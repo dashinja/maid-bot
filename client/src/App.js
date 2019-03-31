@@ -6,11 +6,11 @@ import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 
-// let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
+let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
 
-let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [
-  new Destroyer('The Original Destroyer', 'Bipedal'),
-]
+// let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [
+//   new Destroyer('The Original Destroyer', 'Bipedal'),
+// ]
 
 console.log('createdBots value on page load:', createdBots)
 
@@ -27,9 +27,9 @@ class App extends Component {
   createBot = e => {
     e.preventDefault()
 
-   if (this.state.botName === "") {
-     return console.error("Must enter a Robot Name!")
-   } 
+    if (this.state.botName === '') {
+      return console.error('Must enter a Robot Name!')
+    }
 
     console.log(
       `A name was submitted: ${this.state.botName} \n${
@@ -44,22 +44,23 @@ class App extends Component {
     let data = {
       name: this.state.botName,
       botType: this.state.botType,
-      workDone: this.state.workDone,
+      workDone: 0,
     }
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
     console.log('createdBots:', createdBots)
-    
-    axios.post('/api/bot', data)
-    .then((happy) => {
-      console.log('post complete, using:', data)
-      console.log("what's happy?:", happy)
-      this.setState({
-        botName: '',
-        botType: 'Bipedal',
+
+    axios
+      .post('/api/bot', data)
+      .then(happy => {
+        console.log('post complete, using:', data)
+        console.log("what's happy?:", happy)
+        this.setState({
+          botName: '',
+          botType: 'Bipedal',
+        })
       })
-    })
-    .catch(err => console.log(err))
+      .catch(err => console.log(err))
 
     localStorage.setItem('createdBots', JSON.stringify(createdBots))
   }
@@ -68,17 +69,29 @@ class App extends Component {
     e.preventDefault()
     console.log('e.target.name:', e.target.name)
     const name = e.target.name
-    // let data = {
-    //   name,
-    // }
-
-    this.executioner([name], createdBots[createdBots.length - 1])
 
     // Reflects 1 task added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 1,
+      name: createdBots[createdBots.length - 1].name,
     }))
-    // axios.post('/api/action', data)
+
+
+    let data = {
+      name,
+      workDone: this.state.workDone,
+      botName: createdBots[createdBots.length - 1].name,
+    }
+    this.executioner([name], createdBots[createdBots.length - 1])
+    
+    console.log('data before axios:', data)
+    
+    axios
+      .post('/api/bot/score', data)
+      .then(returnData => {
+        console.log('Successful PUT update. New values', returnData)
+      })
+      .catch(err => console.log(err))
   }
 
   doChores = e => {
@@ -96,6 +109,18 @@ class App extends Component {
       Task.outsideTasks,
       createdBots[createdBots.length - 1],
     )
+
+    let data = {
+      workDone: this.state.workDone,
+      botName: createdBots[createdBots.length - 1].name,
+    }
+
+    axios
+      .post('/api/bot/score', data)
+      .then(returnData => {
+        console.log('Successful PUT update. New values', returnData)
+      })
+      .catch(err => console.log(err))
   }
 
   drillPractice = e => {
