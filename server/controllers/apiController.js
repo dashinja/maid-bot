@@ -8,6 +8,16 @@ apiController.route('/bot').get((req, res) => {
 
 apiController.route('/bot').post((req, res) => {
   console.log(req.body)
+
+  db.Bot.create({
+    name: req.body.name,
+    botType: req.body.botType,
+    workDone: req.body.workDone,
+  })
+  .then(result => {
+    console.log(result.dataValues)
+  })
+  .catch(err=>console.log(err))
   res.send(req.body)
 })
 

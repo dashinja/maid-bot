@@ -44,6 +44,7 @@ class App extends Component {
     let data = {
       name: this.state.botName,
       botType: this.state.botType,
+      workDone: this.state.workDone,
     }
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
