@@ -4,14 +4,25 @@ import ActionButton from './Components/ActionButton'
 import axios from 'axios'
 import { Destroyer, selectChores } from './bots'
 import { Task, Pattern } from './patterns'
+import Banner from './Components/Banner'
 
-const createdBots = JSON.parse(localStorage.getItem('createdBots')) || []
-console.log("createdBots value on page load:", createdBots)
+let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
+
+// let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [new Destroyer('The Original Destroyer', 'Bipedal')]
+
+console.log('createdBots value on page load:', createdBots)
 
 class App extends Component {
   state = {
     botName: '',
     botType: 'Bipedal',
+    workDone: 0,
+    currentTask: '',
+  }
+
+  alphaPattern = e => {
+    e.preventDefault()
+    console.log('Alpha Pattern')
   }
 
   doAction = e => {
@@ -20,6 +31,11 @@ class App extends Component {
     let data = {
       name,
     }
+
+    // Reflects 1 task added for current bot
+    this.setState(prevState => ({
+      workDone: prevState.workDone + 1,
+    }))
     // axios.post('/api/action', data)
   }
 
@@ -27,14 +43,19 @@ class App extends Component {
     e.preventDefault()
     console.log('Front Action')
     console.log('Available Task Lists:', Task)
-    const testerBotomat = new Destroyer('Dashinja-Ninja', 'Quadrupedal')
+    // const testerBotomat = new Destroyer('Dashinja-Ninja', 'Quadrupedal')
 
-    selectChores(Task.insideTasks, Task.outsideTasks, testerBotomat)
-  }
+    // Reflects 5 tasks added for current bot
+    this.setState(prevState => ({
+      workDone: prevState.workDone + 5,
+    }))
 
-  alphaPattern = e => {
-    e.preventDefault()
-    console.log('Alpha Pattern')
+    // Select and Do chores on the most recently created Bot
+    createdBots[createdBots.length - 1].selectChores(
+      Task.insideTasks,
+      Task.outsideTasks,
+      createdBots[createdBots.length - 1],
+    )
   }
 
   createBot = e => {
@@ -51,7 +72,7 @@ class App extends Component {
     }
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-    console.log("createdBots:", createdBots)
+    console.log('createdBots:', createdBots)
     localStorage.setItem('createdBots', JSON.stringify(createdBots))
     // axios.post('/api/bot', data).then(() => {
     //   this.setState({
@@ -119,6 +140,8 @@ class App extends Component {
           onClick={this.doAction}
         />
         <ActionButton text="Front Version" name="N/A" onClick={this.doChores} />
+        <Banner title="Work Done" value={this.state.workDone} />
+        <Banner title="Current Task:" value={this.currentTask} />
       </>
     )
   }
