@@ -45,8 +45,11 @@ class App extends Component {
       name: this.state.botName,
       botType: this.state.botType,
       workDone: 0,
+      attack: createdBots[createdBots.length - 1].attackValue().attack,
+      defense: createdBots[createdBots.length - 1].defenseValue().defense,
+      speed: createdBots[createdBots.length - 1].speedValue().speed
     }
-
+    console.log("data:", data)
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
     console.log('createdBots:', createdBots)
 
@@ -110,17 +113,7 @@ class App extends Component {
       createdBots[createdBots.length - 1],
     )
 
-    let data = {
-      workDone: this.state.workDone,
-      botName: createdBots[createdBots.length - 1].name,
-    }
-
-    axios
-      .post('/api/bot/score', data)
-      .then(returnData => {
-        console.log('Successful PUT update. New values', returnData)
-      })
-      .catch(err => console.log(err))
+    this.updateWork()
   }
 
   drillPractice = e => {
@@ -140,7 +133,10 @@ class App extends Component {
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
     }))
+
+    this.updateWork()
   }
+
 
   // Make sure pass an array, even if an array of one element
   executioner(array, bot) {
@@ -175,6 +171,20 @@ class App extends Component {
         this.setState({ choreList: 'Indoor Chores' })
       : this.executioner(second, bot) &&
         this.setState({ choreList: 'Outdoor Chores' })
+  }
+
+  updateWork = () => {
+    let data = {
+      workDone: this.state.workDone,
+      botName: createdBots[createdBots.length - 1].name,
+    }
+
+    return axios
+      .post('/api/bot/score', data)
+      .then(returnData => {
+        console.log('Successful PUT update. New values', returnData)
+      })
+      .catch(err => console.log(err))
   }
 
   render() {

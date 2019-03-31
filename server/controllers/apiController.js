@@ -11,6 +11,9 @@ apiController.route('/bot/').post((req, res) => {
     name: req.body.name,
     botType: req.body.botType,
     workDone: req.body.workDone,
+    attack: req.body.attack,
+    defense: req.body.defense,
+    speed: req.body.speed,
   })
     .then(result => {
       console.log(result.dataValues)
