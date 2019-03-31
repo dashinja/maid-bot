@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const selectChores = (first, second, bot) => {
   const randChoice = () => Math.random()
   randChoice() > 0.2 ? executioner(first, bot) : executioner(second, bot)

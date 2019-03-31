@@ -6,9 +6,11 @@ import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 
-let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
+// let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
 
-// let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [new Destroyer('The Original Destroyer', 'Bipedal')]
+let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [
+  new Destroyer('The Original Destroyer', 'Bipedal'),
+]
 
 console.log('createdBots value on page load:', createdBots)
 
@@ -23,12 +25,21 @@ class App extends Component {
   }
 
   createBot = e => {
+    e.preventDefault()
+
+   if (this.state.botName === "") {
+     return console.error("Must enter a Robot Name!")
+   } 
+
     console.log(
       `A name was submitted: ${this.state.botName} \n${
         this.state.botName
       } is a ${this.state.botType}`,
     )
-    e.preventDefault()
+
+    this.setState(prevState => ({
+      workDone: prevState.workDone * 0,
+    }))
 
     let data = {
       name: this.state.botName,
@@ -37,27 +48,31 @@ class App extends Component {
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
     console.log('createdBots:', createdBots)
-    localStorage.setItem('createdBots', JSON.stringify(createdBots))
-    this.setState({
-      botName: '',
-      botType: 'Bipedal',
+    
+    axios.post('/api/bot', data)
+    .then((happy) => {
+      console.log('post complete, using:', data)
+      console.log("what's happy?:", happy)
+      this.setState({
+        botName: '',
+        botType: 'Bipedal',
+      })
     })
-    // axios.post('/api/bot', data).then(() => {
-    // })
+    .catch(err => console.log(err))
+
+    localStorage.setItem('createdBots', JSON.stringify(createdBots))
   }
 
   doSingleAction = e => {
-    //FIXME
     e.preventDefault()
     console.log('e.target.name:', e.target.name)
     const name = e.target.name
-    let data = {
-      name,
-    }
-
-    console.log('name:', name)
+    // let data = {
+    //   name,
+    // }
 
     this.executioner([name], createdBots[createdBots.length - 1])
+
     // Reflects 1 task added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 1,
@@ -67,9 +82,7 @@ class App extends Component {
 
   doChores = e => {
     e.preventDefault()
-    console.log('Front Action')
     console.log('Available Task Lists:', Task)
-    // const testerBotomat = new Destroyer('Dashinja-Ninja', 'Quadrupedal')
 
     // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
@@ -103,6 +116,7 @@ class App extends Component {
     }))
   }
 
+  // Make sure pass an array, even if an array of one element
   executioner(array, bot) {
     if (array[0] && bot[array[0]]) {
       this.setState({ nextTask: array.length })
