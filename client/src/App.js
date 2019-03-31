@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import ActionButton from './Components/ActionButton'
 import axios from 'axios'
-import { Destroyer, selectChores } from './bots'
+import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 
@@ -18,20 +18,46 @@ class App extends Component {
     botType: 'Bipedal',
     workDone: 0,
     currentTask: '',
+    nextTask: '',
+    choreList: '',
   }
 
-  alphaPattern = e => {
+  createBot = e => {
+    console.log(
+      `A name was submitted: ${this.state.botName} \n${
+        this.state.botName
+      } is a ${this.state.botType}`,
+    )
     e.preventDefault()
-    console.log('Alpha Pattern')
+
+    let data = {
+      name: this.state.botName,
+      botType: this.state.botType,
+    }
+
+    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+    console.log('createdBots:', createdBots)
+    localStorage.setItem('createdBots', JSON.stringify(createdBots))
+    this.setState({
+      botName: '',
+      botType: 'Bipedal',
+    })
+    // axios.post('/api/bot', data).then(() => {
+    // })
   }
 
-  doAction = e => {
+  doSingleAction = e => {
+    //FIXME
+    e.preventDefault()
     console.log('e.target.name:', e.target.name)
     const name = e.target.name
     let data = {
       name,
     }
 
+    console.log('name:', name)
+
+    this.executioner([name], createdBots[createdBots.length - 1])
     // Reflects 1 task added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 1,
@@ -51,35 +77,45 @@ class App extends Component {
     }))
 
     // Select and Do chores on the most recently created Bot
-    createdBots[createdBots.length - 1].selectChores(
+    this.selectChores(
       Task.insideTasks,
       Task.outsideTasks,
       createdBots[createdBots.length - 1],
     )
   }
 
-  createBot = e => {
-    console.log(
-      `A name was submitted: ${this.state.botName} \n${
-        this.state.botName
-      } is a ${this.state.botType}`,
-    )
+  drillPractice = e => {
     e.preventDefault()
+    console.log(Pattern)
+    console.log('Random Drill Pattern')
+    const drills = Object.entries(Pattern)
+    console.log('drills:', drills)
 
-    let data = {
-      name: this.state.botName,
-      botType: this.state.botType,
-    }
+    const randChoice = Math.floor(Math.random() * Pattern.length)
+    const choice = Pattern[randChoice]
+    console.log('choice:', choice)
 
-    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-    console.log('createdBots:', createdBots)
-    localStorage.setItem('createdBots', JSON.stringify(createdBots))
-    // axios.post('/api/bot', data).then(() => {
-    //   this.setState({
-    //     botName: '',
-    //     botType: '',
-    //   })
-    // })
+    // createdBots[createdBots.length - 1].executioner(choice, createdBots[createdBots.length - 1])
+
+    this.executioner(choice, createdBots[createdBots.length - 1])
+    this.setState(prevState => ({
+      workDone: prevState.workDone + 5,
+    }))
+  }
+
+  executioner(array, bot) {
+    if (array[0] && bot[array[0]]) {
+      this.setState({ nextTask: array.length })
+      console.log('\n', bot[array[0]]().description)
+      this.setState({ currentTask: bot[array[0]]().description })
+      setTimeout(() => {
+        console.log(`\n${bot.name} Finished the Task`)
+        let nextArray = array.slice(1)
+        console.log('Remaining Tasks:', nextArray)
+        this.setState({ nextTask: nextArray.length })
+        this.executioner(nextArray, bot)
+      }, bot[array[0]]().eta)
+    } else console.log('All Tasks Complete!')
   }
 
   handleInputChange = event => {
@@ -90,6 +126,15 @@ class App extends Component {
     this.setState({
       [name]: value,
     })
+  }
+
+  selectChores(first, second, bot) {
+    const randChoice = () => Math.random()
+    randChoice() > 0.2
+      ? this.executioner(first, bot) &&
+        this.setState({ choreList: 'Indoor Chores' })
+      : this.executioner(second, bot) &&
+        this.setState({ choreList: 'Outdoor Chores' })
   }
 
   render() {
@@ -132,16 +177,22 @@ class App extends Component {
         <ActionButton
           text="Wash Dishes"
           name="doTheDishes"
-          onClick={this.doAction}
+          onClick={this.doSingleAction}
         />
         <ActionButton
           text="Attack"
           name="attackValue"
-          onClick={this.doAction}
+          onClick={this.doSingleAction}
         />
         <ActionButton text="Front Version" name="N/A" onClick={this.doChores} />
+        <ActionButton
+          text="HD Drill Practice"
+          name="N/A"
+          onClick={this.drillPractice}
+        />
         <Banner title="Work Done" value={this.state.workDone} />
-        <Banner title="Current Task:" value={this.currentTask} />
+        <Banner title="Current Task" value={this.state.currentTask} />
+        <Banner title="Tasks Remaining" value={this.state.nextTask} />
       </>
     )
   }

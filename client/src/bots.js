@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const selectChores = (first, second, bot) => {
   const randChoice = () => Math.random()
   randChoice() > 0.2 ? executioner(first, bot) : executioner(second, bot)
@@ -15,8 +17,6 @@ export const executioner = (array, bot) => {
   } else console.log('All Tasks Complete!')
 }
 
-
-
 export class Destroyer {
   constructor(name, type) {
     this.name = name
@@ -28,7 +28,8 @@ export class Destroyer {
     return {
       description: `${this.name} is attacking!`,
       attack: 10000,
-      eta: 2000,
+      eta: 3000,
+      name: 'Attack',
     }
   }
 
@@ -36,6 +37,7 @@ export class Destroyer {
     return {
       description: `${this.name} is baking cookies.`,
       eta: 8000,
+      name: 'Bake Cookies',
     }
   }
 
@@ -43,7 +45,9 @@ export class Destroyer {
     let defense = this.attackValue().attack / 2
     return {
       defense,
-      eta: 1000,
+      eta: 3500,
+      description: `${this.name} is defending like Optimus. Flexin' like a Prime!`,
+      name: 'Defense',
     }
   }
 
@@ -51,6 +55,7 @@ export class Destroyer {
     return {
       description: `${this.name} is doing the dishes.`,
       eta: 5000,
+      name: "Dishes"
     }
   }
 
@@ -58,10 +63,11 @@ export class Destroyer {
     return {
       description: `${this.name} is taking out the laundry.`,
       eta: 10000,
+      name: "Laundry"
     }
   }
 
-  executioner (array, bot) {
+  executioner(array, bot) {
     if (array[0] && bot[array[0]]) {
       console.log('\n', bot[array[0]]().description)
       setTimeout(() => {
@@ -77,6 +83,7 @@ export class Destroyer {
     return {
       description: `${this.name} is giving the dog a bath.`,
       eta: 14500,
+      name: "Bathe Dog"
     }
   }
 
@@ -89,6 +96,7 @@ export class Destroyer {
     return {
       description: `${this.name} is making a yummy sammich!`,
       eta: 7000,
+      name: "Make Sandwhich"
     }
   }
 
@@ -106,9 +114,11 @@ export class Destroyer {
     }
   }
 
-  selectChores (first, second, bot) {
+  selectChores(first, second, bot) {
     const randChoice = () => Math.random()
-    randChoice() > 0.2 ? this.executioner(first, bot) : this.executioner(second, bot)
+    randChoice() > 0.2
+      ? this.executioner(first, bot)
+      : this.executioner(second, bot)
   }
 
   speedValue() {
@@ -120,13 +130,13 @@ export class Destroyer {
   }
 
   stats() {
-    console.log(
-      `\nHealth: ${this.healthValue()} \nAttack: ${
-      this.attackValue().attack
+    return {
+      description: `Show Stats: \nHealth: ${this.healthValue()} \nAttack: ${
+        this.attackValue().attack
       } \nDefense: ${this.defenseValue().defense} \nSpeed: ${
-      this.speedValue().speed
+        this.speedValue().speed
       }`,
-    )
+    }
   }
 
   sweepTheHouse() {
@@ -150,7 +160,3 @@ export class Destroyer {
     }
   }
 }
-
-
-
-
