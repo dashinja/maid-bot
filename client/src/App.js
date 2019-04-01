@@ -6,6 +6,11 @@ import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 import ScoreBanner from './Components/ScoreBanner'
+import Input from '@material-ui/core/Input'
+import Select from '@material-ui/core/Select'
+import Button from '@material-ui/core/Button'
+import TaskBanner from "./Components/TaskBanner"
+
 
 let createdBots = []
 console.log('createdBots value on page load:', [createdBots])
@@ -20,6 +25,8 @@ class App extends Component {
     choreList: '',
     isDisabled: true,
     score: 'high score',
+    progressInterval: 20,
+    semiPermaName: "Bot"
   }
 
   componentDidMount() {
@@ -35,6 +42,7 @@ class App extends Component {
 
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
+      semiPermaName: this.state.botName
     }))
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
@@ -137,6 +145,9 @@ class App extends Component {
   // Make sure pass an array, even if an array of one element
   executioner(array, bot) {
     if (array[0] && bot[array[0]]) {
+      this.setState(prevState => ({
+        progressInterval: prevState.progressInterval + 20
+      }))
       this.setState({ nextTask: array.length })
       console.log('\n', bot[array[0]]().description)
       this.setState({ currentTask: bot[array[0]]().description })
@@ -148,8 +159,11 @@ class App extends Component {
         this.executioner(nextArray, bot)
       }, bot[array[0]]().eta)
     } else {
-      console.log('All Tasks Complete!')
-      this.setState({currentTask: "All Tasks Complete!"})
+      console.log(`${bot.name} completed all tasks!`)
+      this.setState({
+        currentTask: `${bot.name} completed all tasks!` || `All Tasks Complete!`,
+        progressInterval: 0
+      })
     }
   }
 
@@ -213,22 +227,26 @@ class App extends Component {
           <fieldset>
             <legend>Create a Bot</legend>
             <label>
-              Bot Name:
-              <input
+              <span>Name: </span>
+              <Input
                 name="botName"
                 type="text"
                 value={this.state.botName}
                 onChange={this.handleInputChange}
+                placeholder="Enter Bot Name Here"
               />
+              <span> Type: </span>
             </label>
 
-            <select
+            <Select
               name="botType"
               type="select"
               id="botType"
               selected={this.state.botType}
               onChange={this.handleInputChange}
               value={this.state.botType}
+              native={true}
+              variant="filled"
             >
               <option value="Unipedal">Unipedal</option>
               <option value="Bipedal">Bipedal</option>
@@ -236,9 +254,19 @@ class App extends Component {
               <option value="Arachnid">Arachnid</option>
               <option value="Radial">Radial</option>
               <option value="Aeronautical">Aeronautical</option>
-            </select>
+            </Select>
 
-            <input type="submit" value="Submit" />
+            {/* <Input 
+              type="submit" 
+              value="Submit" 
+              variant="contained"
+            /> */}
+            <Button
+              type="submit"
+              variant="contained"
+            >
+            Submit
+            </Button>
           </fieldset>
         </form>
 
@@ -247,6 +275,7 @@ class App extends Component {
           name="N/A"
           onClick={this.doChores}
           disabled={this.state.isDisabled}
+          color="secondary"
         />
         <ActionButton
           text="Wash Dishes"
@@ -265,15 +294,17 @@ class App extends Component {
           name="N/A"
           onClick={this.drillPractice}
           disabled={this.state.isDisabled}
+          color="secondary"
         />
         <ActionButton
           text="Refresh Score"
           name="N/A"
           onClick={this.getScores}
           clickable={true}
+          color="primary"
         />
         <Banner title="Current Task" value={this.state.currentTask} />
-        <Banner title="Tasks Remaining" value={this.state.nextTask} />
+        <TaskBanner title={`Tasks Remaining for ${this.state.semiPermaName}`} value={this.state.nextTask} />
         <Banner title="Work Done" value={this.state.workDone} />
         <br />
         <ScoreBanner

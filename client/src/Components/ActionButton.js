@@ -1,16 +1,18 @@
 import React from "react"
-
+import Button from "@material-ui/core/Button"
 function ActionButton(props) {
   return (
     <>
-      <button 
+      <Button 
         type="button" 
         name={props.name}
         onClick={props.onClick}
         disabled={props.disabled}
+        color={props.color}
+        variant="contained"
       >
         {props.text}
-      </button>
+      </Button>
     </>
   )
 }
