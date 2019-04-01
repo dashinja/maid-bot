@@ -1,6 +1,7 @@
 import React from "react"
 
 function ActionButton(props) {
+console.log("props.disabled:", props.disabled)
   return (
     <>
       <input 
@@ -8,6 +9,7 @@ function ActionButton(props) {
         value={props.text}
         name={props.name}
         onClick={props.onClick}
+        disabled={props.disabled}
       />
     </>
   )

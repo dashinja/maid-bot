@@ -12,7 +12,7 @@ let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
 //   new Destroyer('The Original Destroyer', 'Bipedal'),
 // ]
 
-console.log('createdBots value on page load:', createdBots)
+console.log('createdBots value on page load:', [createdBots])
 
 class App extends Component {
   state = {
@@ -22,6 +22,11 @@ class App extends Component {
     currentTask: '',
     nextTask: '',
     choreList: '',
+    isDisabled: true,
+  }
+
+  componentDidMount() {
+    this.getScores()
   }
 
   createBot = e => {
@@ -47,9 +52,9 @@ class App extends Component {
       workDone: 0,
       attack: createdBots[createdBots.length - 1].attackValue().attack,
       defense: createdBots[createdBots.length - 1].defenseValue().defense,
-      speed: createdBots[createdBots.length - 1].speedValue().speed
+      speed: createdBots[createdBots.length - 1].speedValue().speed,
     }
-    console.log("data:", data)
+    console.log('data:', data)
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
     console.log('createdBots:', createdBots)
 
@@ -65,7 +70,9 @@ class App extends Component {
       })
       .catch(err => console.log(err))
 
-    localStorage.setItem('createdBots', JSON.stringify(createdBots))
+    this.setState({ didMakeBot: true })
+
+    // localStorage.setItem('createdBots', JSON.stringify(createdBots))
   }
 
   doSingleAction = e => {
@@ -79,22 +86,23 @@ class App extends Component {
       name: createdBots[createdBots.length - 1].name,
     }))
 
-
     let data = {
       name,
       workDone: this.state.workDone,
       botName: createdBots[createdBots.length - 1].name,
     }
-    this.executioner([name], createdBots[createdBots.length - 1])
-    
+    this.executioner([name], [createdBots][[createdBots].length - 1])
+
     console.log('data before axios:', data)
-    
+
     axios
       .post('/api/bot/score', data)
       .then(returnData => {
         console.log('Successful PUT update. New values', returnData)
       })
       .catch(err => console.log(err))
+
+    this.getScores()
   }
 
   doChores = e => {
@@ -114,6 +122,7 @@ class App extends Component {
     )
 
     this.updateWork()
+    this.getScores()
   }
 
   drillPractice = e => {
@@ -135,8 +144,8 @@ class App extends Component {
     }))
 
     this.updateWork()
+    this.getScores()
   }
-
 
   // Make sure pass an array, even if an array of one element
   executioner(array, bot) {
@@ -152,6 +161,13 @@ class App extends Component {
         this.executioner(nextArray, bot)
       }, bot[array[0]]().eta)
     } else console.log('All Tasks Complete!')
+  }
+
+  getScores() {
+    axios.get('/api/bot/score').then(allScores => {
+      console.log('allscores', allScores.data)
+      // allScores.data.map(score => console.log(score))
+    })
   }
 
   handleInputChange = event => {
@@ -190,7 +206,10 @@ class App extends Component {
   render() {
     return (
       <>
-        <h1>Hi, check the form below:</h1>
+        <h1>Welcome to Maid-Bot Wars</h1>
+        <h3>Give your bot a name and choose it's type</h3>
+        <h4>How much work can YOUR bot do?</h4>
+
         <form onSubmit={this.createBot}>
           <fieldset>
             <legend>Create a Bot</legend>
@@ -228,17 +247,31 @@ class App extends Component {
           text="Wash Dishes"
           name="doTheDishes"
           onClick={this.doSingleAction}
+          disabled={this.state.isDisabled}
         />
         <ActionButton
           text="Attack"
           name="attackValue"
           onClick={this.doSingleAction}
+          disabled={this.state.isDisabled}
         />
-        <ActionButton text="Front Version" name="N/A" onClick={this.doChores} />
+        <ActionButton
+          text="Front Version"
+          name="N/A"
+          onClick={this.doChores}
+          disabled={this.state.isDisabled}
+        />
         <ActionButton
           text="HD Drill Practice"
           name="N/A"
           onClick={this.drillPractice}
+          disabled={this.state.isDisabled}
+        />
+        <ActionButton
+          text="Refresh Score"
+          name="N/A"
+          onClick={this.getScores}
+          clickable={true}
         />
         <Banner title="Work Done" value={this.state.workDone} />
         <Banner title="Current Task" value={this.state.currentTask} />

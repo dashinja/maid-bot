@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Bot name taken. Please choose another!',
+      },
       validate: {
         len: [1],
       },
@@ -19,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     workDone: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: 0,
     },
 
     attack: {
