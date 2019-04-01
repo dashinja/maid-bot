@@ -5,13 +5,10 @@ import axios from 'axios'
 import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
-
+import ScoreBanner from './Components/ScoreBanner'
 let createdBots = []
-// let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
 
-// let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [
-//   new Destroyer('The Original Destroyer', 'Bipedal'),
-// ]
+
 
 console.log('createdBots value on page load:', [createdBots])
 
@@ -24,7 +21,10 @@ class App extends Component {
     nextTask: '',
     choreList: '',
     isDisabled: true,
+    score: 'high score',
   }
+
+  // scores = this.state.score
 
   componentDidMount() {
     this.getScores()
@@ -37,18 +37,18 @@ class App extends Component {
       return console.error('Must enter a Robot Name!')
     }
 
-    console.log(
-      `A name was submitted: ${this.state.botName} \n${
-        this.state.botName
-      } is a ${this.state.botType}`,
-    )
+    // console.log(
+    //   `A name was submitted: ${this.state.botName} \n${
+    //     this.state.botName
+    //   } is a ${this.state.botType}`,
+    // )
 
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
     }))
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-    console.log('createdBots:', createdBots)
+    // console.log('createdBots:', createdBots)
 
     this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
 
@@ -60,13 +60,13 @@ class App extends Component {
       defense: createdBots[createdBots.length - 1].defenseValue().defense,
       speed: createdBots[createdBots.length - 1].speedValue().speed,
     }
-    console.log('data:', creationData)
+    // console.log('data:', creationData)
 
     axios
       .post('/api/bot', creationData)
       .then(happy => {
-        console.log('post complete, using:', creationData)
-        console.log("what's happy?:", happy)
+        // console.log('post complete, using:', creationData)
+        // console.log("what's happy?:", happy)
         this.setState({
           botName: '',
           botType: 'Bipedal',
@@ -114,14 +114,9 @@ class App extends Component {
     console.log('Available Task Lists:', Task)
 
     // Reflects 5 tasks added for current bot
-    this.setState(
-      prevState => (
-        {
-          workDone: prevState.workDone + 5,
-        },
-        this.updateWorkState()
-      ),
-    )
+    this.setState(prevState => ({
+      workDone: prevState.workDone + 5,
+    }))
 
     // Select and Do chores on the most recently created Bot
     this.selectChores(
@@ -130,6 +125,7 @@ class App extends Component {
       createdBots[createdBots.length - 1],
     )
 
+    this.updateWorkState()
     this.getScores()
   }
 
@@ -147,6 +143,8 @@ class App extends Component {
     // createdBots[createdBots.length - 1].executioner(choice, createdBots[createdBots.length - 1])
 
     this.executioner(choice, createdBots[createdBots.length - 1])
+
+    // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
     }))
@@ -172,10 +170,16 @@ class App extends Component {
   }
 
   getScores() {
-    axios.get('/api/bot/score').then(allScores => {
-      console.log('allscores', allScores.data)
-      // allScores.data.map(score => console.log(score))
-    })
+    axios
+      .get('/api/bot/score')
+      .then(allScores => {
+        console.log('allscores', allScores.data)
+        // allScores.data.map(score => console.log(score))
+        this.setState({ score: allScores.data })
+        console.log('typeof:', Array.isArray(allScores.data))
+        this.scores = allScores.data
+      })
+      .catch(err => console.log(err))
   }
 
   handleInputChange = event => {
@@ -207,7 +211,7 @@ class App extends Component {
       .post('/api/bot/score', data)
       .then(returnData => {
         console.log(
-          `Successful PUT update. Used: ${JSON.stringify(
+          `Successful PO update. Used: ${JSON.stringify(
             data,
           )}. New values: ${returnData}`,
         )
@@ -288,6 +292,12 @@ class App extends Component {
         <Banner title="Work Done" value={this.state.workDone} />
         <Banner title="Current Task" value={this.state.currentTask} />
         <Banner title="Tasks Remaining" value={this.state.nextTask} />
+        <br />
+        <ScoreBanner
+          title="High Score"
+          value={this.state.score[0].workDone}
+          name={this.state.score[0].name}
+        />
       </>
     )
   }

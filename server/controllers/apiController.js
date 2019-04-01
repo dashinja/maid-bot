@@ -26,7 +26,7 @@ apiController.route('/bot/score').get((req, res) => {
   db.Bot.findAll({
     attributes: ['name', 'botType', 'workDone'],
     order: [['workDone', 'DESC']],
-    limit: 10,
+    limit: 1,
   })
     .then(results => {
       //  const arrayResult = results.map(result=>))
