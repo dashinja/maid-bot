@@ -6,7 +6,8 @@ import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 
-let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
+let createdBots = []
+// let createdBots = [new Destroyer('The Original Destroyer', 'Bipedal')]
 
 // let createdBots = JSON.parse(localStorage.getItem('createdBots')) || [
 //   new Destroyer('The Original Destroyer', 'Bipedal'),
@@ -43,25 +44,28 @@ class App extends Component {
     )
 
     this.setState(prevState => ({
-      workDone: prevState.workDone * 0,
+      workDone: prevState.workDone + 5,
     }))
 
-    let data = {
+    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+    console.log('createdBots:', createdBots)
+
+    this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
+
+    let creationData = {
       name: this.state.botName,
       botType: this.state.botType,
-      workDone: 0,
+      workDone: 5,
       attack: createdBots[createdBots.length - 1].attackValue().attack,
       defense: createdBots[createdBots.length - 1].defenseValue().defense,
       speed: createdBots[createdBots.length - 1].speedValue().speed,
     }
-    console.log('data:', data)
-    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-    console.log('createdBots:', createdBots)
+    console.log('data:', creationData)
 
     axios
-      .post('/api/bot', data)
+      .post('/api/bot', creationData)
       .then(happy => {
-        console.log('post complete, using:', data)
+        console.log('post complete, using:', creationData)
         console.log("what's happy?:", happy)
         this.setState({
           botName: '',
@@ -70,7 +74,7 @@ class App extends Component {
       })
       .catch(err => console.log(err))
 
-    this.setState({ didMakeBot: true })
+    this.setState({ isDisabled: false })
 
     // localStorage.setItem('createdBots', JSON.stringify(createdBots))
   }
@@ -110,9 +114,14 @@ class App extends Component {
     console.log('Available Task Lists:', Task)
 
     // Reflects 5 tasks added for current bot
-    this.setState(prevState => ({
-      workDone: prevState.workDone + 5,
-    }))
+    this.setState(
+      prevState => (
+        {
+          workDone: prevState.workDone + 5,
+        },
+        this.updateWorkState()
+      ),
+    )
 
     // Select and Do chores on the most recently created Bot
     this.selectChores(
@@ -121,7 +130,6 @@ class App extends Component {
       createdBots[createdBots.length - 1],
     )
 
-    this.updateWork()
     this.getScores()
   }
 
@@ -143,7 +151,7 @@ class App extends Component {
       workDone: prevState.workDone + 5,
     }))
 
-    this.updateWork()
+    this.updateWorkState()
     this.getScores()
   }
 
@@ -189,7 +197,7 @@ class App extends Component {
         this.setState({ choreList: 'Outdoor Chores' })
   }
 
-  updateWork = () => {
+  updateWorkState = () => {
     let data = {
       workDone: this.state.workDone,
       botName: createdBots[createdBots.length - 1].name,
@@ -198,7 +206,11 @@ class App extends Component {
     return axios
       .post('/api/bot/score', data)
       .then(returnData => {
-        console.log('Successful PUT update. New values', returnData)
+        console.log(
+          `Successful PUT update. Used: ${JSON.stringify(
+            data,
+          )}. New values: ${returnData}`,
+        )
       })
       .catch(err => console.log(err))
   }
@@ -256,7 +268,7 @@ class App extends Component {
           disabled={this.state.isDisabled}
         />
         <ActionButton
-          text="Front Version"
+          text="Do Chores"
           name="N/A"
           onClick={this.doChores}
           disabled={this.state.isDisabled}

@@ -1,7 +1,6 @@
 import React from "react"
 
 function ActionButton(props) {
-console.log("props.disabled:", props.disabled)
   return (
     <>
       <input 

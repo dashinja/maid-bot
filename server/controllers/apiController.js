@@ -37,9 +37,10 @@ apiController.route('/bot/score').get((req, res) => {
 })
 
 apiController.route('/bot/score').post((req, res) => {
-  console.log('req.body', req.body)
+  console.log('req.body.workDone', req.body.workDone)
 
   const newValue = { workDone: req.body.workDone + 1 }
+  console.log("newvalue.workDone:", newValue.workDone)
   db.Bot.update(newValue, {
     where: {
       name: req.body.botName,
