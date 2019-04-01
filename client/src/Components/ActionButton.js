@@ -3,13 +3,14 @@ import React from "react"
 function ActionButton(props) {
   return (
     <>
-      <input 
+      <button 
         type="button" 
-        value={props.text}
         name={props.name}
         onClick={props.onClick}
         disabled={props.disabled}
-      />
+      >
+        {props.text}
+      </button>
     </>
   )
 }

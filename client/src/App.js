@@ -6,10 +6,8 @@ import { Destroyer, selectChores, executioner } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 import ScoreBanner from './Components/ScoreBanner'
+
 let createdBots = []
-
-
-
 console.log('createdBots value on page load:', [createdBots])
 
 class App extends Component {
@@ -17,14 +15,12 @@ class App extends Component {
     botName: '',
     botType: 'Bipedal',
     workDone: 0,
-    currentTask: '',
-    nextTask: '',
+    currentTask: 'Awaiting Bot Creation',
+    nextTask: 0,
     choreList: '',
     isDisabled: true,
     score: 'high score',
   }
-
-  // scores = this.state.score
 
   componentDidMount() {
     this.getScores()
@@ -37,18 +33,11 @@ class App extends Component {
       return console.error('Must enter a Robot Name!')
     }
 
-    // console.log(
-    //   `A name was submitted: ${this.state.botName} \n${
-    //     this.state.botName
-    //   } is a ${this.state.botType}`,
-    // )
-
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
     }))
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-    // console.log('createdBots:', createdBots)
 
     this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
 
@@ -60,13 +49,10 @@ class App extends Component {
       defense: createdBots[createdBots.length - 1].defenseValue().defense,
       speed: createdBots[createdBots.length - 1].speedValue().speed,
     }
-    // console.log('data:', creationData)
 
     axios
       .post('/api/bot', creationData)
-      .then(happy => {
-        // console.log('post complete, using:', creationData)
-        // console.log("what's happy?:", happy)
+      .then(data => {
         this.setState({
           botName: '',
           botType: 'Bipedal',
@@ -75,29 +61,27 @@ class App extends Component {
       .catch(err => console.log(err))
 
     this.setState({ isDisabled: false })
-
-    // localStorage.setItem('createdBots', JSON.stringify(createdBots))
   }
 
   doSingleAction = e => {
     e.preventDefault()
-    console.log('e.target.name:', e.target.name)
     const name = e.target.name
-
+    console.log("name:", name)
     // Reflects 1 task added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 1,
       name: createdBots[createdBots.length - 1].name,
     }))
-
+    const tasks = []
+    tasks.push(e.target.name)
+    console.log("tasks", tasks)
     let data = {
       name,
       workDone: this.state.workDone,
       botName: createdBots[createdBots.length - 1].name,
     }
-    this.executioner([name], [createdBots][[createdBots].length - 1])
+    this.executioner(tasks, [createdBots][[createdBots].length - 1])
 
-    console.log('data before axios:', data)
 
     axios
       .post('/api/bot/score', data)
@@ -111,7 +95,6 @@ class App extends Component {
 
   doChores = e => {
     e.preventDefault()
-    console.log('Available Task Lists:', Task)
 
     // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
@@ -131,16 +114,14 @@ class App extends Component {
 
   drillPractice = e => {
     e.preventDefault()
-    console.log(Pattern)
-    console.log('Random Drill Pattern')
-    const drills = Object.entries(Pattern)
-    console.log('drills:', drills)
+    // console.log(Pattern)
+    // console.log('Random Drill Pattern')
+    // const drills = Object.entries(Pattern)
+    // console.log('drills:', drills)
 
     const randChoice = Math.floor(Math.random() * Pattern.length)
     const choice = Pattern[randChoice]
-    console.log('choice:', choice)
-
-    // createdBots[createdBots.length - 1].executioner(choice, createdBots[createdBots.length - 1])
+    // console.log('choice:', choice)
 
     this.executioner(choice, createdBots[createdBots.length - 1])
 
@@ -166,7 +147,10 @@ class App extends Component {
         this.setState({ nextTask: nextArray.length })
         this.executioner(nextArray, bot)
       }, bot[array[0]]().eta)
-    } else console.log('All Tasks Complete!')
+    } else {
+      console.log('All Tasks Complete!')
+      this.setState({currentTask: "All Tasks Complete!"})
+    }
   }
 
   getScores() {
@@ -174,7 +158,6 @@ class App extends Component {
       .get('/api/bot/score')
       .then(allScores => {
         console.log('allscores', allScores.data)
-        // allScores.data.map(score => console.log(score))
         this.setState({ score: allScores.data })
         console.log('typeof:', Array.isArray(allScores.data))
         this.scores = allScores.data
@@ -260,6 +243,12 @@ class App extends Component {
         </form>
 
         <ActionButton
+          text="Do Chore Regimen"
+          name="N/A"
+          onClick={this.doChores}
+          disabled={this.state.isDisabled}
+        />
+        <ActionButton
           text="Wash Dishes"
           name="doTheDishes"
           onClick={this.doSingleAction}
@@ -269,12 +258,6 @@ class App extends Component {
           text="Attack"
           name="attackValue"
           onClick={this.doSingleAction}
-          disabled={this.state.isDisabled}
-        />
-        <ActionButton
-          text="Do Chores"
-          name="N/A"
-          onClick={this.doChores}
           disabled={this.state.isDisabled}
         />
         <ActionButton
@@ -289,9 +272,9 @@ class App extends Component {
           onClick={this.getScores}
           clickable={true}
         />
-        <Banner title="Work Done" value={this.state.workDone} />
         <Banner title="Current Task" value={this.state.currentTask} />
         <Banner title="Tasks Remaining" value={this.state.nextTask} />
+        <Banner title="Work Done" value={this.state.workDone} />
         <br />
         <ScoreBanner
           title="High Score"
