@@ -30,8 +30,13 @@ apiController.route('/bot/score').get((req, res) => {
   })
     .then(results => {
       //  const arrayResult = results.map(result=>))
-      console.log(results.map(result => result.dataValues))
-      res.json(results)
+      console.log("raw results:", results.dataValues)
+      if (results.length === 0) {
+        res.send('N/A')
+      } else {
+        console.log(results.map(result => result.dataValues))
+        res.json(results)
+      }
     })
     .catch(err => console.log(err))
 })
@@ -40,7 +45,7 @@ apiController.route('/bot/score').post((req, res) => {
   console.log('req.body.workDone', req.body.workDone)
 
   const newValue = { workDone: req.body.workDone + 1 }
-  console.log("newvalue.workDone:", newValue.workDone)
+  console.log('newvalue.workDone:', newValue.workDone)
   db.Bot.update(newValue, {
     where: {
       name: req.body.botName,

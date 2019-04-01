@@ -9,8 +9,7 @@ import ScoreBanner from './Components/ScoreBanner'
 import Input from '@material-ui/core/Input'
 import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
-import TaskBanner from "./Components/TaskBanner"
-
+import TaskBanner from './Components/TaskBanner'
 
 let createdBots = []
 console.log('createdBots value on page load:', [createdBots])
@@ -25,8 +24,8 @@ class App extends Component {
     choreList: '',
     isDisabled: true,
     score: 'high score',
-    progressInterval: 20,
-    semiPermaName: "Bot"
+    progressInterval: 0,
+    semiPermaName: 'Bot',
   }
 
   componentDidMount() {
@@ -35,14 +34,13 @@ class App extends Component {
 
   createBot = e => {
     e.preventDefault()
-
     if (this.state.botName === '') {
       return console.error('Must enter a Robot Name!')
     }
 
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
-      semiPermaName: this.state.botName
+      semiPermaName: this.state.botName,
     }))
 
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
@@ -65,6 +63,8 @@ class App extends Component {
           botName: '',
           botType: 'Bipedal',
         })
+        this.getScores()
+
       })
       .catch(err => console.log(err))
 
@@ -74,7 +74,7 @@ class App extends Component {
   doSingleAction = e => {
     e.preventDefault()
     const name = e.target.name
-    console.log("name:", name)
+    console.log('name:', name)
     // Reflects 1 task added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 1,
@@ -82,14 +82,13 @@ class App extends Component {
     }))
     const tasks = []
     tasks.push(e.target.name)
-    console.log("tasks", tasks)
+    console.log('tasks', tasks)
     let data = {
       name,
       workDone: this.state.workDone,
       botName: createdBots[createdBots.length - 1].name,
     }
     this.executioner(tasks, [createdBots][[createdBots].length - 1])
-
 
     axios
       .post('/api/bot/score', data)
@@ -145,9 +144,6 @@ class App extends Component {
   // Make sure pass an array, even if an array of one element
   executioner(array, bot) {
     if (array[0] && bot[array[0]]) {
-      this.setState(prevState => ({
-        progressInterval: prevState.progressInterval + 20
-      }))
       this.setState({ nextTask: array.length })
       console.log('\n', bot[array[0]]().description)
       this.setState({ currentTask: bot[array[0]]().description })
@@ -155,19 +151,24 @@ class App extends Component {
         console.log(`\n${bot.name} Finished the Task`)
         let nextArray = array.slice(1)
         console.log('Remaining Tasks:', nextArray)
-        this.setState({ nextTask: nextArray.length })
+        // this.setState({ nextTask: nextArray.length })
+        this.setState(prevState => ({
+          nextTask: nextArray.length,
+          progressInterval: prevState.progressInterval + 1,
+        }))
         this.executioner(nextArray, bot)
       }, bot[array[0]]().eta)
     } else {
       console.log(`${bot.name} completed all tasks!`)
       this.setState({
-        currentTask: `${bot.name} completed all tasks!` || `All Tasks Complete!`,
-        progressInterval: 0
+        currentTask:
+          `${bot.name} completed all tasks!` || `All Tasks Complete!`,
       })
     }
   }
 
   getScores() {
+    // Retrieves highest score only
     axios
       .get('/api/bot/score')
       .then(allScores => {
@@ -261,11 +262,8 @@ class App extends Component {
               value="Submit" 
               variant="contained"
             /> */}
-            <Button
-              type="submit"
-              variant="contained"
-            >
-            Submit
+            <Button type="submit" variant="contained">
+              Submit
             </Button>
           </fieldset>
         </form>
@@ -300,17 +298,23 @@ class App extends Component {
           text="Refresh Score"
           name="N/A"
           onClick={this.getScores}
-          clickable={true}
           color="primary"
         />
-        <Banner title="Current Task" value={this.state.currentTask} />
-        <TaskBanner title={`Tasks Remaining for ${this.state.semiPermaName}`} value={this.state.nextTask} />
-        <Banner title="Work Done" value={this.state.workDone} />
+        <Banner title="Status" value={this.state.currentTask} />
+        <TaskBanner
+          title={`Tasks Remaining for ${this.state.semiPermaName}`}
+          value={this.state.nextTask}
+        />
+        <Banner title="Work Done" value={this.state.progressInterval} />
         <br />
         <ScoreBanner
           title="High Score"
-          value={this.state.score[0].workDone}
-          name={this.state.score[0].name}
+          value={
+            this.state.score === 'N/A' ? 'any' : this.state.score[0].workDone
+          }
+          name={
+            this.state.score === 'N/A' ? `No-Bot-y` : this.state.score[0].name
+          }
         />
       </>
     )
