@@ -12,6 +12,7 @@ app.use(express.json())
 app.use('/api', apiController)
 app.use('/', mainController)
 
+
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Listening on port:${PORT}`))
 })
