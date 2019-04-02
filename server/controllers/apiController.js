@@ -30,7 +30,7 @@ apiController.route('/bot/score').get((req, res) => {
   })
     .then(results => {
       //  const arrayResult = results.map(result=>))
-      console.log("raw results:", results.dataValues)
+      console.log("\nraw results length:", results.length)
       if (results.length === 0) {
         res.send('N/A')
       } else {

@@ -10,6 +10,8 @@ function ActionButton(props) {
         disabled={props.disabled}
         color={props.color}
         variant="contained"
+        size={props.size}
+
       >
         {props.text}
       </Button>

@@ -19,6 +19,7 @@ class App extends Component {
     botName: '',
     botType: 'Bipedal',
     workDone: 0,
+    totalWorkDone: 0,
     currentTask: 'Awaiting Bot Creation',
     nextTask: 0,
     choreList: '',
@@ -32,6 +33,8 @@ class App extends Component {
     this.getScores()
   }
 
+
+  
   createBot = e => {
     e.preventDefault()
     if (this.state.botName === '') {
@@ -41,34 +44,38 @@ class App extends Component {
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
       semiPermaName: this.state.botName,
-    }))
+    },justWork()))
 
-    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+    const justWork = () => {
 
-    this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
-
-    let creationData = {
-      name: this.state.botName,
-      botType: this.state.botType,
-      workDone: 5,
-      attack: createdBots[createdBots.length - 1].attackValue().attack,
-      defense: createdBots[createdBots.length - 1].defenseValue().defense,
-      speed: createdBots[createdBots.length - 1].speedValue().speed,
-    }
-
-    axios
-      .post('/api/bot', creationData)
-      .then(data => {
-        this.setState({
-          botName: '',
-          botType: 'Bipedal',
+      console.log("workDone before creation of new Bot:", this.state.workDone)
+  
+      createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+  
+      this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
+  
+      let creationData = {
+        name: this.state.botName,
+        botType: this.state.botType,
+        workDone: 5,
+        attack: createdBots[createdBots.length - 1].attackValue().attack,
+        defense: createdBots[createdBots.length - 1].defenseValue().defense,
+        speed: createdBots[createdBots.length - 1].speedValue().speed,
+      }
+  
+      axios
+        .post('/api/bot', creationData)
+        .then(data => {
+          this.setState({
+            botName: '',
+            botType: 'Bipedal',
+          })
+          this.getScores()
         })
-        this.getScores()
-
-      })
-      .catch(err => console.log(err))
-
-    this.setState({ isDisabled: false })
+        .catch(err => console.log(err))
+  
+      this.setState({ isDisabled: false })
+    }
   }
 
   doSingleAction = e => {
@@ -152,6 +159,7 @@ class App extends Component {
         let nextArray = array.slice(1)
         console.log('Remaining Tasks:', nextArray)
         // this.setState({ nextTask: nextArray.length })
+        this.getScores()
         this.setState(prevState => ({
           nextTask: nextArray.length,
           progressInterval: prevState.progressInterval + 1,
@@ -161,8 +169,9 @@ class App extends Component {
     } else {
       console.log(`${bot.name} completed all tasks!`)
       this.setState({
-        currentTask:
-          `${bot.name} completed all tasks!` || `All Tasks Complete!`,
+        currentTask: `${bot.name} completed all tasks!`,
+        totalWorkDone: this.state.workDone,
+        workDone: 0,
       })
     }
   }
@@ -172,10 +181,19 @@ class App extends Component {
     axios
       .get('/api/bot/score')
       .then(allScores => {
-        console.log('allscores', allScores.data)
-        this.setState({ score: allScores.data })
-        console.log('typeof:', Array.isArray(allScores.data))
-        this.scores = allScores.data
+        allScores.data === "N/A" 
+        ? this.setState({
+          score: allScores.data
+          })
+        : this.setState({
+          score: allScores.data[0]
+          })
+        // console.log('allscores', allScores.data[0])
+        
+        // this.setState({ score: allScores.data[0] })
+        // console.log('typeof:', Array.isArray(allScores.data))
+        console.log("this.state.score:", this.state.score)
+        
       })
       .catch(err => console.log(err))
   }
@@ -209,7 +227,7 @@ class App extends Component {
       .post('/api/bot/score', data)
       .then(returnData => {
         console.log(
-          `Successful PO update. Used: ${JSON.stringify(
+          `Successful POST update. Used: ${JSON.stringify(
             data,
           )}. New values: ${returnData}`,
         )
@@ -262,7 +280,7 @@ class App extends Component {
               value="Submit" 
               variant="contained"
             /> */}
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" size="large">
               Submit
             </Button>
           </fieldset>
@@ -274,8 +292,9 @@ class App extends Component {
           onClick={this.doChores}
           disabled={this.state.isDisabled}
           color="secondary"
+          size="large"
         />
-        <ActionButton
+        {/* <ActionButton
           text="Wash Dishes"
           name="doTheDishes"
           onClick={this.doSingleAction}
@@ -286,20 +305,24 @@ class App extends Component {
           name="attackValue"
           onClick={this.doSingleAction}
           disabled={this.state.isDisabled}
-        />
+        /> */}
         <ActionButton
           text="HD Drill Practice"
           name="N/A"
           onClick={this.drillPractice}
           disabled={this.state.isDisabled}
           color="secondary"
+          size="large"
         />
         <ActionButton
           text="Refresh Score"
           name="N/A"
           onClick={this.getScores}
           color="primary"
+          size="large"
         />
+
+
         <Banner title="Status" value={this.state.currentTask} />
         <TaskBanner
           title={`Tasks Remaining for ${this.state.semiPermaName}`}
@@ -310,10 +333,10 @@ class App extends Component {
         <ScoreBanner
           title="High Score"
           value={
-            this.state.score === 'N/A' ? 'any' : this.state.score[0].workDone
+            this.state.score === 'N/A' ? 'any' : this.state.score.workDone
           }
           name={
-            this.state.score === 'N/A' ? `No-Bot-y` : this.state.score[0].name
+            this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name
           }
         />
       </>
