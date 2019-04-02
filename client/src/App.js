@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import ActionButton from './Components/ActionButton'
 import axios from 'axios'
-import { Destroyer, selectChores, executioner } from './bots'
+import { Destroyer} from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 import ScoreBanner from './Components/ScoreBanner'
@@ -44,6 +44,7 @@ class App extends Component {
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
       semiPermaName: this.state.botName,
+      // eslint-disable-next-line
     },justWork()))
 
     const justWork = () => {
