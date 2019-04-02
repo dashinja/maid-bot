@@ -5,7 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:prod": "npm run server",
+    "start:prod": "npm install && npm run server",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
     "server": "cd server && npm install && npm run startgo",
     "startgo": "node server.js",
