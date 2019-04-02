@@ -8,7 +8,7 @@
     "start:prod": "npm run server",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
     "server": "cd server && npm install && npm run startgo",
-    "startgo": "cd .. && node server/server.js",
+    "startgo": "node server.js",
     "client": "cd client && npm run start",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
