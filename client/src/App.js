@@ -10,7 +10,8 @@ import Input from '@material-ui/core/Input'
 import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
-import Burglar from './burglar';
+import Burglar from './burglar'
+import SimpleModal from "./Components/SimpleModal"
 
 let createdBots = []
 console.log('createdBots value on page load:', [createdBots])
@@ -28,11 +29,18 @@ class App extends Component {
     score: 'high score',
     progressInterval: 0,
     semiPermaName: 'Bot',
-    winner: "",
+    winner: '',
   }
 
   componentDidMount() {
     this.getScores()
+    let speak = {
+      and: function(text) {
+        window.responsiveVoice.speak(text, 'Afrikans Male', { pitch: 1 })
+      },
+    }
+
+    // speak.and('Welcome to Maid Bot Wars!')
   }
 
   createBot = e => {
@@ -48,11 +56,11 @@ class App extends Component {
           semiPermaName: this.state.botName,
           // eslint-disable-next-line
         },
-        justWork()
+        botStartUp()
       ),
     )
 
-    const justWork = () => {
+    const botStartUp = () => {
       console.log('workDone before creation of new Bot:', this.state.workDone)
 
       createdBots.push(new Destroyer(this.state.botName, this.state.botType))
@@ -83,34 +91,34 @@ class App extends Component {
     }
   }
 
-  doSingleAction = e => {
-    e.preventDefault()
-    const name = e.target.name
-    console.log('name:', name)
-    // Reflects 1 task added for current bot
-    this.setState(prevState => ({
-      workDone: prevState.workDone + 1,
-      name: createdBots[createdBots.length - 1].name,
-    }))
-    const tasks = []
-    tasks.push(e.target.name)
-    console.log('tasks', tasks)
-    let data = {
-      name,
-      workDone: this.state.workDone,
-      botName: createdBots[createdBots.length - 1].name,
-    }
-    this.executioner(tasks, [createdBots][[createdBots].length - 1])
+  // doSingleAction = e => {
+  //   e.preventDefault()
+  //   const name = e.target.name
+  //   console.log('name:', name)
+  //   // Reflects 1 task added for current bot
+  //   this.setState(prevState => ({
+  //     workDone: prevState.workDone + 1,
+  //     name: createdBots[createdBots.length - 1].name,
+  //   }))
+  //   const tasks = []
+  //   tasks.push(e.target.name)
+  //   console.log('tasks', tasks)
+  //   let data = {
+  //     name,
+  //     workDone: this.state.workDone,
+  //     botName: createdBots[createdBots.length - 1].name,
+  //   }
+  //   this.executioner(tasks, [createdBots][[createdBots].length - 1])
 
-    axios
-      .post('/api/bot/score', data)
-      .then(returnData => {
-        console.log('Successful PUT update. New values', returnData)
-      })
-      .catch(err => console.log(err))
+  //   axios
+  //     .post('/api/bot/score', data)
+  //     .then(returnData => {
+  //       console.log('Successful PUT update. New values', returnData)
+  //     })
+  //     .catch(err => console.log(err))
 
-    this.getScores()
-  }
+  //   this.getScores()
+  // }
 
   doChores = e => {
     e.preventDefault()
@@ -133,14 +141,9 @@ class App extends Component {
 
   drillPractice = e => {
     e.preventDefault()
-    // console.log(Pattern)
-    // console.log('Random Drill Pattern')
-    // const drills = Object.entries(Pattern)
-    // console.log('drills:', drills)
 
     const randChoice = Math.floor(Math.random() * Pattern.length)
     const choice = Pattern[randChoice]
-    // console.log('choice:', choice)
 
     this.executioner(choice, createdBots[createdBots.length - 1])
 
@@ -215,12 +218,16 @@ class App extends Component {
   homeDefense = () => {
     console.log('Home defense activated!')
     const intruder = new Burglar()
-    
-     intruder.attackValue(createdBots[createdBots.length - 1])
-    
-      // createdBots[createdBots.length - 1].health > 0 ||
-      // intruder.health >= 9000
-    
+
+    this.setState(
+      { winner: intruder.attackValue(createdBots[createdBots.length - 1]) },
+      () => {
+        console.log('new winner:', this.state.winner)
+      },
+    )
+
+    // createdBots[createdBots.length - 1].health > 0 ||
+    // intruder.health >= 9000
   }
 
   selectChores(first, second, bot) {
@@ -251,6 +258,7 @@ class App extends Component {
   }
 
   render() {
+    
     return (
       <>
         <h1>Welcome to Maid-Bot Wars</h1>
@@ -311,11 +319,20 @@ class App extends Component {
         />
 
         <ActionButton
+          text="Home Defense Drill Practice"
+          name="N/A"
+          onClick={this.drillPractice}
+          disabled={this.state.isDisabled}
+          color="primary"
+          size="large"
+        />
+
+        <ActionButton
           text="Burglar Attack"
           name="N/A"
           onClick={this.homeDefense}
           disabled={this.state.isDisabled}
-          color="primary"
+          color="secondary"
           size="large"
         />
         {/* <ActionButton
@@ -330,21 +347,13 @@ class App extends Component {
           onClick={this.doSingleAction}
           disabled={this.state.isDisabled}
         /> */}
-        <ActionButton
-          text="HD Drill Practice"
-          name="N/A"
-          onClick={this.drillPractice}
-          disabled={this.state.isDisabled}
-          color="secondary"
-          size="large"
-        />
-        <ActionButton
+        {/* <ActionButton
           text="Refresh Score"
           name="N/A"
           onClick={this.getScores}
           color="primary"
           size="large"
-        />
+        /> */}
 
         <Banner title="Status" value={this.state.currentTask} />
         <TaskBanner
@@ -359,10 +368,8 @@ class App extends Component {
           name={this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name}
         />
 
-        <Banner
-          title="Burglar Status"
-          value="Unknown"
-        />
+        <Banner title="Burglar Status" value="Unknown" />
+        <SimpleModal/>
       </>
     )
   }

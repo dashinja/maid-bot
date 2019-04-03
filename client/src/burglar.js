@@ -7,7 +7,6 @@ export default class Burglar {
 
   attackValue(victim) {
     if (this.health < 9000) {
-      // this.setState({winner: victim.name})
       console.log(`${this.name} is defeated! ${victim.name} wins!`)
       return victim.name
     } else if (
@@ -15,26 +14,18 @@ export default class Burglar {
       victim.health - this.attack > 0 &&
       this.health >= 9000
     ) {
-      
-      victim.health = victim.health - (this.attack * Math.random())
-      this.health = this.health - (victim.attack * Math.random())
-      console.log(`${victim.name} has ${victim.health} health.`)
-      console.log(`$The ${this.name} has ${this.health} health.`)
-     this.attackValue(victim) 
+      setTimeout(() => {
+        victim.health = victim.health - this.attack * Math.random()
+        this.health = this.health - victim.attack * Math.random()
+        console.log(`${victim.name} has ${victim.health} health.`)
+        console.log(`$The ${this.name} has ${this.health} health.`)
+        this.attackValue(victim)
+        
+      }, 1500);
     } else {
-      // this.setState({winner: this.name})
       console.log(`${victim.name} is defeated! ${this.name} wins!`)
       return this.name
     }
-
-    // return {
-    //   description: `Burgler is attacking! ${
-    //     bot.name
-    //   }'s health is now ${bot.health}.`,
-    //   attack,
-    //   eta,
-    //   name: 'Attack',
-    // }
   }
 
   stats() {
