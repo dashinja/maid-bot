@@ -36,9 +36,15 @@ class SimpleModal extends React.Component {
     open: false,
   }
 
-
   handleOpen = () => {
     this.setState({ open: true })
+    let speak = {
+      and: function(text) {
+        window.responsiveVoice.speak(text, 'UK English Female', { pitch: 1 })
+      },
+    }
+
+    speak.and("Honey, I'm home!")
   }
 
   handleClose = () => {
@@ -53,7 +59,7 @@ class SimpleModal extends React.Component {
         <Typography gutterBottom>
           Click to get the full Modal experience!
         </Typography>
-        <Button onLoad={this.handleOpen}>Open Modal</Button>
+        <Button onClick={this.handleOpen}>Open Modal</Button>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"

@@ -11,7 +11,7 @@ import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
-import SimpleModal from "./Components/SimpleModal"
+import SimpleModal from './Components/SimpleModal'
 
 let createdBots = []
 console.log('createdBots value on page load:', [createdBots])
@@ -32,62 +32,129 @@ class App extends Component {
     winner: '',
   }
 
+  //Counts submissions with no Input Name
+  noNameCount = 0
+  
+  //Robot Commentary Setup
+  speak = {
+  and: function (text) {
+    window.responsiveVoice.speak(text, 'UK English Female', {
+      pitch: 0.77,
+      volume: 1,
+    })
+  }}
+
   componentDidMount() {
     this.getScores()
-    let speak = {
-      and: function(text) {
-        window.responsiveVoice.speak(text, 'Afrikans Male', { pitch: 1 })
-      },
-    }
-
-    // speak.and('Welcome to Maid Bot Wars!')
   }
 
   createBot = e => {
     e.preventDefault()
-    if (this.state.botName === '') {
-      return console.error('Must enter a Robot Name!')
+    let speak = {
+      and: function(text) {
+        window.responsiveVoice.speak(text, 'UK English Female', {
+          pitch: 0.77,
+          volume: 1,
+        })
+      },
     }
 
-    this.setState(
-      prevState => (
-        {
-          workDone: prevState.workDone + 5,
-          semiPermaName: this.state.botName,
-          // eslint-disable-next-line
-        },
-        botStartUp()
-      ),
-    )
+    if (this.state.botName === '') {
+      if (this.noNameCount === 0) {
+        speak.and(
+          'Nope! You must enter a proper Robot Name for your little pet',
+        )
+        this.noNameCount += 1
+        console.log("I'm this.noNameCount:", this.noNameCount)
+        return console.error('Must enter a Robot Name!')
 
-    const botStartUp = () => {
-      console.log('workDone before creation of new Bot:', this.state.workDone)
+      } else if (this.noNameCount === 1) {
+        this.noNameCount += 1
+        speak.and('Gaaaahh, reallY!?!?! Instructions, people! Kids these days!')
+        console.log("I'm this.noNameCount:", this.noNameCount)
+        return console.error('Must enter a Robot Name!')
 
-      createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+      } else if (this.noNameCount === 2) {
+        this.noNameCount += 1
+        speak.and("BLAST! I... i'm just...I'm just so finished talking with you!")
+        console.log("I'm this.noNameCount:", this.noNameCount)
+        return console.error('Must enter a Robot Name!')
 
-      this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
-
-      let creationData = {
-        name: this.state.botName,
-        botType: this.state.botType,
-        workDone: 5,
-        attack: createdBots[createdBots.length - 1].attackValue().attack,
-        defense: createdBots[createdBots.length - 1].defenseValue().defense,
-        speed: createdBots[createdBots.length - 1].speedValue().speed,
+      } else if (this.noNameCount >= 3) {
+        speak.and("shhh! Whatever! See if I care.")
       }
+    } else {
+      console.log("I'm this.noNameCount:", this.noNameCount)
+      if (this.noNameCount >= 1 && this.noNameCount <= 3) {
+        speak.and(`There, that's better. So ...Um...`)
+        speak.and(`${this.state.botName} you call it?`)
+        speak.and(`How very nice.`)
+        speak.and(`Now its doing your chores for you automagically`)
+        this.noNameCount += 10
+        console.log("I'm this.noNameCount:", this.noNameCount)
+        setTimeout(() => {
+          speak.and(`How Simply amazing!`)
+        }, 10500);
 
-      axios
-        .post('/api/bot', creationData)
-        .then(data => {
-          this.setState({
-            botName: '',
-            botType: 'Bipedal',
-          })
-          this.getScores()
-        })
-        .catch(err => console.log(err))
+      } else if (this.noNameCount <1) {
+        speak.and(`Well well then. ${this.state.botName}, ahah? - I see... - How unique of you`)
+        speak.and(`Now its doing your chores for you`)
+        this.noNameCount += 10
+        console.log("I'm this.noNameCount:", this.noNameCount)
+        setTimeout(() => {
+          speak.and(`Just look at it go!`)
+        }, 10500);
+      } else {
+        return
+      }
+        this.setState(
+          prevState => (
+            {
+              workDone: prevState.workDone + 5,
+              semiPermaName: this.state.botName,
+              // eslint-disable-next-line
+            },
+            botStartUp()
+          ),
+        )
 
-      this.setState({ isDisabled: false })
+        const botStartUp = () => {
+          console.log(
+            'workDone before creation of new Bot:',
+            this.state.workDone,
+          )
+
+          createdBots.push(
+            new Destroyer(this.state.botName, this.state.botType),
+          )
+
+          this.executioner(
+            Task.insideTasks,
+            createdBots[createdBots.length - 1],
+          )
+
+          let creationData = {
+            name: this.state.botName,
+            botType: this.state.botType,
+            workDone: 5,
+            attack: createdBots[createdBots.length - 1].attackValue().attack,
+            defense: createdBots[createdBots.length - 1].defenseValue().defense,
+            speed: createdBots[createdBots.length - 1].speedValue().speed,
+          }
+
+          axios
+            .post('/api/bot', creationData)
+            .then(data => {
+              this.setState({
+                botName: '',
+                botType: 'Bipedal',
+              })
+              this.getScores()
+            })
+            .catch(err => console.log(err))
+
+          this.setState({ isDisabled: false })
+        }
     }
   }
 
@@ -180,7 +247,7 @@ class App extends Component {
         currentTask: `${bot.name} completed all tasks!`,
         totalWorkDone: this.state.workDone,
         workDone: 0,
-      })
+      }, () => window.responsiveVoice.speak("All Done! And ready for second breakfast! Eleven seas and more!", "UK English Female"))
     }
   }
 
@@ -258,7 +325,6 @@ class App extends Component {
   }
 
   render() {
-    
     return (
       <>
         <h1>Welcome to Maid-Bot Wars</h1>
@@ -369,7 +435,7 @@ class App extends Component {
         />
 
         <Banner title="Burglar Status" value="Unknown" />
-        <SimpleModal/>
+        <SimpleModal />
       </>
     )
   }
