@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import ActionButton from './Components/ActionButton'
 import axios from 'axios'
-import { Destroyer} from './bots'
+import { Destroyer } from './bots'
 import { Task, Pattern } from './patterns'
 import Banner from './Components/Banner'
 import ScoreBanner from './Components/ScoreBanner'
@@ -10,6 +10,7 @@ import Input from '@material-ui/core/Input'
 import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
+import Burglar from './burglar';
 
 let createdBots = []
 console.log('createdBots value on page load:', [createdBots])
@@ -27,34 +28,37 @@ class App extends Component {
     score: 'high score',
     progressInterval: 0,
     semiPermaName: 'Bot',
+    winner: "",
   }
 
   componentDidMount() {
     this.getScores()
   }
 
-
-  
   createBot = e => {
     e.preventDefault()
     if (this.state.botName === '') {
       return console.error('Must enter a Robot Name!')
     }
 
-    this.setState(prevState => ({
-      workDone: prevState.workDone + 5,
-      semiPermaName: this.state.botName,
-      // eslint-disable-next-line
-    },justWork()))
+    this.setState(
+      prevState => (
+        {
+          workDone: prevState.workDone + 5,
+          semiPermaName: this.state.botName,
+          // eslint-disable-next-line
+        },
+        justWork()
+      ),
+    )
 
     const justWork = () => {
+      console.log('workDone before creation of new Bot:', this.state.workDone)
 
-      console.log("workDone before creation of new Bot:", this.state.workDone)
-  
       createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-  
+
       this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
-  
+
       let creationData = {
         name: this.state.botName,
         botType: this.state.botType,
@@ -63,7 +67,7 @@ class App extends Component {
         defense: createdBots[createdBots.length - 1].defenseValue().defense,
         speed: createdBots[createdBots.length - 1].speedValue().speed,
       }
-  
+
       axios
         .post('/api/bot', creationData)
         .then(data => {
@@ -74,7 +78,7 @@ class App extends Component {
           this.getScores()
         })
         .catch(err => console.log(err))
-  
+
       this.setState({ isDisabled: false })
     }
   }
@@ -182,19 +186,18 @@ class App extends Component {
     axios
       .get('/api/bot/score')
       .then(allScores => {
-        allScores.data === "N/A" 
-        ? this.setState({
-          score: allScores.data
-          })
-        : this.setState({
-          score: allScores.data[0]
-          })
+        allScores.data === 'N/A'
+          ? this.setState({
+              score: allScores.data,
+            })
+          : this.setState({
+              score: allScores.data[0],
+            })
         // console.log('allscores', allScores.data[0])
-        
+
         // this.setState({ score: allScores.data[0] })
         // console.log('typeof:', Array.isArray(allScores.data))
-        console.log("this.state.score:", this.state.score)
-        
+        // console.log('this.state.score:', this.state.score)
       })
       .catch(err => console.log(err))
   }
@@ -207,6 +210,17 @@ class App extends Component {
     this.setState({
       [name]: value,
     })
+  }
+
+  homeDefense = () => {
+    console.log('Home defense activated!')
+    const intruder = new Burglar()
+    
+     intruder.attackValue(createdBots[createdBots.length - 1])
+    
+      // createdBots[createdBots.length - 1].health > 0 ||
+      // intruder.health >= 9000
+    
   }
 
   selectChores(first, second, bot) {
@@ -295,6 +309,15 @@ class App extends Component {
           color="secondary"
           size="large"
         />
+
+        <ActionButton
+          text="Burglar Attack"
+          name="N/A"
+          onClick={this.homeDefense}
+          disabled={this.state.isDisabled}
+          color="primary"
+          size="large"
+        />
         {/* <ActionButton
           text="Wash Dishes"
           name="doTheDishes"
@@ -323,7 +346,6 @@ class App extends Component {
           size="large"
         />
 
-
         <Banner title="Status" value={this.state.currentTask} />
         <TaskBanner
           title={`Tasks Remaining for ${this.state.semiPermaName}`}
@@ -333,12 +355,13 @@ class App extends Component {
         <br />
         <ScoreBanner
           title="High Score"
-          value={
-            this.state.score === 'N/A' ? 'any' : this.state.score.workDone
-          }
-          name={
-            this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name
-          }
+          value={this.state.score === 'N/A' ? 'any' : this.state.score.workDone}
+          name={this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name}
+        />
+
+        <Banner
+          title="Burglar Status"
+          value="Unknown"
         />
       </>
     )

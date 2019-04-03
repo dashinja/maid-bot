@@ -19,10 +19,16 @@ export class Destroyer {
   constructor(name, type) {
     this.name = name
     this.type = type
+    this.health = 50000
+    this.attack = 9000
+    this.defense = this.attack / 2
+    this.speed = this.defense / 50
+
     console.log(`\n${this.name}, the ${this.type} Destroyer is Born! Tremble!`)
   }
 
   attackValue() {
+    
     return {
       description: `${this.name} is attacking!`,
       attack: 10000,
@@ -44,7 +50,9 @@ export class Destroyer {
     return {
       defense,
       eta: 3500,
-      description: `${this.name} is defending like Optimus. Flexin' like a Prime!`,
+      description: `${
+        this.name
+      } is defending like Optimus. Flexin' like a Prime!`,
       name: 'Defense',
     }
   }
@@ -53,7 +61,7 @@ export class Destroyer {
     return {
       description: `${this.name} is doing the dishes.`,
       eta: 5000,
-      name: "Dishes"
+      name: 'Dishes',
     }
   }
 
@@ -61,7 +69,7 @@ export class Destroyer {
     return {
       description: `${this.name} is taking out the laundry.`,
       eta: 10000,
-      name: "Laundry"
+      name: 'Laundry',
     }
   }
 
@@ -81,12 +89,13 @@ export class Destroyer {
     return {
       description: `${this.name} is giving the dog a bath.`,
       eta: 14500,
-      name: "Bathe Dog"
+      name: 'Bathe Dog',
     }
   }
 
   healthValue() {
-    let health = 40000
+    let health = this.health
+    this.health = health
     return health
   }
 
@@ -94,7 +103,7 @@ export class Destroyer {
     return {
       description: `${this.name} is making a yummy sammich!`,
       eta: 7000,
-      name: "Make Sandwhich"
+      name: 'Make Sandwhich',
     }
   }
 
@@ -134,6 +143,7 @@ export class Destroyer {
       } \nDefense: ${this.defenseValue().defense} \nSpeed: ${
         this.speedValue().speed
       }`,
+      health: this.health >= 0 ? `${this.name}'s health is ${this.health}.` : `${this.name} is defeated!`,
     }
   }
 
