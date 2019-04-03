@@ -14,16 +14,22 @@ export default class Burglar {
       victim.health - this.attack > 0 &&
       this.health >= 9000
     ) {
-      setTimeout(() => {
-        victim.health = victim.health - this.attack * Math.random()
-        this.health = this.health - victim.attack * Math.random()
-        console.log(`${victim.name} has ${victim.health} health.`)
-        console.log(`$The ${this.name} has ${this.health} health.`)
-        this.attackValue(victim)
-        
-      }, 1500);
+      // setTimeout(() => {
+      victim.health = victim.health - this.attack * Math.random()
+      this.health = this.health - victim.attack * Math.random()
+      console.log(`${victim.name} has ${victim.health} health.`)
+      console.log(`$The ${this.name} has ${this.health} health.`)
+      this.attackValue(victim)
+
+      // }, 1500);
     } else {
       console.log(`${victim.name} is defeated! ${this.name} wins!`)
+      window.responsiveVoice.speak(
+        `Welp...the ${
+          this.name
+        } won! Now your master's house will get looted. Yo, do you even turing?! Piece of junk!`,
+      )
+
       return this.name
     }
   }
