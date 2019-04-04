@@ -1,20 +1,3 @@
-// export const selectChores = (first, second, bot) => {
-//   const randChoice = () => Math.random()
-//   randChoice() > 0.2 ? executioner(first, bot) : executioner(second, bot)
-// }
-
-// export const executioner = (array, bot) => {
-//   if (array[0] && bot[array[0]]) {
-//     console.log('\n', bot[array[0]]().description)
-//     setTimeout(() => {
-//       console.log(`\n${bot.name} Finished the Task`)
-//       let nextArray = array.slice(1)
-//       console.log('Remaining Tasks:', nextArray)
-//       executioner(nextArray, bot)
-//     }, bot[array[0]]().eta)
-//   } else console.log('All Tasks Complete!')
-// }
-
 export class Destroyer {
   constructor(name, type) {
     this.name = name
@@ -28,7 +11,6 @@ export class Destroyer {
   }
 
   attackValue() {
-
     return {
       description: `${this.name} is attacking!`,
       attack: 10000,
@@ -143,7 +125,10 @@ export class Destroyer {
       } \nDefense: ${this.defenseValue().defense} \nSpeed: ${
         this.speedValue().speed
       }`,
-      health: this.health >= 0 ? `${this.name}'s health is ${this.health}.` : `${this.name} is defeated!`,
+      health:
+        this.health >= 0
+          ? `${this.name}'s health is ${this.health}.`
+          : `${this.name} is defeated!`,
     }
   }
 

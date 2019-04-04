@@ -47,8 +47,6 @@ class App extends Component {
     },
   }
 
-  
-
   componentDidMount() {
     this.getScores()
   }
@@ -95,18 +93,15 @@ class App extends Component {
         )
         this.noNameCount += 10
         console.log("I'm this.noNameCount:", this.noNameCount)
-        // setTimeout(() => {
-        //   this.speak.and(`How Simply amazing!`)
-        // }, 10500)
         setTimeout(() => {
           this.speak.and('One - chore robot - to rule over them all...')
         }, 20000)
         setTimeout(() => {
-          this.speak.and("And with that chore robot - Bind them...")
-        }, 25000);
+          this.speak.and('And with that chore robot - Bind them...')
+        }, 25000)
         setTimeout(() => {
-          this.speak.and("Oh! - uh - sorry - ")
-        }, 28000);
+          this.speak.and('Oh! - uh - sorry - ')
+        }, 28000)
       } else if (this.noNameCount < 1) {
         this.speak.and(
           `Well well then. ${
@@ -120,8 +115,10 @@ class App extends Component {
           this.speak.and(`Just look at it go!`)
         }, 10500)
         setTimeout(() => {
-          this.speak.and(`Move those feet...- or... mandibles...whatever you have!`)
-        }, 20000);
+          this.speak.and(
+            `Move those feet...- or... mandibles...whatever you have!`,
+          )
+        }, 20000)
         setTimeout(() => {
           this.speak.and(`Almost there...`)
         }, 28000)
@@ -135,7 +132,11 @@ class App extends Component {
         console.log("I'm in botStartup and I'm this.getScores:", this.getScores)
 
         const getScores = this.getScores
-        this.executioner(Task.insideTasks, createdBots[createdBots.length - 1], getScores)
+        this.executioner(
+          Task.insideTasks,
+          createdBots[createdBots.length - 1],
+          getScores,
+        )
 
         let creationData = {
           name: this.state.botName,
@@ -150,12 +151,10 @@ class App extends Component {
           .post('/api/bot', creationData)
           .then(data => {
             console.log('what came back, init-creation data:', data.data)
-            // this.getScores()
           })
           .catch(err => console.log(err))
 
-
-// Enable buttons in time for task completion
+        // Enable buttons in time for task completion
         setTimeout(() => {
           this.setState({
             isDisabled: false,
@@ -180,35 +179,6 @@ class App extends Component {
       }, 1000)
     }
   }
-
-  // doSingleAction = e => {
-  //   e.preventDefault()
-  //   const name = e.target.name
-  //   console.log('name:', name)
-  //   // Reflects 1 task added for current bot
-  //   this.setState(prevState => ({
-  //     workDone: prevState.workDone + 1,
-  //     name: createdBots[createdBots.length - 1].name,
-  //   }))
-  //   const tasks = []
-  //   tasks.push(e.target.name)
-  //   console.log('tasks', tasks)
-  //   let data = {
-  //     name,
-  //     workDone: this.state.workDone,
-  //     botName: createdBots[createdBots.length - 1].name,
-  //   }
-  //   this.executioner(tasks, [createdBots][[createdBots].length - 1])
-
-  //   axios
-  //     .post('/api/bot/score', data)
-  //     .then(returnData => {
-  //       console.log('Successful PUT update. New values', returnData)
-  //     })
-  //     .catch(err => console.log(err))
-
-  //   this.getScores()
-  // }
 
   doChores = e => {
     e.preventDefault()
@@ -249,13 +219,12 @@ class App extends Component {
     )
 
     this.updateWorkState()
-    // this.getScores()
 
     setTimeout(() => {
       this.setState({
         isDisabledBurglar: false,
         isDisabledDrill: false,
-        isDisabledChore: false, 
+        isDisabledChore: false,
       })
     }, 33575)
   }
@@ -274,22 +243,22 @@ class App extends Component {
     switch (randChoice) {
       case 0:
         window.responsiveVoice.speak(`Executing Skirmish Pattern Alpha!`)
-        this.setState({choreList: "Alpha Pattern"})
+        this.setState({ choreList: 'Alpha Pattern' })
         break
 
       case 1:
         window.responsiveVoice.speak(`Executing Attack Pattern Beta!`)
-        this.setState({choreList: "Beta Pattern"})
+        this.setState({ choreList: 'Beta Pattern' })
         break
 
       case 2:
         window.responsiveVoice.speak(`Executing Defense Pattern Delta!`)
-        this.setState({choreList: "Delta Pattern"})
+        this.setState({ choreList: 'Delta Pattern' })
         break
 
       case 3:
         window.responsiveVoice.speak(`Executing Mixed Combat Pattern Omega!`)
-        this.setState({choreList: "Omega Pattern"})
+        this.setState({ choreList: 'Omega Pattern' })
         break
 
       default:
@@ -317,7 +286,6 @@ class App extends Component {
 
     console.log('inside Drillpractice - workdone:', this.state.workDone)
     this.updateWorkState()
-    // this.getScores()
   }
 
   // Make sure pass an array, even if an array of one element
@@ -331,8 +299,6 @@ class App extends Component {
         console.log(`\n${bot.name} Finished the Task`)
         let nextArray = array.slice(1)
         console.log('Remaining Tasks:', nextArray)
-        // this.setState({ nextTask: nextArray.length })
-        // this.getScores()
         this.setState(prevState => ({
           nextTask: nextArray.length,
           progressInterval: prevState.progressInterval + 1,
@@ -345,19 +311,15 @@ class App extends Component {
         window.responsiveVoice.speak(
           `${bot.name} completed the task set! Standing by!`,
         )
-        
       }
-      
-    //  getScoreUpdate()
 
       // Keeps function from breaking if no callback is passed
-      if (typeof getScoreUpdate === "function") {
-        console.log("There was a callback! Holla!")
+      if (typeof getScoreUpdate === 'function') {
+        console.log('There was a callback! Holla!')
         getScoreUpdate()
       } else {
-        console.log("No callback to speak of!")
-        console.log("callback:", getScoreUpdate)
-        
+        console.log('No callback to speak of!')
+        console.log('callback:', getScoreUpdate)
       }
 
       setTimeout(() => {
@@ -365,17 +327,18 @@ class App extends Component {
           {
             currentTask: `${bot.name} completed all tasks!`,
             totalWorkDone: this.state.workDone,
-            
           },
           () => {
             console.log("I'm this.noNameCount:", this.noNameCount)
             if (this.noNameCount === 14) {
               setTimeout(() => {
-                window.responsiveVoice.speak(`Whew! I'm glad that's over!`, {rate: 0.75, pitch: 0.85})
+                window.responsiveVoice.speak(`Whew! I'm glad that's over!`, {
+                  rate: 0.75,
+                  pitch: 0.85,
+                })
                 this.noNameCount += 1
-                console.log("this.noNameCount:", this.noNameCount)
-                
-              }, 3000);
+                console.log('this.noNameCount:', this.noNameCount)
+              }, 3000)
               return
             } else if (this.noNameCount < 14) {
               window.responsiveVoice.speak(
@@ -387,37 +350,27 @@ class App extends Component {
             }
           },
         )
-        
-      }, 3000);
+      }, 3000)
     }
   }
 
   getScores = () => {
-
-
     // Retrieves highest score only
     axios
-    .get('/api/bot/score')
-    .then(allScores => {
-        // allScores.data === 'N/A'
-        //   ? this.setState({
-        //       score: allScores.data,
-        //     })
-        //   : this.setState({
-        //       score: allScores.data[0],
-        //     })
-        console.log("this.state.currentTask", this.state.currentTask)
-console.log("inside this.getscores, for this.state.score: before setting:", this.state.score)
+      .get('/api/bot/score')
+      .then(allScores => {
+        console.log('this.state.currentTask', this.state.currentTask)
+        console.log(
+          'inside this.getscores, for this.state.score: before setting:',
+          this.state.score,
+        )
 
-this.setState({score: allScores.data})
+        this.setState({ score: allScores.data })
 
-console.log("inside this.getscores, for this.state.score: after setting:", this.state.score)
-        // this.setState(prevState => ({ score: allScores.data }))
-        // console.log('allscores', allScores.data[0])
-
-        // this.setState({ score: allScores.data[0] })
-        // console.log('typeof:', Array.isArray(allScores.data))
-        // console.log('this.state.score:', this.state.score)
+        console.log(
+          'inside this.getscores, for this.state.score: after setting:',
+          this.state.score,
+        )
       })
       .catch(err => console.log(err))
   }
@@ -465,52 +418,20 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
     setTimeout(() => {
       console.log('youWin inside setTimeout:', youWin)
 
-
       this.setState(
-          {
-            winner: youWin,
-            isDisabledChore: false,
-            isDisabledDrill: false,
-            isDisabledBurglar: false,
-          },
-          () => {
-            // Maybe this callback isn't needed at all
-            console.log('hollaBack!')
-            this.updateWorkState()
-            this.getScores()
-          }
+        {
+          winner: youWin,
+          isDisabledChore: false,
+          isDisabledDrill: false,
+          isDisabledBurglar: false,
+        },
+        () => {
+          console.log('hollaBack!')
+          this.updateWorkState()
+          this.getScores()
+        },
       )
-      
     }, 5750)
-
-    // (async () => {
-    //   const intruder = await new Burglar()
-    //   const theWinner = await intruder.attackValue(createdBots[createdBots.length - 1])
-
-    //   console.log('winner before setState:', theWinner)
-
-    //   // this.setState({ winner: '' }, () => {
-    //     this.setState(
-    //       {
-    //         winner: theWinner,
-    //       },
-    //       () => {
-    //         console.log(`New Winner: ${this.state.winner}`)
-    //       },
-    //     )
-    //   // })
-    //   console.log('winner After setState:', theWinner)
-
-    // })();
-    // this.setState(
-    //   { winner: winner },
-    //   () => {
-    //     console.log('new winner:', this.state.winner)
-    //   },
-    // )
-
-    // createdBots[createdBots.length - 1].health > 0 ||
-    // intruder.health >= 9000
   }
 
   selectChores(first, second, bot) {
@@ -520,7 +441,10 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
       ? this.executioner(first, bot, getScores) &&
         this.setState({ choreList: 'Indoor Chores' })
       : this.executioner(second, bot, getScores) &&
-        this.setState({ choreList: 'Outdoor Chores' }) && window.responsiveVoice.speak("What? Outside chores? This is gonna take a whole minute!")
+        this.setState({ choreList: 'Outdoor Chores' }) &&
+        window.responsiveVoice.speak(
+          'What? Outside chores? This is gonna take a whole minute!',
+        )
   }
 
   updateWorkState = () => {
@@ -585,11 +509,6 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
               <option value="Aeronautical">Aeronautical</option>
             </Select>
 
-            {/* <Input 
-              type="submit" 
-              value="Submit" 
-              variant="contained"
-            /> */}
             <Button type="submit" variant="contained" size="large">
               Submit
             </Button>
@@ -622,25 +541,6 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
           color="secondary"
           size="large"
         />
-        {/* <ActionButton
-          text="Wash Dishes"
-          name="doTheDishes"
-          onClick={this.doSingleAction}
-          disabled={this.state.isDisabled}
-        />
-        <ActionButton
-          text="Attack"
-          name="attackValue"
-          onClick={this.doSingleAction}
-          disabled={this.state.isDisabled}
-        /> */}
-        {/* <ActionButton
-          text="Refresh Score"
-          name="N/A"
-          onClick={this.getScores}
-          color="primary"
-          size="large"
-        /> */}
 
         <Banner title="Status" value={this.state.currentTask} />
         <TaskBanner
@@ -656,19 +556,20 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
               ? 'any'
               : this.state.score.workDone === 0
               ? this.state.score.progressInterval
-                : this.state.score.workDone
+              : this.state.score.workDone
           }
-          name={
-            this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name
-          }
+          name={this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name}
         />
 
-        <Banner 
-          title="Burglar Status" 
-          value= {this.state.winner !== undefined 
-          ? this.state.winner === "Burglar" 
-          ? `Burglar is looting your owner's home over your lifeless circuits!` : `Burglar is defeated and has run away!`
-          : `No intruders have come!`} 
+        <Banner
+          title="Burglar Status"
+          value={
+            this.state.winner !== undefined
+              ? this.state.winner === 'Burglar'
+                ? `Burglar is looting your owner's home over your lifeless circuits!`
+                : `Burglar is defeated and has run away!`
+              : `No intruders have come!`
+          }
         />
         {/* <SimpleModal /> */}
       </>

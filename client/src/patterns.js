@@ -51,9 +51,4 @@ export const Task = {
   outsideTasks,
 }
 
-export const Pattern = [
-  alphaPattern,
-  betaPattern,
-  deltaPattern,
-  omegaPattern,
-]
+export const Pattern = [alphaPattern, betaPattern, deltaPattern, omegaPattern]

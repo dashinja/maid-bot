@@ -29,13 +29,9 @@ apiController.route('/bot/score').get((req, res) => {
     limit: 1,
   })
     .then(result => {
-      //  const arrayResult = results.map(result=>))
-      // console.log("\nraw results length:", results.length)
-      // console.log("result:", result.dataValues)
       if (result === null) {
         res.send('N/A')
       } else {
-        // console.log(results.map(result => result.dataValues))
         res.json(result)
       }
     })
