@@ -10,32 +10,14 @@ export class Destroyer {
     console.log(`\n${this.name}, the ${this.type} Destroyer is Born! Tremble!`)
   }
 
-  attackValue() {
-    return {
-      description: `${this.name} is attacking!`,
-      attack: 10000,
-      eta: 3000,
-      name: 'Attack',
-    }
-  }
-
+  /////////////////////////////////
+  // Inside Chore Methods: Short //
+  /////////////////////////////////
   bakeSomeCookies() {
     return {
       description: `${this.name} is baking cookies.`,
       eta: 8000,
       name: 'Bake Cookies',
-    }
-  }
-
-  defenseValue() {
-    let defense = this.attackValue().attack / 2
-    return {
-      defense,
-      eta: 3500,
-      description: `${
-        this.name
-      } is defending like Optimus. Flexin' like a Prime!`,
-      name: 'Defense',
     }
   }
 
@@ -55,37 +37,29 @@ export class Destroyer {
     }
   }
 
-  executioner(array, bot) {
-    if (array[0] && bot[array[0]]) {
-      console.log('\n', bot[array[0]]().description)
-      setTimeout(() => {
-        console.log(`\n${bot.name} Finished the Task`)
-        let nextArray = array.slice(1)
-        console.log('Remaining Tasks:', nextArray)
-        this.executioner(nextArray, bot)
-      }, bot[array[0]]().eta)
-    } else console.log('All Tasks Complete!')
-  }
-
-  giveTheDogABath() {
-    return {
-      description: `${this.name} is giving the dog a bath.`,
-      eta: 14500,
-      name: 'Bathe Dog',
-    }
-  }
-
-  healthValue() {
-    let health = this.health
-    this.health = health
-    return health
-  }
-
   makeASammich() {
     return {
       description: `${this.name} is making a yummy sammich!`,
       eta: 7000,
       name: 'Make Sandwhich',
+    }
+  }
+
+  sweepTheHouse() {
+    return {
+      description: `${this.name} is sweeping the house`,
+      eta: 3000,
+    }
+  }
+
+  /////////////////////////////////
+  // Outside Chore Methods: Long //
+  /////////////////////////////////
+  giveTheDogABath() {
+    return {
+      description: `${this.name} is giving the dog a bath.`,
+      eta: 14500,
+      name: 'Bathe Dog',
     }
   }
 
@@ -103,11 +77,48 @@ export class Destroyer {
     }
   }
 
-  selectChores(first, second, bot) {
-    const randChoice = () => Math.random()
-    randChoice() > 0.2
-      ? this.executioner(first, bot)
-      : this.executioner(second, bot)
+  takeOutTheRecycling() {
+    return {
+      description: `${this.name} is taking out the recycling `,
+      eta: 4000,
+    }
+  }
+
+  washTheCar() {
+    return {
+      description: `${this.name} is washing the car!`,
+      eta: 20000,
+    }
+  }
+
+  ///////////////////////////////
+  // Drill and Defense Methods //
+  ///////////////////////////////
+  attackValue() {
+    return {
+      description: `${this.name} is attacking!`,
+      attack: 10000,
+      eta: 3000,
+      name: 'Attack',
+    }
+  }
+
+  defenseValue() {
+    let defense = this.attackValue().attack / 2
+    return {
+      defense,
+      eta: 3500,
+      description: `${
+        this.name
+      } is defending like Optimus. Flexin' like a Prime!`,
+      name: 'Defense',
+    }
+  }
+
+  healthValue() {
+    let health = this.health
+    this.health = health
+    return health
   }
 
   speedValue() {
@@ -129,27 +140,7 @@ export class Destroyer {
         this.health >= 0
           ? `${this.name}'s health is ${this.health}.`
           : `${this.name} is defeated!`,
-    }
-  }
-
-  sweepTheHouse() {
-    return {
-      description: `${this.name} is sweeping the house`,
-      eta: 3000,
-    }
-  }
-
-  takeOutTheRecycling() {
-    return {
-      description: `${this.name} is taking out the recycling `,
-      eta: 4000,
-    }
-  }
-
-  washTheCar() {
-    return {
-      description: `${this.name} is washing the car!`,
-      eta: 20000,
+      eta: 1000,
     }
   }
 }

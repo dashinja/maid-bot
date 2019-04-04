@@ -30,7 +30,7 @@ export default class Burglar {
         window.responsiveVoice.speak(
           `Welp - the ${
             this.name
-          } won! Now your master's house will get looted. Yo, do you even turing, you Piece of junk! Wait, you DO know about the Turing Test, I hope...`,
+          } won! Now your master's house will get looted. Like, do you even turing? - What a Piece of Junk!`,
         )
       }, 6000)
 

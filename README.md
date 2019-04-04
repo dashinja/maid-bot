@@ -1,1 +1,3 @@
-# maid-bot
+# Maid-Bot
+
+Maid Bot is the 

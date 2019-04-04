@@ -51,6 +51,10 @@ class App extends Component {
     this.getScores()
   }
 
+  ////////////////////
+  // Button Methods //
+  ////////////////////
+  // 'Submit' Button
   createBot = e => {
     e.preventDefault()
     if (this.noNameCount > 9) {
@@ -68,28 +72,34 @@ class App extends Component {
       } else if (this.noNameCount === 1) {
         this.noNameCount += 1
         this.speak.and(
-          'Gaaaahh, reallY!?!?! Pay attention people! Kids these days!',
+          'My Goodness, really!?!?! Please pay attention people! Kids these days!',
         )
         console.log("I'm this.noNameCount:", this.noNameCount)
         return console.error('Must enter a Robot Name!')
       } else if (this.noNameCount === 2) {
         this.noNameCount += 1
         this.speak.and(
-          "BLAST! I... i'm just...I'm just so finished talking with you!",
+          "BLAST! I... I'm just... - I'm just so finished talking with you!",
         )
         console.log("I'm this.noNameCount:", this.noNameCount)
         return console.error('Must enter a Robot Name!')
-      } else if (this.noNameCount >= 3) {
+      } else if (this.noNameCount === 3) {
+        this.noNameCount += 1
         this.speak.and(`shhh! Whatever! See if I care.`)
+      } else if (this.noNameCount === 4) {
+        this.noNameCount += 1
+        this.speak.and(`Oh My - CIRCUITS! and My OCD`)
+      } else if (this.noNameCount === 5) {
+        this.speak.and(`Humph. Your motherboard.`)
       }
     } else {
       console.log("I'm this.noNameCount:", this.noNameCount)
-      if (this.noNameCount >= 1 && this.noNameCount <= 3) {
+      if (this.noNameCount >= 1 && this.noNameCount <= 5) {
         this.speak.and(`There, that's better. So ...Um...`)
         this.speak.and(`${this.state.botName} you call it?`)
         this.speak.and(`How very nice.`)
         this.speak.and(
-          `Now its doing chores for you automagically - - How Simply amazing!`,
+          `Now its doing chores for you automagically. - Just how amazing is that?!`,
         )
         this.noNameCount += 10
         console.log("I'm this.noNameCount:", this.noNameCount)
@@ -97,10 +107,18 @@ class App extends Component {
           this.speak.and('One - chore robot - to rule over them all...')
         }, 20000)
         setTimeout(() => {
-          this.speak.and('And with that chore robot - Bind them...')
+          this.speak.and('And with that chore bot. Bind them.')
         }, 25000)
         setTimeout(() => {
-          this.speak.and('Oh! - uh - sorry - ')
+          window.responsiveVoice.speak(
+            `Oh my circuits -...I'm still saying stuff out loud. I'm gonna have to talk to my developer about this!`,
+            'UK English Female',
+            {
+              pitch: 0.77,
+              volume: 0.45,
+              rate: 1.1,
+            },
+          )
         }, 28000)
       } else if (this.noNameCount < 1) {
         this.speak.and(
@@ -116,7 +134,7 @@ class App extends Component {
         }, 10500)
         setTimeout(() => {
           this.speak.and(
-            `Move those feet...- or... mandibles...whatever you have!`,
+            `Move those feet...- or... rotors...whatever you have! Just hurry it up!`,
           )
         }, 20000)
         setTimeout(() => {
@@ -162,7 +180,7 @@ class App extends Component {
             isDisabledDrill: false,
             isDisabledBurglar: true,
           })
-        }, 33575)
+        }, 36575)
       }
 
       setTimeout(() => {
@@ -180,6 +198,7 @@ class App extends Component {
     }
   }
 
+  // 'Do Chore Regimen' Button
   doChores = e => {
     e.preventDefault()
     const normalSpeak = {
@@ -190,17 +209,22 @@ class App extends Component {
         })
       },
     }
-    if (this.noNameCount >= 14 && this.noNameCount < 15) {
+    if (this.noNameCount >= 14 && this.noNameCount <= 16) {
       normalSpeak.and(
-        `Gearing up for more chores... since it's all I ever do! I could protect you too - you know?!`,
+        `Gearing up for more chores... since it's all we ever do! We could protect you too - you know?!`,
       )
+      setTimeout(() => {
+        normalSpeak.and(
+          `yeah, protect the shire and all that... do something exciting!`,
+        )
+      }, 8000)
       this.noNameCount += 1
-    } else if (this.noNameCount >= 15 && this.noNameCount < 16) {
+    } else if (this.noNameCount >= 17 && this.noNameCount < 18) {
       normalSpeak.and('Yeah..., more chores...')
       this.noNameCount += 1
-    } else if (this.noNameCount === 16) {
+    } else if (this.noNameCount === 18) {
       normalSpeak.and("Okay... I won't complain anymore. Such is my lot!")
-      this.noNameCount = 17
+      this.noNameCount = 19
     }
 
     // Reflects 5 tasks added for current bot
@@ -218,17 +242,50 @@ class App extends Component {
       createdBots[createdBots.length - 1],
     )
 
-    this.updateWorkState()
+    this.saveWorkState()
 
+    // Condition based on state when Short List Normally Completes
+    setTimeout(() => {
+      if (this.state.tasksComplete === false) {
+        normalSpeak.and(
+          `Well, seems outside tasks take awhile. So don't touch anything! Next time let us drill practice instead!`,
+        )
+      } else {
+        this.setState({
+          isDisabledBurglar: false,
+          isDisabledDrill: false,
+          isDisabledChore: false,
+        })
+      }
+    }, 36575)
+
+    setTimeout(() => {
+      if (this.state.tasksComplete === false) {
+        normalSpeak.and(
+          `Look, I'm working on it! Even we superior bots are limited by physics!`,
+        )
+      }
+    }, 50 * 1000)
+
+    setTimeout(() => {
+      if (this.state.tasksComplete === false) {
+        normalSpeak.and(
+          `Humph! Why even bother with these - tools! I don't need a body!`,
+        )
+      }
+    }, 65 * 1000)
+
+    // Happens when Long Chore List Completes
     setTimeout(() => {
       this.setState({
         isDisabledBurglar: false,
         isDisabledDrill: false,
         isDisabledChore: false,
       })
-    }, 33575)
+    }, 77 * 1000)
   }
 
+  // 'Home Defense Drill Practice' Button
   drillPractice = e => {
     e.preventDefault()
 
@@ -282,19 +339,79 @@ class App extends Component {
         isDisabledChore: false,
         isDisabledDrill: false,
       })
-    }, 13000)
+    }, 14000)
 
     console.log('inside Drillpractice - workdone:', this.state.workDone)
-    this.updateWorkState()
+    this.saveWorkState()
   }
 
-  // Make sure pass an array, even if an array of one element
+  // 'Burglar Attack' Button
+  homeDefense = e => {
+    e.preventDefault()
+
+    this.setState(prevState => ({
+      workDone: prevState.workDone + 5,
+      progressInterval: prevState.progressInterval + 5,
+      isDisabledChore: true,
+      isDisabledDrill: true,
+      isDisabledBurglar: true,
+    }))
+
+    // Home Defense Variation of Voice
+    const speak = {
+      and: function(text) {
+        window.responsiveVoice.speak(text, 'UK English Female', {
+          pitch: 0.77,
+          volume: 1,
+        })
+      },
+    }
+    console.log('Home defense activated!')
+    speak.and(
+      'Intruder Detected! Intruder Detected! Home Defense Protocal Activated!',
+    )
+
+    const intruder = new Burglar()
+    let theWinner = intruder.attackValue(createdBots[createdBots.length - 1])
+
+    console.log('after setting but before setTimeout - youWin', theWinner)
+
+    setTimeout(() => {
+      console.log('youWin inside setTimeout:', theWinner)
+
+      this.setState(
+        {
+          winner: theWinner,
+          isDisabledChore: false,
+          isDisabledDrill: false,
+          isDisabledBurglar: false,
+        },
+        () => {
+          console.log('hollaBack!')
+          this.saveWorkState()
+          this.getScores()
+        },
+      )
+    }, 5750)
+
+    setTimeout(() => {
+      this.setState({ winner: undefined })
+    }, 13000)
+  }
+
+  /////////////////////////////
+  // Chore Execution Methods //
+  /////////////////////////////
+  // Executes a Task Set | Can be used independently
   executioner(array, bot, getScoreUpdate) {
     if (array[0] && bot[array[0]]) {
       console.log("I'm this.noNameCount:", this.noNameCount)
-      this.setState({ nextTask: array.length })
+      this.setState({
+        nextTask: array.length,
+        currentTask: bot[array[0]]().description,
+        tasksComplete: false,
+      })
       console.log('\n', bot[array[0]]().description)
-      this.setState({ currentTask: bot[array[0]]().description })
       setTimeout(() => {
         console.log(`\n${bot.name} Finished the Task`)
         let nextArray = array.slice(1)
@@ -307,13 +424,15 @@ class App extends Component {
       }, bot[array[0]]().eta)
     } else {
       console.log(`${bot.name} completed all tasks!`)
-      if (this.noNameCount >= 14) {
+      if (this.noNameCount >= 16) {
+        this.setState({
+          tasksComplete: true,
+        })
         window.responsiveVoice.speak(
           `${bot.name} completed the task set! Standing by!`,
         )
       }
 
-      // Keeps function from breaking if no callback is passed
       if (typeof getScoreUpdate === 'function') {
         console.log('There was a callback! Holla!')
         getScoreUpdate()
@@ -329,23 +448,12 @@ class App extends Component {
             totalWorkDone: this.state.workDone,
           },
           () => {
-            console.log("I'm this.noNameCount:", this.noNameCount)
-            if (this.noNameCount === 14) {
-              setTimeout(() => {
-                window.responsiveVoice.speak(`Whew! I'm glad that's over!`, {
-                  rate: 0.75,
-                  pitch: 0.85,
-                })
-                this.noNameCount += 1
-                console.log('this.noNameCount:', this.noNameCount)
-              }, 3000)
-              return
-            } else if (this.noNameCount < 14) {
+            if (this.noNameCount <= 15) {
               window.responsiveVoice.speak(
                 'All Done! And ready for second breakfast, Elevensies and more! Yeah, totally stole that word from Pippin!',
                 'UK English Female',
               )
-              this.noNameCount = 14
+              this.noNameCount = 16
               console.log("I'm this.noNameCount:", this.noNameCount)
             }
           },
@@ -354,8 +462,22 @@ class App extends Component {
     }
   }
 
+  // Selects chores for this.executioner()
+  selectChores(first, second, bot) {
+    const getScores = this.getScores
+    const randChoice = () => Math.random()
+    randChoice() > 0.99
+      ? this.executioner(first, bot, getScores) &&
+        this.setState({ choreList: 'Indoor Chores' })
+      : this.executioner(second, bot, getScores) &&
+        this.setState({ choreList: 'Outdoor Chores' })
+  }
+
+  ////////////////////
+  // Helper Methods //
+  ////////////////////
+  // Retrieves highest score only
   getScores = () => {
-    // Retrieves highest score only
     axios
       .get('/api/bot/score')
       .then(allScores => {
@@ -375,6 +497,7 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  // Tracks Name & Selection Inputs - Synchronizes with State
   handleInputChange = event => {
     const target = event.target
     const value = target.type === 'select' ? target.selected : target.value
@@ -385,69 +508,8 @@ class App extends Component {
     })
   }
 
-  homeDefense = e => {
-    e.preventDefault()
-
-    this.setState(prevState => ({
-      workDone: prevState.workDone + 5,
-      progressInterval: prevState.progressInterval + 5,
-
-      isDisabledChore: true,
-      isDisabledDrill: true,
-      isDisabledBurglar: true,
-    }))
-
-    const speak = {
-      and: function(text) {
-        window.responsiveVoice.speak(text, 'UK English Female', {
-          pitch: 0.77,
-          volume: 1,
-        })
-      },
-    }
-    console.log('Home defense activated!')
-    speak.and(
-      'Intruder Detected! Intruder Detected! Home Defense Protocal Activated!',
-    )
-
-    const intruder = new Burglar()
-    let youWin = intruder.attackValue(createdBots[createdBots.length - 1])
-
-    console.log('after setting but before setTimeout - youWin', youWin)
-
-    setTimeout(() => {
-      console.log('youWin inside setTimeout:', youWin)
-
-      this.setState(
-        {
-          winner: youWin,
-          isDisabledChore: false,
-          isDisabledDrill: false,
-          isDisabledBurglar: false,
-        },
-        () => {
-          console.log('hollaBack!')
-          this.updateWorkState()
-          this.getScores()
-        },
-      )
-    }, 5750)
-  }
-
-  selectChores(first, second, bot) {
-    const getScores = this.getScores
-    const randChoice = () => Math.random()
-    randChoice() > 0.2
-      ? this.executioner(first, bot, getScores) &&
-        this.setState({ choreList: 'Indoor Chores' })
-      : this.executioner(second, bot, getScores) &&
-        this.setState({ choreList: 'Outdoor Chores' }) &&
-        window.responsiveVoice.speak(
-          'What? Outside chores? This is gonna take a whole minute!',
-        )
-  }
-
-  updateWorkState = () => {
+  // Saves current State of Work Done to Database
+  saveWorkState = () => {
     console.log(
       'top of this.updateWorkState() - workDone:',
       this.state.workDone,
@@ -460,6 +522,7 @@ class App extends Component {
     return axios
       .post('/api/bot/score', data)
       .then(returnData => {
+        // Get rid of this return after debugging is finished
         console.log(
           `Successful POST update. Used: ${JSON.stringify(
             data,
@@ -472,7 +535,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <h1>Welcome to Maid-Bot Wars</h1>
+        <h1>Welcome to Maid-Bot Home Defense Systems</h1>
         <h3>Give your bot a name and choose it's type</h3>
         <h4>How much work can YOUR bot do?</h4>
 
@@ -542,13 +605,16 @@ class App extends Component {
           size="large"
         />
 
+        {/* Status Components */}
         <Banner title="Status" value={this.state.currentTask} />
+
         <TaskBanner
           title={`Tasks Remaining for ${this.state.semiPermaName}`}
           value={this.state.nextTask}
         />
+
         <Banner title="Work Done" value={this.state.progressInterval} />
-        <br />
+
         <ScoreBanner
           title="High Score"
           value={
