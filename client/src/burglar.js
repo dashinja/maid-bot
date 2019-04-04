@@ -19,7 +19,7 @@ export default class Burglar {
       this.health = this.health - victim.attack * Math.random()
       console.log(`${victim.name} has ${victim.health} health.`)
       console.log(`$The ${this.name} has ${this.health} health.`)
-      this.attackValue(victim)
+      return this.attackValue(victim)
 
       // }, 1500);
     } else {

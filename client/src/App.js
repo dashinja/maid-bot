@@ -91,15 +91,23 @@ class App extends Component {
         this.speak.and(`There, that's better. So ...Um...`)
         this.speak.and(`${this.state.botName} you call it?`)
         this.speak.and(`How very nice.`)
-        this.speak.and(`Now its doing chores for you automagically`)
+        this.speak.and(
+          `Now its doing chores for you automagically - - How Simply amazing!`,
+        )
         this.noNameCount += 10
         console.log("I'm this.noNameCount:", this.noNameCount)
+        // setTimeout(() => {
+        //   this.speak.and(`How Simply amazing!`)
+        // }, 10500)
         setTimeout(() => {
-          this.speak.and(`How Simply amazing!`)
-        }, 10500)
+          this.speak.and('One - chore robot - to rule over them all...')
+        }, 20000)
         setTimeout(() => {
-          this.speak.and('One Chore Bot to rule them all...')
-        }, 28000)
+          this.speak.and("And with that chore robot - Bind them...")
+        }, 25000);
+        setTimeout(() => {
+          this.speak.and("Oh! - uh - sorry - ")
+        }, 28000);
       } else if (this.noNameCount < 1) {
         this.speak.and(
           `Well well then. ${
@@ -112,6 +120,9 @@ class App extends Component {
         setTimeout(() => {
           this.speak.and(`Just look at it go!`)
         }, 10500)
+        setTimeout(() => {
+          this.speak.and(`Move those feet...- or...- mandibles...whatever you have!`)
+        }, 20000);
         setTimeout(() => {
           this.speak.and(`Almost there...`)
         }, 28000)
@@ -349,8 +360,9 @@ class App extends Component {
         },
         () => {
           console.log("I'm this.noNameCount:", this.noNameCount)
-          if (this.noNameCount >= 14) {
-            window.responsiveVoice.speak('')
+          if (this.noNameCount = 14) {
+            window.responsiveVoice.speak(`Whew! I'm glad that's over!`)
+            this.noNameCount += 1
             return
           } else {
             window.responsiveVoice.speak(
@@ -430,7 +442,7 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
     const intruder = new Burglar()
     let youWin = intruder.attackValue(createdBots[createdBots.length - 1])
 
-    console.log('after setting but before setTimeout - this.youWin', youWin)
+    console.log('after setting but before setTimeout - youWin', youWin)
     setTimeout(() => {
       console.log('this.youWin inside setTimeout:', youWin)
       this.setState({
@@ -477,7 +489,7 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
       ? this.executioner(first, bot, getScores) &&
         this.setState({ choreList: 'Indoor Chores' })
       : this.executioner(second, bot, getScores) &&
-        this.setState({ choreList: 'Outdoor Chores' })
+        this.setState({ choreList: 'Outdoor Chores' }) && window.responsiveVoice.speak("What? Outside chores? This is gonna take a whole minute!")
   }
 
   updateWorkState = () => {
