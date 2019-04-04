@@ -8,6 +8,11 @@ export default class Burglar {
   attackValue(victim) {
     if (this.health < 9000) {
       console.log(`${this.name} is defeated! ${victim.name} wins!`)
+    setTimeout(() => {
+      window.responsiveVoice.speak(
+        `${this.name} is defeated! ${victim.name} wins!`,
+      )
+    }, 6000);
       return victim.name
     } else if (
       victim.health > 0 &&
@@ -21,14 +26,17 @@ export default class Burglar {
       console.log(`$The ${this.name} has ${this.health} health.`)
       return this.attackValue(victim)
 
-      // }, 1500);
+      // }, 500);
     } else {
       console.log(`${victim.name} is defeated! ${this.name} wins!`)
-      window.responsiveVoice.speak(
-        `Welp...the ${
-          this.name
-        } won! Now your master's house will get looted. Yo, do you even turing?! Piece of junk!`,
-      )
+      setTimeout(() => {
+        window.responsiveVoice.speak(
+          `Welp - the ${
+            this.name
+          } won! Now your master's house will get looted. Yo, do you even turing, you Piece of junk! Wait, you DO know about the Turing Test, I hope...`
+        )
+        
+      }, 6000);
 
       return this.name
     }

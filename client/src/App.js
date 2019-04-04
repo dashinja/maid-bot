@@ -32,7 +32,6 @@ class App extends Component {
     score: 'high score',
     progressInterval: 0,
     semiPermaName: 'Bot',
-    winner: '',
   }
 
   //Counts submissions with no Input Name
@@ -48,7 +47,7 @@ class App extends Component {
     },
   }
 
-  youWin = ''
+  
 
   componentDidMount() {
     this.getScores()
@@ -121,7 +120,7 @@ class App extends Component {
           this.speak.and(`Just look at it go!`)
         }, 10500)
         setTimeout(() => {
-          this.speak.and(`Move those feet...- or...- mandibles...whatever you have!`)
+          this.speak.and(`Move those feet...- or... mandibles...whatever you have!`)
         }, 20000);
         setTimeout(() => {
           this.speak.and(`Almost there...`)
@@ -156,7 +155,7 @@ class App extends Component {
           .catch(err => console.log(err))
 
 
-
+// Enable buttons in time for task completion
         setTimeout(() => {
           this.setState({
             isDisabled: false,
@@ -178,7 +177,7 @@ class App extends Component {
           },
           botStartUp(),
         )
-      }, 2000)
+      }, 1000)
     }
   }
 
@@ -239,6 +238,7 @@ class App extends Component {
       workDone: prevState.workDone + 5,
       isDisabledBurglar: true,
       isDisabledDrill: true,
+      isDisabledChore: true,
     }))
 
     // Select and Do chores on the most recently created Bot
@@ -255,6 +255,7 @@ class App extends Component {
       this.setState({
         isDisabledBurglar: false,
         isDisabledDrill: false,
+        isDisabledChore: false, 
       })
     }, 33575)
   }
@@ -272,19 +273,23 @@ class App extends Component {
 
     switch (randChoice) {
       case 0:
-        window.responsiveVoice.speak(`Executing Alpha Pattern!`)
+        window.responsiveVoice.speak(`Executing Skirmish Pattern Alpha!`)
+        this.setState({choreList: "Alpha Pattern"})
         break
 
       case 1:
-        window.responsiveVoice.speak(`Executing Beta Pattern!`)
+        window.responsiveVoice.speak(`Executing Attack Pattern Beta!`)
+        this.setState({choreList: "Beta Pattern"})
         break
 
       case 2:
-        window.responsiveVoice.speak(`Executing Delta Pattern`)
+        window.responsiveVoice.speak(`Executing Defense Pattern Delta!`)
+        this.setState({choreList: "Delta Pattern"})
         break
 
       case 3:
-        window.responsiveVoice.speak(`Executing Omega Pattern`)
+        window.responsiveVoice.speak(`Executing Mixed Combat Pattern Omega!`)
+        this.setState({choreList: "Omega Pattern"})
         break
 
       default:
@@ -299,12 +304,14 @@ class App extends Component {
       workDone: prevState.workDone + 5,
       isDisabledBurglar: true,
       isDisabledChore: true,
+      isDisabledDrill: true,
     }))
 
     setTimeout(() => {
       this.setState({
         isDisabledBurglar: false,
         isDisabledChore: false,
+        isDisabledDrill: false,
       })
     }, 13000)
 
@@ -314,7 +321,7 @@ class App extends Component {
   }
 
   // Make sure pass an array, even if an array of one element
-  executioner(array, bot, justACallBack) {
+  executioner(array, bot, getScoreUpdate) {
     if (array[0] && bot[array[0]]) {
       console.log("I'm this.noNameCount:", this.noNameCount)
       this.setState({ nextTask: array.length })
@@ -330,7 +337,7 @@ class App extends Component {
           nextTask: nextArray.length,
           progressInterval: prevState.progressInterval + 1,
         }))
-        this.executioner(nextArray, bot, justACallBack)
+        this.executioner(nextArray, bot, getScoreUpdate)
       }, bot[array[0]]().eta)
     } else {
       console.log(`${bot.name} completed all tasks!`)
@@ -341,39 +348,47 @@ class App extends Component {
         
       }
       
-     justACallBack()
+    //  getScoreUpdate()
 
       // Keeps function from breaking if no callback is passed
-      if (typeof justACallBack === "function") {
+      if (typeof getScoreUpdate === "function") {
         console.log("There was a callback! Holla!")
-        justACallBack()
+        getScoreUpdate()
       } else {
         console.log("No callback to speak of!")
-        console.log("callback:", justACallBack)
+        console.log("callback:", getScoreUpdate)
         
       }
-      this.setState(
-        {
-          currentTask: `${bot.name} completed all tasks!`,
-          totalWorkDone: this.state.workDone,
-          
-        },
-        () => {
-          console.log("I'm this.noNameCount:", this.noNameCount)
-          if (this.noNameCount = 14) {
-            window.responsiveVoice.speak(`Whew! I'm glad that's over!`)
-            this.noNameCount += 1
-            return
-          } else {
-            window.responsiveVoice.speak(
-              'All Done! And ready for second breakfast, Elevensies and more! Yeah, totally stole that word from Pippin!',
-              'UK English Female',
-            )
-            this.noNameCount = 14
+
+      setTimeout(() => {
+        this.setState(
+          {
+            currentTask: `${bot.name} completed all tasks!`,
+            totalWorkDone: this.state.workDone,
+            
+          },
+          () => {
             console.log("I'm this.noNameCount:", this.noNameCount)
-          }
-        },
-      )
+            if (this.noNameCount === 14) {
+              setTimeout(() => {
+                window.responsiveVoice.speak(`Whew! I'm glad that's over!`, {rate: 0.75, pitch: 0.85})
+                this.noNameCount += 1
+                console.log("this.noNameCount:", this.noNameCount)
+                
+              }, 3000);
+              return
+            } else if (this.noNameCount < 14) {
+              window.responsiveVoice.speak(
+                'All Done! And ready for second breakfast, Elevensies and more! Yeah, totally stole that word from Pippin!',
+                'UK English Female',
+              )
+              this.noNameCount = 14
+              console.log("I'm this.noNameCount:", this.noNameCount)
+            }
+          },
+        )
+        
+      }, 3000);
     }
   }
 
@@ -422,8 +437,11 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
 
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
+      progressInterval: prevState.progressInterval + 5,
+
       isDisabledChore: true,
       isDisabledDrill: true,
+      isDisabledBurglar: true,
     }))
 
     const speak = {
@@ -438,19 +456,32 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
     speak.and(
       'Intruder Detected! Intruder Detected! Home Defense Protocal Activated!',
     )
-    console.log('before settings - this.youWin', this.youWin)
+
     const intruder = new Burglar()
     let youWin = intruder.attackValue(createdBots[createdBots.length - 1])
 
     console.log('after setting but before setTimeout - youWin', youWin)
+
     setTimeout(() => {
-      console.log('this.youWin inside setTimeout:', youWin)
-      this.setState({
-        myWinner: youWin,
-        isDisabledChore: false,
-        isDisabledDrill: false,
-      })
-    }, 6000)
+      console.log('youWin inside setTimeout:', youWin)
+
+
+      this.setState(
+          {
+            winner: youWin,
+            isDisabledChore: false,
+            isDisabledDrill: false,
+            isDisabledBurglar: false,
+          },
+          () => {
+            // Maybe this callback isn't needed at all
+            console.log('hollaBack!')
+            this.updateWorkState()
+            this.getScores()
+          }
+      )
+      
+    }, 5750)
 
     // (async () => {
     //   const intruder = await new Burglar()
@@ -620,11 +651,25 @@ console.log("inside this.getscores, for this.state.score: after setting:", this.
         <br />
         <ScoreBanner
           title="High Score"
-          value={this.state.score === 'N/A' ? 'any' : this.state.score.workDone === 0 ? this.state.score.progressInterval : this.state.score.workDone}
-          name={this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name}
+          value={
+            this.state.score === 'N/A'
+              ? 'any'
+              : this.state.score.workDone === 0
+              ? this.state.score.progressInterval
+                : this.state.score.workDone
+          }
+          name={
+            this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name
+          }
         />
 
-        <Banner title="Burglar Status" value="Unknown" />
+        <Banner 
+          title="Burglar Status" 
+          value= {this.state.winner !== undefined 
+          ? this.state.winner === "Burglar" 
+          ? `Burglar is looting your owner's home over your lifeless circuits!` : `Burglar is defeated and has run away!`
+          : `No intruders have come!`} 
+        />
         {/* <SimpleModal /> */}
       </>
     )
