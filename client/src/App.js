@@ -535,7 +535,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <h1>Welcome to Maid-Bot Home Defense Systems</h1>
+        <h1>Maid-Bot Home Defense Systems</h1>
         <h3>Give your bot a name and choose it's type</h3>
         <h4>How much work can YOUR bot do?</h4>
 
