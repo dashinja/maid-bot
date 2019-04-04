@@ -23,19 +23,20 @@ apiController.route('/bot/').post((req, res) => {
 })
 
 apiController.route('/bot/score').get((req, res) => {
-  db.Bot.findAll({
+  db.Bot.findOne({
     attributes: ['name', 'botType', 'workDone'],
     order: [['workDone', 'DESC']],
     limit: 1,
   })
-    .then(results => {
+    .then(result => {
       //  const arrayResult = results.map(result=>))
-      console.log("\nraw results length:", results.length)
-      if (results.length === 0) {
+      // console.log("\nraw results length:", results.length)
+      // console.log("result:", result.dataValues)
+      if (result === null) {
         res.send('N/A')
       } else {
-        console.log(results.map(result => result.dataValues))
-        res.json(results)
+        // console.log(results.map(result => result.dataValues))
+        res.json(result)
       }
     })
     .catch(err => console.log(err))
@@ -44,7 +45,7 @@ apiController.route('/bot/score').get((req, res) => {
 apiController.route('/bot/score').post((req, res) => {
   console.log('req.body.workDone', req.body.workDone)
 
-  const newValue = { workDone: req.body.workDone + 1 }
+  const newValue = { workDone: req.body.workDone + 5 }
   console.log('newvalue.workDone:', newValue.workDone)
   db.Bot.update(newValue, {
     where: {

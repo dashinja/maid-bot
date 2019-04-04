@@ -48,7 +48,7 @@ class App extends Component {
     },
   }
 
-  youWin = ""
+  youWin = ''
 
   componentDidMount() {
     this.getScores()
@@ -115,26 +115,17 @@ class App extends Component {
         setTimeout(() => {
           this.speak.and(`Almost there...`)
         }, 28000)
-      } else {
-        return
       }
-      this.setState(
-        prevState => (
-          {
-            workDone: prevState.workDone + 5,
-            semiPermaName: this.state.botName,
-            // eslint-disable-next-line
-          },
-          botStartUp()
-        ),
-      )
 
       const botStartUp = () => {
         console.log('workDone before creation of new Bot:', this.state.workDone)
 
         createdBots.push(new Destroyer(this.state.botName, this.state.botType))
 
-        this.executioner(Task.insideTasks, createdBots[createdBots.length - 1])
+        console.log("I'm in botStartup and I'm this.getScores:", this.getScores)
+
+        const getScores = this.getScores
+        this.executioner(Task.insideTasks, createdBots[createdBots.length - 1], getScores)
 
         let creationData = {
           name: this.state.botName,
@@ -148,13 +139,12 @@ class App extends Component {
         axios
           .post('/api/bot', creationData)
           .then(data => {
-            this.setState({
-              botName: '',
-              botType: 'Bipedal',
-            })
-            this.getScores()
+            console.log('what came back, init-creation data:', data.data)
+            // this.getScores()
           })
           .catch(err => console.log(err))
+
+
 
         setTimeout(() => {
           this.setState({
@@ -165,6 +155,19 @@ class App extends Component {
           })
         }, 33575)
       }
+
+      setTimeout(() => {
+        this.setState(
+          {
+            workDone: 5,
+            semiPermaName: this.state.botName,
+            botName: '',
+            botType: 'Bipedal',
+            // eslint-disable-next-line
+          },
+          botStartUp(),
+        )
+      }, 2000)
     }
   }
 
@@ -235,7 +238,7 @@ class App extends Component {
     )
 
     this.updateWorkState()
-    this.getScores()
+    // this.getScores()
 
     setTimeout(() => {
       this.setState({
@@ -277,7 +280,8 @@ class App extends Component {
         break
     }
 
-    this.executioner(choice, createdBots[createdBots.length - 1])
+    const getScores = this.getScores
+    this.executioner(choice, createdBots[createdBots.length - 1], getScores)
 
     // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
@@ -293,12 +297,13 @@ class App extends Component {
       })
     }, 13000)
 
+    console.log('inside Drillpractice - workdone:', this.state.workDone)
     this.updateWorkState()
-    this.getScores()
+    // this.getScores()
   }
 
   // Make sure pass an array, even if an array of one element
-  executioner(array, bot) {
+  executioner(array, bot, justACallBack) {
     if (array[0] && bot[array[0]]) {
       console.log("I'm this.noNameCount:", this.noNameCount)
       this.setState({ nextTask: array.length })
@@ -309,12 +314,12 @@ class App extends Component {
         let nextArray = array.slice(1)
         console.log('Remaining Tasks:', nextArray)
         // this.setState({ nextTask: nextArray.length })
-        this.getScores()
+        // this.getScores()
         this.setState(prevState => ({
           nextTask: nextArray.length,
           progressInterval: prevState.progressInterval + 1,
         }))
-        this.executioner(nextArray, bot)
+        this.executioner(nextArray, bot, justACallBack)
       }, bot[array[0]]().eta)
     } else {
       console.log(`${bot.name} completed all tasks!`)
@@ -322,13 +327,25 @@ class App extends Component {
         window.responsiveVoice.speak(
           `${bot.name} completed the task set! Standing by!`,
         )
-        return
+        
+      }
+      
+     justACallBack()
+
+      // Keeps function from breaking if no callback is passed
+      if (typeof justACallBack === "function") {
+        console.log("There was a callback! Holla!")
+        justACallBack()
+      } else {
+        console.log("No callback to speak of!")
+        console.log("callback:", justACallBack)
+        
       }
       this.setState(
         {
           currentTask: `${bot.name} completed all tasks!`,
           totalWorkDone: this.state.workDone,
-          workDone: 0,
+          
         },
         () => {
           console.log("I'm this.noNameCount:", this.noNameCount)
@@ -348,18 +365,27 @@ class App extends Component {
     }
   }
 
-  getScores() {
+  getScores = () => {
+
+
     // Retrieves highest score only
     axios
-      .get('/api/bot/score')
-      .then(allScores => {
-        allScores.data === 'N/A'
-          ? this.setState({
-              score: allScores.data,
-            })
-          : this.setState({
-              score: allScores.data[0],
-            })
+    .get('/api/bot/score')
+    .then(allScores => {
+        // allScores.data === 'N/A'
+        //   ? this.setState({
+        //       score: allScores.data,
+        //     })
+        //   : this.setState({
+        //       score: allScores.data[0],
+        //     })
+        console.log("this.state.currentTask", this.state.currentTask)
+console.log("inside this.getscores, for this.state.score: before setting:", this.state.score)
+
+this.setState({score: allScores.data})
+
+console.log("inside this.getscores, for this.state.score: after setting:", this.state.score)
+        // this.setState(prevState => ({ score: allScores.data }))
         // console.log('allscores', allScores.data[0])
 
         // this.setState({ score: allScores.data[0] })
@@ -400,11 +426,11 @@ class App extends Component {
     speak.and(
       'Intruder Detected! Intruder Detected! Home Defense Protocal Activated!',
     )
-      console.log("before settings - this.youWin", this.youWin)
-      const intruder = new Burglar()
-      let youWin = intruder.attackValue(createdBots[createdBots.length - 1])
-      
-      console.log("after setting but before setTimeout - this.youWin", youWin)
+    console.log('before settings - this.youWin', this.youWin)
+    const intruder = new Burglar()
+    let youWin = intruder.attackValue(createdBots[createdBots.length - 1])
+
+    console.log('after setting but before setTimeout - this.youWin', youWin)
     setTimeout(() => {
       console.log('this.youWin inside setTimeout:', youWin)
       this.setState({
@@ -445,20 +471,25 @@ class App extends Component {
   }
 
   selectChores(first, second, bot) {
+    const getScores = this.getScores
     const randChoice = () => Math.random()
     randChoice() > 0.2
-      ? this.executioner(first, bot) &&
+      ? this.executioner(first, bot, getScores) &&
         this.setState({ choreList: 'Indoor Chores' })
-      : this.executioner(second, bot) &&
+      : this.executioner(second, bot, getScores) &&
         this.setState({ choreList: 'Outdoor Chores' })
   }
 
   updateWorkState = () => {
+    console.log(
+      'top of this.updateWorkState() - workDone:',
+      this.state.workDone,
+    )
     let data = {
       workDone: this.state.workDone,
       botName: createdBots[createdBots.length - 1].name,
     }
-
+    console.log('data before axios in upDateWorkState():', data)
     return axios
       .post('/api/bot/score', data)
       .then(returnData => {
@@ -577,7 +608,7 @@ class App extends Component {
         <br />
         <ScoreBanner
           title="High Score"
-          value={this.state.score === 'N/A' ? 'any' : this.state.score.workDone}
+          value={this.state.score === 'N/A' ? 'any' : this.state.score.workDone === 0 ? this.state.score.progressInterval : this.state.score.workDone}
           name={this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name}
         />
 
