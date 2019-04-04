@@ -38,85 +38,68 @@ Every now and then, though out of the norm: A burglar may attempt to enter your 
 
 She does not take failure as an option.
 
-## Developer Installation
+## Installation
 
-### Structure
+### Install Dependencies & Start Application
 
-
-
-
-
-
-
-
-
-
-
-
-
+From the root folder
 
 ```
-project
-│   README.md
-│   file001.txt    
-│
-└───folder1
-│   │   file011.txt
-│   │   file012.txt
-│   │
-│   └───subfolder1
-│       │   file111.txt
-│       │   file112.txt
-│       │   ...
-│   
-└───folder2
-    │   file021.txt
-    │   file022.txt
+npm install
+npm start
 ```
 
-    |-- .bowerrc
-    |-- .jshintrc
-    |-- .jshintrc2
-    |-- Gruntfile.js
-    |-- README.md
-    |-- bower.json
-    |-- karma.conf.js
-    |-- package.json
-    |-- app
-        |-- app.js
-        |-- db.js
-        |-- directoryList.md
-        |-- index.html
-        |-- mddir.js
-        |-- routing.js
-        |-- server.js
-        |-- _api
-            |-- api.groups.js
-            |-- api.posts.js
-            |-- api.users.js
-            |-- api.widgets.js
-        |-- _components
-            |-- directives
-                |-- directives.module.js
-                |-- vendor
-                    |-- directive.draganddrop.js
-            |-- helpers
-                |-- helpers.module.js
-                |-- proprietary
-                    |-- factory.actionDispatcher.js
-            |-- services
-                |-- services.cardTemplates.js
-                |-- services.cards.js
-                |-- services.groups.js
-                |-- services.posts.js
-                |-- services.users.js
-                |-- services.widgets.js
-        |-- _mocks
-            |-- mocks.groups.js
-            |-- mocks.posts.js
-            |-- mocks.users.js
-            |-- mocks.widgets.js
+## Project Structure
 
+### Front End
 
+The Front-end is built on React with Material-UI
 
-sadl
+```
+client
+┃
+┣ public
+┃ ┗ index.html              # Root for react
+┃
+┣ src
+┃ ┃
+┃ ┣ Components
+┃ ┃ ┣ ActionButton.js       # 'Push' buttons in user interface
+┃ ┃ ┣ Banner.js             # 'General' status components
+┃ ┃ ┣ ScoreBanner.js        # Score specific <Banner/> component
+┃ ┃ ┣ SimpleModal.js        # Modal for simple instructions
+┃ ┃ ┗ TaskBanner.js         # Task specific <Banner /> component
+┃ ┃
+┃ ┣ App.js                  # Main Component & State Holder
+┃ ┣ bots.js                 # Bot Definition > i.e. Destroyer Class
+┃ ┣ burglar.js              # Burglar Definition > i.e. Burglar Class
+┃ ┣ index.css
+┃ ┣ index.js                # Renders App.js to #root in index.html
+┃ ┗ patterns.js             # Array dependencies for App.js
+```
+
+### Back End
+
+The Back-end is built with NodeJS and Sequelize for the database.
+
+#### Notes:
+
+Sequelize will not work unless you create a mySQL database named 'smallbot'. It will not create it for you.
+
+```
+server
+┃
+┣ config
+┃ ┗ config.json             # Sequelize database options
+┃
+┣ controllers
+┃ ┣ apiController.js        # Data controllers
+┃ ┗ mainController.js       # Controls invalid route entries
+┃
+┣ models
+┃ ┗ bot.js                  # Bot Model
+┃
+┗ server.js                 # The Server
+```
+
+Created by Dashinja
