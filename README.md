@@ -30,7 +30,7 @@ Try it a few times. Don't say I didn't warn you. This will also give you an alte
 
 After you properly name and type your specific maid bot, it will auto-magically start doing some tasks around the house for you.
 
-When it finishes these tasks, you can give Maid-Bot.
+When these tasks finish, you can give Maid-Bot another task set to accomplish.
 She does have a preference on task type however. I'll let you figure that out...
 
 After selecting a task set for Maid-Bot, she'll be busy working - you can't stop her. Don't bother trying to offer further instruction. Just wait it out.
