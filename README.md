@@ -10,7 +10,7 @@ Sometimes she identifies as a particular maid-bot, other times she recognizes he
 
 She manufactures the made bots at the factory and speaks on behalf of all the maid-bots in the world.
 
-She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid bot services at your own cost.
+She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid bot services at your own risk.
 
 And for the love of motherboards: Do NOT forget to give maid-bots a name. Repeated failures have been known to throw her into a bot rage.
 
