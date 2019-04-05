@@ -15,17 +15,10 @@
     "go": "npm install && pnpm run start",
     "heroku-postbuild": "pnpm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dashinja/maid-bot.git"
-  },
+  "repository": "https://github.com/dashinja/maid-bot.git",
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dashinja/maid-bot/issues"
-  },
-  "homepage": "https://github.com/dashinja/maid-bot#readme",
   "devDependencies": {
     "concurrently": "^4.1.0",
     "nodemon": "^1.18.7"
