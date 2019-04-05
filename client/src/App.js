@@ -247,7 +247,7 @@ class App extends Component {
     setTimeout(() => {
       if (this.state.tasksComplete === false) {
         normalSpeak.and(
-          `Well, seems outside tasks take awhile. So don't touch anything! Next time let us drill practice instead!`,
+          `Well, seems outside tasks take awhile. So don't touch anything! Next time pick drill practice instead!`,
         )
       } else {
         this.setState({
@@ -465,7 +465,7 @@ class App extends Component {
   selectChores(first, second, bot) {
     const getScores = this.getScores
     const randChoice = () => Math.random()
-    randChoice() > 0.99
+    randChoice() > 0.5
       ? this.executioner(first, bot, getScores) &&
         this.setState({ choreList: 'Indoor Chores' })
       : this.executioner(second, bot, getScores) &&

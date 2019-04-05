@@ -12,7 +12,7 @@
     "build": "pnpm run clean && pnpm run build-babel && cd client && pnpm install && pnpm run build",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./server -s --copy-files",
-    "go": "npm install && pnpm run start",
+    "maid-bot": "npm install && pnpm run start",
     "heroku-postbuild": "pnpm run build"
   },
   "repository": "https://github.com/dashinja/maid-bot.git",

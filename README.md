@@ -2,6 +2,8 @@
 
 ## Who is the Maid-Bot?
 
+Well turn up your volume - She's got things to say!
+
 The Maid Bot is the AI that powers all maid-bots. She is one, and not many. Though she may not know that. Thing is, she's the only condensed neural network to pass the Turing test - but that doesn't mean she isn't a little mental.
 
 Sometimes she identifies as a particular maid-bot, other times she recognizes herself as an entity apart from the physical nuts and bolts. She is wherever a maid-bot is, and no where - at the same time.
@@ -70,8 +72,7 @@ Start a local SQL server instance, and then run the SQL command found in
 Then from the root folder
 
 ```
-npm install
-npm start
+npm run maid-bot
 ```
 
 ## Project Structure
