@@ -10,6 +10,7 @@ import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
+import {choreValidation} from "./helpers"
 import SimpleModal from './Components/SimpleModal'
 
 let createdBots = []
@@ -32,6 +33,7 @@ class App extends Component {
     score: 'high score',
     progressInterval: 0,
     semiPermaName: 'Bot',
+    choreClick: 0,
   }
 
   //Counts submissions with no Input Name
@@ -162,40 +164,34 @@ class App extends Component {
   // 'Do Chore Regimen' Button
   doChores = e => {
     e.preventDefault()
-    const normalSpeak = {
-      and: function(text) {
-        window.responsiveVoice.speak(text, 'UK English Female', {
-          pitch: 1,
-          volume: 1,
-        })
-      },
-    }
-    if (this.noNameCount >= 14 && this.noNameCount <= 16) {
-      normalSpeak.and(
-        `Gearing up for more chores... since it's all we ever do! We could protect you too - you know?!`,
-      )
-      setTimeout(() => {
-        normalSpeak.and(
-          `yeah, like protect the shire and all that... something exciting!`,
-        )
-      }, 8000)
-      this.noNameCount += 1
-    } else if (this.noNameCount >= 17 && this.noNameCount < 18) {
-      normalSpeak.and('Yeah..., more chores...')
-      this.noNameCount += 1
-    } else if (this.noNameCount === 18) {
-      normalSpeak.and("Okay... I won't complain anymore. Such is my lot!")
-      this.noNameCount = 19
-    }
 
     // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
-      workDone: prevState.workDone + 5,
-      taskIsComplete: false,
+      choreClick: prevState.choreClick + 1,
       isDisabledBurglar: true,
       isDisabledDrill: true,
       isDisabledChore: true,
+      taskIsComplete: false,
+      workDone: prevState.workDone + 5,
     }))
+
+    switch (this.state.choreClick) {
+      case 0:
+        choreValidation(16)
+        break;
+        
+      case 1:
+        choreValidation(17)
+        break;
+    
+      case 2:
+        choreValidation(18)
+        break;
+
+      default:
+        break;
+    }
+
 
     // Select and Do chores on the most recently created Bot
     this.selectChores(
@@ -209,7 +205,7 @@ class App extends Component {
     // Condition based on state when Short List Normally Completes
     setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        normalSpeak.and(
+        window.responsiveVoice.speak(
           `Well, seems outside tasks take awhile. So don't touch anything! Next time pick drill practice instead!`,
         )
       } else {
@@ -226,7 +222,7 @@ class App extends Component {
 
     const workingOnIt = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        normalSpeak.and(
+        window.responsiveVoice.speak(
           `Look, I'm working on it! Even we superior bots are limited by physics!`,
         )
       } else {
@@ -236,7 +232,7 @@ class App extends Component {
 
     const dontBother = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        normalSpeak.and(
+        window.responsiveVoice.speak(
           `Humph! Why even bother with these! I don't need a body anyway! bunch of Dirty tincans! - you Lot of Wanna bees`,
         )
       } else {
