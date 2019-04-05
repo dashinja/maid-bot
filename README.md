@@ -21,7 +21,10 @@ I wonder, if you can figure out with what she entertains herself.
 
 Enter a name for your maid-bot as well as choose it's type, at which time you may press enter or click submit.
 
-If you'd like an alternate experience - start submitting without entering a name. Don't say I didn't warn you.
+![Bot Entry](https://i.imgur.com/uX7C92m.gif)
+
+If you'd like an alternate experience - start submitting without entering a name.
+Try it a few times. Don't say I didn't warn you. This will also give you an alternate experience with Maid-Bot while creating ... your little pet.
 
 After you properly name and type your specific maid bot, it will auto-magically start doing some tasks around the house for you.
 
@@ -31,6 +34,8 @@ She does have a preference on task type however. I'll let you figure that out...
 After selecting a task set for Maid-Bot, she'll be busy working - you can't stop her. Don't bother trying to offer further instruction. Just wait it out.
 
 She'll let you know when she is finished.
+Her buttons let you know too.
+![Buttons are Ready](https://i.imgur.com/x5btO6h.gif)
 
 ## Bonus
 
@@ -39,6 +44,19 @@ Every now and then, though out of the norm: A burglar may attempt to enter your 
 She does not take failure as an option.
 
 ## Installation
+
+### Note for MacOS Users:
+
+Replace the "host" line the following in `/config/config.json`
+
+```
+"host": "localhost",
+    "port": "/Applications/MAMP/tmp/mysql/mysql.sock",
+```
+
+Example Below::
+
+![MacOS Sequelize DB Settings](https://i.imgur.com/w3VOnMn.png)
 
 ### Install Dependencies & Start Application
 
@@ -87,7 +105,7 @@ client
 
 ### Back End
 
-The Back-end is built with NodeJS and Sequelize for the database.
+The Back-end is built with NodeJS, Express Server and Sequelize ORM for the database.
 
 ```
 server
@@ -105,4 +123,5 @@ server
 ┗ server.js                 # The Server
 ```
 
+I hope you enjoy!  
 Created by Dashinja
