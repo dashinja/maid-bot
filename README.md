@@ -42,7 +42,14 @@ She does not take failure as an option.
 
 ### Install Dependencies & Start Application
 
-From the root folder
+Sequelize will not work unless you create a mySQL database named 'smallbot'. It will not create it for you.
+
+Run it on a mySql Server like MAMP or others.
+
+Start a local SQL server instance, and then run the SQL command found in
+/server/models/seeds.sql to create the necessary database.
+
+Then from the root folder
 
 ```
 npm install
@@ -81,10 +88,6 @@ client
 ### Back End
 
 The Back-end is built with NodeJS and Sequelize for the database.
-
-#### Notes:
-
-Sequelize will not work unless you create a mySQL database named 'smallbot'. It will not create it for you.
 
 ```
 server

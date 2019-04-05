@@ -4,14 +4,16 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:prod": "npm install && npm run server",
-    "start:dev": "concurrently  \"nodemon --ignore 'client/*'\" \"npm run server\"  \"npm run client\" ",
-    "server": "cd server && npm install",
-    "client": "cd client && npm run start",
-    "install": "cd client && npm install",
-    "build": "cd client && npm run build",
-    "heroku-postbuild": "npm run build"
+    "start": "if-env NODE_ENV=production && pnpm run start:prod || pnpm run start:dev",
+    "start:prod": "node ./build/server.js",
+    "start:dev": "concurrently \"nodemon --exec ./server/server.js --ignore 'client/*'\" \"pnpm run client\"",
+    "client": "cd client && pnpm run start",
+    "install": "pnpm run clean && pnpm run build-babel && cd client && pnpm install && pnpm run build",
+    "build": "pnpm run clean && pnpm run build-babel && cd client && pnpm install && pnpm run build",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./server -s --copy-files",
+    "go": "npm install && pnpm run start",
+    "heroku-postbuild": "pnpm run build"
   },
   "repository": {
     "type": "git",
@@ -29,7 +31,13 @@
     "nodemon": "^1.18.7"
   },
   "dependencies": {
-    "express": "^4.16.3",
-    "if-env": "^1.0.4"
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "express": "^4.16.4",
+    "if-env": "^1.0.4",
+    "mysql2": "^1.6.5",
+    "pnpm": "^3.1.0",
+    "sequelize": "^5.2.7"
   }
 }
