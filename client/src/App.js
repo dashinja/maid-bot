@@ -40,7 +40,7 @@ class App extends Component {
   speak = {
     and: function(text) {
       window.responsiveVoice.speak(text, 'UK English Female', {
-        pitch: 0.77,
+        pitch: 1,
         volume: 1,
       })
     },
@@ -141,46 +141,7 @@ class App extends Component {
         }, 28000)
       }
 
-      const botStartUp = () => {
-        console.log('workDone before creation of new Bot:', this.state.workDone)
 
-        createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-
-        console.log("I'm in botStartup and I'm this.getScores:", this.getScores)
-
-        const getScores = this.getScores
-        this.executioner(
-          Task.insideTasks,
-          createdBots[createdBots.length - 1],
-          getScores,
-        )
-
-        let creationData = {
-          name: this.state.botName,
-          botType: this.state.botType,
-          workDone: 5,
-          attack: createdBots[createdBots.length - 1].attackValue().attack,
-          defense: createdBots[createdBots.length - 1].defenseValue().defense,
-          speed: createdBots[createdBots.length - 1].speedValue().speed,
-        }
-
-        axios
-          .post('/api/bot', creationData)
-          .then(data => {
-            console.log('what came back, init-creation data:', data.data)
-          })
-          .catch(err => console.log(err))
-
-        // Enable buttons in time for task completion
-        setTimeout(() => {
-          this.setState({
-            isDisabled: false,
-            isDisabledChore: false,
-            isDisabledDrill: false,
-            isDisabledBurglar: true,
-          })
-        }, 36575)
-      }
 
       setTimeout(() => {
         this.setState(
@@ -191,7 +152,7 @@ class App extends Component {
             botType: 'Bipedal',
             // eslint-disable-next-line
           },
-          botStartUp(),
+          this.botStartUp(),
         )
       }, 1000)
     }
@@ -475,6 +436,48 @@ class App extends Component {
   ////////////////////
   // Helper Methods //
   ////////////////////
+  // Handles Bot Creation and Bot Save to DB
+  botStartUp = () => {
+    console.log('workDone before creation of new Bot:', this.state.workDone)
+
+    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+
+    console.log("I'm in botStartup and I'm this.getScores:", this.getScores)
+
+    const getScores = this.getScores
+    this.executioner(
+      Task.insideTasks,
+      createdBots[createdBots.length - 1],
+      getScores,
+    )
+
+    const creationData = {
+      name: this.state.botName,
+      botType: this.state.botType,
+      workDone: 5,
+      attack: createdBots[createdBots.length - 1].attackValue().attack,
+      defense: createdBots[createdBots.length - 1].defenseValue().defense,
+      speed: createdBots[createdBots.length - 1].speedValue().speed,
+    }
+
+    axios
+      .post('/api/bot', creationData)
+      .then(data => {
+        console.log('what came back, init-creation data:', data.data)
+      })
+      .catch(err => console.log(err))
+
+    // Enable buttons in time for task completion
+    setTimeout(() => {
+      this.setState({
+        isDisabled: false,
+        isDisabledChore: false,
+        isDisabledDrill: false,
+        isDisabledBurglar: true,
+      })
+    }, 36575)
+  }
+
   // Retrieves highest score only
   getScores = () => {
     axios
