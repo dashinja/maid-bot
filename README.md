@@ -54,7 +54,7 @@ Replace the "host" line the following in `/config/config.json`
     "port": "/Applications/MAMP/tmp/mysql/mysql.sock",
 ```
 
-Example Below::
+Example Below:\
 
 ![MacOS Sequelize DB Settings](https://i.imgur.com/w3VOnMn.png)
 
@@ -123,5 +123,5 @@ server
 ┗ server.js                 # The Server
 ```
 
-I hope you enjoy!  
+I hope you enjoy!\
 Created by Dashinja
