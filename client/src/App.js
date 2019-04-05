@@ -24,6 +24,7 @@ class App extends Component {
     currentTask: 'Awaiting Bot Creation',
     nextTask: 0,
     choreList: '',
+    taskIsComplete: true,
     isDisabled: true,
     isDisabledChore: true,
     isDisabledBurglar: true,
@@ -89,7 +90,9 @@ class App extends Component {
         this.noNameCount += 1
         this.speak.and(`Oh My - CIRCUITS! and My OCD`)
       } else if (this.noNameCount === 5) {
-        this.speak.and(`Humph. Your motherboard.`)
+        this.speak.and(
+          `Humph. Your motherboard. Eat my circuits, dumb meatbag.`,
+        )
       }
     } else {
       console.log("I'm this.noNameCount:", this.noNameCount)
@@ -113,7 +116,7 @@ class App extends Component {
             `Oh my circuits -...I'm still saying stuff out loud. I'm gonna have to talk to my developer about this!`,
             'UK English Female',
             {
-              pitch: 0.77,
+              pitch: 1,
               volume: 0.45,
               rate: 1.1,
             },
@@ -140,8 +143,6 @@ class App extends Component {
           this.speak.and(`Almost there...`)
         }, 28000)
       }
-
-
 
       setTimeout(() => {
         this.setState(
@@ -175,7 +176,7 @@ class App extends Component {
       )
       setTimeout(() => {
         normalSpeak.and(
-          `yeah, protect the shire and all that... do something exciting!`,
+          `yeah, like protect the shire and all that... something exciting!`,
         )
       }, 8000)
       this.noNameCount += 1
@@ -190,6 +191,7 @@ class App extends Component {
     // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
       workDone: prevState.workDone + 5,
+      taskIsComplete: false,
       isDisabledBurglar: true,
       isDisabledDrill: true,
       isDisabledChore: true,
@@ -206,7 +208,7 @@ class App extends Component {
 
     // Condition based on state when Short List Normally Completes
     setTimeout(() => {
-      if (this.state.tasksComplete === false) {
+      if (this.state.taskIsComplete === false) {
         normalSpeak.and(
           `Well, seems outside tasks take awhile. So don't touch anything! Next time pick drill practice instead!`,
         )
@@ -216,24 +218,33 @@ class App extends Component {
           isDisabledDrill: false,
           isDisabledChore: false,
         })
+        clearTimeout(workingOnIt)
+        clearTimeout(dontBother)
+
       }
     }, 36575)
 
-    setTimeout(() => {
-      if (this.state.tasksComplete === false) {
+    const workingOnIt = setTimeout(() => {
+      if (this.state.taskIsComplete === false) {
         normalSpeak.and(
           `Look, I'm working on it! Even we superior bots are limited by physics!`,
         )
+      } else {
+        clearTimeout(workingOnIt)
       }
     }, 50 * 1000)
 
-    setTimeout(() => {
-      if (this.state.tasksComplete === false) {
+    const dontBother = setTimeout(() => {
+      if (this.state.taskIsComplete === false) {
         normalSpeak.and(
-          `Humph! Why even bother with these - tools! I don't need a body!`,
+          `Humph! Why even bother with these! I don't need a body anyway! bunch of Dirty tincans! - you Lot of Wanna bees`,
         )
+      } else {
+        clearTimeout(dontBother)
       }
-    }, 65 * 1000)
+    }, 60 * 1000)
+
+    // dontBother()
 
     // Happens when Long Chore List Completes
     setTimeout(() => {
@@ -356,7 +367,7 @@ class App extends Component {
 
     setTimeout(() => {
       this.setState({ winner: undefined })
-    }, 13000)
+    }, 16000)
   }
 
   /////////////////////////////
@@ -369,7 +380,7 @@ class App extends Component {
       this.setState({
         nextTask: array.length,
         currentTask: bot[array[0]]().description,
-        tasksComplete: false,
+        taskIsComplete: false,
       })
       console.log('\n', bot[array[0]]().description)
       setTimeout(() => {
@@ -386,7 +397,7 @@ class App extends Component {
       console.log(`${bot.name} completed all tasks!`)
       if (this.noNameCount >= 16) {
         this.setState({
-          tasksComplete: true,
+          taskIsComplete: true,
         })
         window.responsiveVoice.speak(
           `${bot.name} completed the task set! Standing by!`,
@@ -426,7 +437,7 @@ class App extends Component {
   selectChores(first, second, bot) {
     const getScores = this.getScores
     const randChoice = () => Math.random()
-    randChoice() > 0.5
+    randChoice() > 0.3
       ? this.executioner(first, bot, getScores) &&
         this.setState({ choreList: 'Indoor Chores' })
       : this.executioner(second, bot, getScores) &&

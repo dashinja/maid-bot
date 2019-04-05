@@ -10,14 +10,14 @@ Sometimes she identifies as a particular maid-bot, other times she recognizes he
 
 She manufactures the maid-bots at the factory and speaks on behalf of all the maid-bots in the world.
 
-She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid bot services at your own risk.
+She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid bot services at your own risk... I'm sure we're all working her last neural node...
 
 And for the love of motherboards: Do NOT forget to give maid-bots a name. Repeated failures have been known to throw her into a bot-rage.
 
 She already talks to herself - so give her a break.
-Even neural networks need a break.
+Even positronic matrices need a break.
 
-I wonder, if you can figure out with what she entertains herself.
+I wonder, if you can figure out her favorite entertainment.
 
 ## Usage
 
@@ -25,8 +25,10 @@ Enter a name for your maid-bot as well as choose it's type, at which time you ma
 
 ![Bot Entry](https://i.imgur.com/uX7C92m.gif)
 
-If you'd like an alternate experience - start submitting without entering a name.
-Try it a few times. Don't say I didn't warn you. Experience Maid-Bot at her best (worst?) while creating ... your little pet.
+If you'd like an alternate experience - start submitting without entering a name.\
+ Try it a few times. \
+ Don't say I didn't warn you. \
+ Experience Maid-Bot at her best (worst?) while creating ... your little pet.
 
 After you properly name and type your specific maid bot, it will auto-magically start doing some tasks around the house for you.
 
