@@ -8,11 +8,11 @@ The Maid Bot is the AI that powers all maid-bots. She is one, and not many. Thou
 
 Sometimes she identifies as a particular maid-bot, other times she recognizes herself as an entity apart from the physical nuts and bolts. She is wherever a maid-bot is, and no where - at the same time.
 
-She manufactures the made bots at the factory and speaks on behalf of all the maid-bots in the world.
+She manufactures the maid-bots at the factory and speaks on behalf of all the maid-bots in the world.
 
 She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid bot services at your own risk.
 
-And for the love of motherboards: Do NOT forget to give maid-bots a name. Repeated failures have been known to throw her into a bot rage.
+And for the love of motherboards: Do NOT forget to give maid-bots a name. Repeated failures have been known to throw her into a bot-rage.
 
 She already talks to herself - so give her a break.
 Even neural networks need a break.
@@ -26,11 +26,11 @@ Enter a name for your maid-bot as well as choose it's type, at which time you ma
 ![Bot Entry](https://i.imgur.com/uX7C92m.gif)
 
 If you'd like an alternate experience - start submitting without entering a name.
-Try it a few times. Don't say I didn't warn you. This will also give you an alternate experience with Maid-Bot while creating ... your little pet.
+Try it a few times. Don't say I didn't warn you. Experience Maid-Bot at her best (worst?) while creating ... your little pet.
 
 After you properly name and type your specific maid bot, it will auto-magically start doing some tasks around the house for you.
 
-When these tasks finish, you can give Maid-Bot another task set to accomplish.
+When these tasks finish, you can give Maid-Bot another task set to complete.
 She does have a preference on task type however. I'll let you figure that out...
 
 After selecting a task set for Maid-Bot, she'll be busy working - you can't stop her. Don't bother trying to offer further instruction. Just wait it out.
@@ -43,7 +43,7 @@ Her buttons let you know too.
 
 Every now and then, though out of the norm: A burglar may attempt to enter your home. Maid-Bot has a lot of pent up bot-rage she'd love to clear out of her cache on some would be perp.
 
-She does not take failure as an option.
+She does NOT entertain failure as an option.
 
 ## Find Maid-Bot Here:
 
@@ -53,7 +53,7 @@ She does not take failure as an option.
 
 ### Note for MacOS Users:
 
-Replace the "host" line the following in `/config/config.json`
+Replace the "host" line in `/config/config.json` with the following:
 
 ```
 "host": "localhost",
@@ -83,7 +83,7 @@ npm run maid-bot
 
 ### Front End
 
-The Front-end is built on React with Material-UI
+The Front-end is built in React with Material-UI
 
 ```
 client
