@@ -2,6 +2,14 @@ const express = require('express')
 const apiController = express.Router()
 const db = require('../models')
 
+apiController.route('/welcome').get((req, res) => {
+  db.Welcome.findOne({})
+  .then(result => {
+    res.send(result)
+  })
+  .catch(err => console.log(err))
+})
+
 apiController.route('/bot/').post((req, res) => {
   db.Bot.create({
     name: req.body.name,

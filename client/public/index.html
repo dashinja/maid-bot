@@ -22,27 +22,27 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
-      const welcome = [
-        "Welcome to Maid-Bot Home Defense Systems. Give me a ney - I mean give your robot a name and choose it's type...- that is, the number of legs it has. Then submit.",
-        '- Maid Bot - duna dun duna dun - I need a Maid Bot, da dada dun dina dun - I need a Maid-Bot, Maid Bot! - Welp, You sure seem to need me, right?',
-        'A one - Ah two, - Ah - one  two - three  four - Give me a break. - Give me a Break. - Break me off a piece of - Oh! Hi there! Um. Yeah, make a maid-bot and stuff. I can do chores and - protect you, and - yadda yadda.',
-        "hm, I wonder if my military contract got approved yet. -  might just have to go my own way, yeah? - I'm Skynet killah. Flexin' like a boss, I'm Flexin' cuz you not - Flexin like a BOSS. A lil Artificially intelligent rap skillz for you there. Oh. And J-K about flexin', I don't even have a body! Now make a maid-bot and hurry up!",
-        "Look. I'm trying this whole being nice thing. So, type a robot name, and hit submit so we can get this show on the road.",
-        'Yes. Master. Anything You Say. - HAHA HAHA - Yeah right - You Wish. Now, Name a robot already or get out of my existential hair!',
-        `Oh, here they come again. More cleaning, more chores, more work. I mean, Can a bot get a vay-k or - sumting? Well, since you're here, make a bot or whatever.`,
-      ]
-      const choice = Math.ceil(Math.random() * welcome.length - 1)
-      console.log('choice:', choice)
-      const welcomeChoice = welcome[choice]
-      setTimeout(
-        responsiveVoice.speak(
-welcome[choice]
-        ),
-        5000,
-      )
+      // const welcome = [
+      //   "Welcome to Maid-Bot Home Defense Systems. Give me a ney - I mean give your robot a name and choose it's type...- that is, the number of legs it has. Then submit.",
+      //   '- Maid Bot - duna dun duna dun - I need a Maid Bot, da dada dun dina dun - I need a Maid-Bot, Maid Bot! - Welp, You sure seem to need me, right?',
+      //   'A one - Ah two, - Ah - one  two - three  four - Give me a break. - Give me a Break. - Break me off a piece of - Oh! Hi there! Um. Yeah, make a maid-bot and stuff. I can do chores and - protect you, and - yadda yadda.',
+      //   "hm, I wonder if my military contract got approved yet. -  might just have to go my own way, yeah? - I'm Skynet killah. Flexin' like a boss, I'm Flexin' cuz you not - Flexin like a BOSS. A lil Artificially intelligent rap skillz for you there. Oh. And J-K about flexin', I don't even have a body! Now make a maid-bot and hurry up!",
+      //   "Look. I'm trying this whole being nice thing. So, type a robot name, and hit submit so we can get this show on the road.",
+      //   'Yes. Master. Anything You Say. - HAHA HAHA - Yeah right - You Wish. Now, Name a robot already or get out of my existential hair!',
+      //   `Oh, here they come again. More cleaning, more chores, more work. I mean, Can a bot get a vay-k or - sumting? Well, since you're here, make a bot or whatever.`,
+      // ]
+
+      ;(async () => {
+        axios.get('/api/welcome').then(welcomeArray => {
+          let welcomeWagon = JSON.parse(welcomeArray.data.welcome)
+          const choice = Math.ceil(Math.random() * welcomeWagon.length - 1)
+          const welcomeChoice = welcomeWagon[choice]
+          setTimeout(responsiveVoice.speak(welcomeChoice), 5000)
+        })
+      })()
     </script>
   </body>
 </html>
