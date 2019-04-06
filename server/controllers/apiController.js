@@ -4,10 +4,10 @@ const db = require('../models')
 
 apiController.route('/welcome').get((req, res) => {
   db.Welcome.findOne({})
-  .then(result => {
-    res.send(result)
-  })
-  .catch(err => console.log(err))
+    .then(result => {
+      res.send(result)
+    })
+    .catch(err => console.log(err))
 })
 
 apiController.route('/bot/').post((req, res) => {
@@ -19,10 +19,7 @@ apiController.route('/bot/').post((req, res) => {
     defense: req.body.defense,
     speed: req.body.speed,
   })
-    .then(result => {
-      console.log(result.dataValues)
-    })
-    .catch(err => console.log(err))
+
   res.send(req.body)
 })
 
@@ -43,16 +40,13 @@ apiController.route('/bot/score').get((req, res) => {
 })
 
 apiController.route('/bot/score').post((req, res) => {
-  console.log('req.body.workDone', req.body.workDone)
-
   const newValue = { workDone: req.body.workDone + 5 }
-  console.log('newvalue.workDone:', newValue.workDone)
+
   db.Bot.update(newValue, {
     where: {
       name: req.body.botName,
     },
   }).then(result => {
-    console.log('Updated to by:', result)
     res.send(result)
   })
 })

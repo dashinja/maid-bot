@@ -25,7 +25,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <script>
-
+      // Loads Welcome Wagon - aka Auto Speech on Page Load
       ;(async () => {
         axios.get('/api/welcome').then(welcomeArray => {
           let welcomeWagon = JSON.parse(welcomeArray.data.welcome)

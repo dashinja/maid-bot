@@ -7,7 +7,6 @@ export default class Burglar {
 
   attackValue(victim) {
     if (this.health < 9000) {
-      console.log(`${this.name} is defeated! ${victim.name} wins!`)
       setTimeout(() => {
         window.responsiveVoice.speak(
           `${this.name} is defeated! ${victim.name} wins!`,
@@ -21,11 +20,8 @@ export default class Burglar {
     ) {
       victim.health = victim.health - this.attack * Math.random()
       this.health = this.health - victim.attack * Math.random()
-      console.log(`${victim.name} has ${victim.health} health.`)
-      console.log(`$The ${this.name} has ${this.health} health.`)
       return this.attackValue(victim)
     } else {
-      console.log(`${victim.name} is defeated and running away! ${this.name} wins!`)
       setTimeout(() => {
         window.responsiveVoice.speak(
           `Welp - the ${
@@ -36,9 +32,5 @@ export default class Burglar {
 
       return this.name
     }
-  }
-
-  stats() {
-    return console.log(`${this.name} has health of ${this.health}.`)
   }
 }

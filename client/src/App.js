@@ -10,7 +10,7 @@ import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
-import { choreValidation, createValidation } from './helpers'
+import { choreSequence, createValidation } from './helpers'
 import { CONSTANTS } from './constants'
 
 let createdBots = []
@@ -111,15 +111,15 @@ class App extends Component {
 
     switch (this.state.choreClick) {
       case 0:
-        choreValidation(16)
+        choreSequence(16)
         break
 
       case 1:
-        choreValidation(17)
+        choreSequence(17)
         break
 
       case 2:
-        choreValidation(18)
+        choreSequence(18)
         break
 
       default:
@@ -235,7 +235,6 @@ class App extends Component {
       })
     }, 14000)
 
-    console.log('inside Drillpractice - workdone:', this.state.workDone)
     this.saveWorkState()
   }
 
@@ -260,17 +259,12 @@ class App extends Component {
         })
       },
     }
-    console.log('Home defense activated!')
     speak.and(CONSTANTS.SPEECH.DEFENSE.ALERT)
 
     const intruder = new Burglar()
     let theWinner = intruder.attackValue(createdBots[createdBots.length - 1])
 
-    console.log('after setting but before setTimeout - youWin', theWinner)
-
     setTimeout(() => {
-      console.log('youWin inside setTimeout:', theWinner)
-
       this.setState(
         {
           winner: theWinner,
@@ -279,7 +273,6 @@ class App extends Component {
           isDisabledBurglar: false,
         },
         () => {
-          console.log('hollaBack!')
           this.saveWorkState()
           this.getScores()
         },
@@ -298,17 +291,14 @@ class App extends Component {
   executioner(array, bot, getScoreUpdate, count) {
     let executionCount = count
     if (array[0] && bot[array[0]]) {
-      console.log("I'm this.noNameCount:", executionCount)
       this.setState({
         nextTask: array.length,
         currentTask: bot[array[0]]().description,
         taskIsComplete: false,
       })
-      console.log('\n', bot[array[0]]().description)
       setTimeout(() => {
         console.log(`\n${bot.name} Finished the Task`)
         let nextArray = array.slice(1)
-        console.log('Remaining Tasks:', nextArray)
         this.setState(prevState => ({
           nextTask: nextArray.length,
           progressInterval: prevState.progressInterval + 1,
@@ -328,11 +318,7 @@ class App extends Component {
       }
 
       if (typeof getScoreUpdate === 'function') {
-        console.log('There was a callback! Holla!')
         getScoreUpdate()
-      } else {
-        console.log('No callback to speak of!')
-        console.log('callback:', getScoreUpdate)
       }
 
       setTimeout(() => {
@@ -372,11 +358,7 @@ class App extends Component {
   ////////////////////
   // Handles Bot Creation and Bot Save to DB
   botStartUp = () => {
-    console.log('workDone before creation of new Bot:', this.state.workDone)
-
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
-
-    console.log("I'm in botStartup and I'm this.getScores:", this.getScores)
 
     const getScores = this.getScores
     this.executioner(
@@ -397,9 +379,7 @@ class App extends Component {
 
     axios
       .post('/api/bot', creationData)
-      .then(data => {
-        console.log('what came back, init-creation data:', data.data)
-      })
+      .then(data => {})
       .catch(err => console.log(err))
 
     // Enable buttons in time for task completion

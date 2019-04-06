@@ -1,11 +1,9 @@
 import { CONSTANTS } from './constants'
 
 export function createValidation(stage, state) {
-  console.log('stage at start:', stage)
-  console.log('state at start:', state)
   let noNameCount = stage
   let botNameState = state
-  console.log('noNameCount at start:', noNameCount)
+
   const speak = {
     and: function(text) {
       window.responsiveVoice.speak(text, 'UK English Female', {
@@ -15,28 +13,22 @@ export function createValidation(stage, state) {
     },
   }
 
-  console.log('noNameCount before BIG if:', noNameCount)
+  // Reset
   if (noNameCount > 9) {
     noNameCount = 0
   }
 
-  console.log('noNameCount before if botNameState:', noNameCount)
   if (botNameState === '') {
     if (noNameCount === 0) {
       speak.and(CONSTANTS.SPEECH.CREATE.ERROR[0])
       noNameCount += 1
-      console.log("I'm noNameCount within first condition", noNameCount)
-      console.log('botNameState:', botNameState)
-      console.error('Must enter a Robot Name!')
     } else if (noNameCount === 1) {
       noNameCount += 1
       speak.and(CONSTANTS.SPEECH.CREATE.ERROR[1])
-      console.log("I'm noNameCount:", noNameCount)
       return console.error('Must enter a Robot Name!')
     } else if (noNameCount === 2) {
       noNameCount += 1
       speak.and(CONSTANTS.SPEECH.CREATE.ERROR[3])
-      console.log("I'm noNameCount:", noNameCount)
       return console.error('Must enter a Robot Name!')
     } else if (noNameCount === 3) {
       noNameCount += 1
@@ -48,7 +40,6 @@ export function createValidation(stage, state) {
       speak.and(CONSTANTS.SPEECH.CREATE.ERROR[6])
     }
   } else {
-    console.log("I'm noNameCount:", noNameCount)
     if (noNameCount > 5 && noNameCount < 10) {
       noNameCount = 5
     }
@@ -58,7 +49,6 @@ export function createValidation(stage, state) {
       speak.and(CONSTANTS.SPEECH.CREATE.ALT[1])
       speak.and(CONSTANTS.SPEECH.CREATE.ALT[2])
       noNameCount += 10
-      console.log("I'm noNameCount:", noNameCount)
       setTimeout(() => {
         speak.and(CONSTANTS.SPEECH.CREATE.ALT[3])
       }, 20000)
@@ -82,7 +72,6 @@ export function createValidation(stage, state) {
       )
       speak.and(CONSTANTS.SPEECH.CREATE.NORMAL[0])
       noNameCount += 10
-      console.log("I'm noNameCount:", noNameCount)
       setTimeout(() => {
         speak.and(CONSTANTS.SPEECH.CREATE.NORMAL[1])
       }, 10500)
@@ -96,7 +85,7 @@ export function createValidation(stage, state) {
   }
 }
 
-export function choreValidation(stage) {
+export function choreSequence(stage) {
   let noNameCount = stage
 
   const normalSpeak = {

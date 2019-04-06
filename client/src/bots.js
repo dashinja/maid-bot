@@ -6,8 +6,6 @@ export class Destroyer {
     this.attack = 9000
     this.defense = this.attack / 2
     this.speed = this.defense / 50
-
-    console.log(`\n${this.name}, the ${this.type} Destroyer is Born! Tremble!`)
   }
 
   /////////////////////////////////
