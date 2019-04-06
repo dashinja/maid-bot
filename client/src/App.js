@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
 import { choreValidation, createValidation } from './helpers'
+import { CONSTANTS } from './constants'
 import SimpleModal from './Components/SimpleModal'
 
 let createdBots = []
@@ -62,7 +63,7 @@ class App extends Component {
         prevState => {
           return {
             botName: this.state.botName,
-            semiPermaName: this.state.botName,
+            semiPermaName: this.state.botName || "Bot",
             workDone: 5,
             // eslint-disable-next-line
           }
@@ -140,7 +141,7 @@ class App extends Component {
     setTimeout(() => {
       if (this.state.taskIsComplete === false) {
         window.responsiveVoice.speak(
-          `Well, seems outside tasks take a lot of time. So touch NOTHING! Next time pick drill practice! Twerp.`,
+          CONSTANTS.SPEECH.CHORES.LONG,
         )
       } else {
         this.setState({
@@ -156,7 +157,7 @@ class App extends Component {
     const workingOnIt = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
         window.responsiveVoice.speak(
-          `Look, I'm working on it! Even we superior bots are limited by physics!`,
+          CONSTANTS.SPEECH.CHORES.LOOK,
         )
       } else {
         clearTimeout(workingOnIt)
@@ -166,7 +167,7 @@ class App extends Component {
     const dontBother = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
         window.responsiveVoice.speak(
-          `Humph! Why even bother with these! I don't need a body anyway! bunch of Dirty tincans!`,
+          CONSTANTS.SPEECH.CHORES.BOTHER,
         )
       } else {
         clearTimeout(dontBother)
@@ -199,22 +200,22 @@ class App extends Component {
 
     switch (randChoice) {
       case 0:
-        window.responsiveVoice.speak(`Executing Skirmish Pattern Alpha!`)
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.DRILL_PRACTICE.ALPHA)
         this.setState({ choreList: 'Alpha Pattern' })
         break
 
       case 1:
-        window.responsiveVoice.speak(`Executing Attack Pattern Beta!`)
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.DRILL_PRACTICE.BETA)
         this.setState({ choreList: 'Beta Pattern' })
         break
 
       case 2:
-        window.responsiveVoice.speak(`Executing Defense Pattern Delta!`)
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.DRILL_PRACTICE.DELTA)
         this.setState({ choreList: 'Delta Pattern' })
         break
 
       case 3:
-        window.responsiveVoice.speak(`Executing Mixed Combat Pattern Omega!`)
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.DRILL_PRACTICE.OMEGA)
         this.setState({ choreList: 'Omega Pattern' })
         break
 
@@ -268,7 +269,7 @@ class App extends Component {
     }
     console.log('Home defense activated!')
     speak.and(
-      'Intruder Detected! Intruder Detected! Home Defense Protocal Activated!',
+      CONSTANTS.SPEECH.DEFENSE.ALERT,
     )
 
     const intruder = new Burglar()
