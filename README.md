@@ -121,8 +121,7 @@ server
 ┃ ┗ config.json             # Sequelize database options
 ┃
 ┣ controllers
-┃ ┣ apiController.js        # Data controllers
-┃ ┗ mainController.js       # Controls invalid route entries
+┃ ┗ apiController.js        # Data controllers
 ┃
 ┣ models
 ┃ ┗ bot.js                  # Bot Model

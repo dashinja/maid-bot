@@ -53,6 +53,9 @@ export function createValidation(stage, state) {
     }
   } else {
     console.log("I'm noNameCount:", noNameCount)
+    if (noNameCount > 5 && noNameCount <10) {
+      noNameCount = 5
+    }
     if (noNameCount >= 1 && noNameCount <= 5) {
       speak.and(`There, that's better. So ...Um...`)
       speak.and(`${botNameState} you call it?`)

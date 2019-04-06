@@ -37,9 +37,6 @@ class App extends Component {
     submitClick: 0,
   }
 
-  //Counts submissions with no Input Name
-  noNameCount = 0
-
   //Robot Commentary Setup
   speak = {
     and: function(text) {
@@ -64,7 +61,6 @@ class App extends Component {
       this.setState(
         prevState => {
           return {
-            // submitClick: prevState.submitClick + 1,
             botName: this.state.botName,
             semiPermaName: this.state.botName,
             workDone: 5,
@@ -72,26 +68,20 @@ class App extends Component {
           }
         },
         () => {
-          //do callback stuff
           let counter = this.state.submitClick
+
           switch (this.state.semiPermaName) {
-            
-            case "":
-            console.log("I'm still first")
-            // console.log("submitClick:", this.state.submitClick)
-            // console.log("botName:", this.state.botName)
-            createValidation(counter, "")
-            this.setState(prevState => ({submitClick: prevState.submitClick + 1}))
-            break
+            case '':
+              createValidation(counter, '')
+              this.setState(prevState => ({
+                submitClick: prevState.submitClick + 1,
+              }))
+              break
 
             default:
-              console.log('Default Switch Statement: GO!')
-              console.log('submitClick:', this.state.submitClick)
-              console.log('botName:', this.state.botName)
               createValidation(counter, this.state.semiPermaName)
               this.botStartUp()
               break
-           
           }
         },
       )
@@ -141,6 +131,7 @@ class App extends Component {
       Task.insideTasks,
       Task.outsideTasks,
       createdBots[createdBots.length - 1],
+      16
     )
 
     this.saveWorkState()
@@ -160,7 +151,7 @@ class App extends Component {
         clearTimeout(workingOnIt)
         clearTimeout(dontBother)
       }
-    }, 36575)
+    }, 38575)
 
     const workingOnIt = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
@@ -175,7 +166,7 @@ class App extends Component {
     const dontBother = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
         window.responsiveVoice.speak(
-          `Humph! Why even bother with these! I don't need a body anyway! bunch of Dirty tincans! - you Lot of Wanna bees`,
+          `Humph! Why even bother with these! I don't need a body anyway! bunch of Dirty tincans!`,
         )
       } else {
         clearTimeout(dontBother)
@@ -232,7 +223,7 @@ class App extends Component {
     }
 
     const getScores = this.getScores
-    this.executioner(choice, createdBots[createdBots.length - 1], getScores)
+    this.executioner(choice, createdBots[createdBots.length - 1], getScores, 16)
 
     // Reflects 5 tasks added for current bot
     this.setState(prevState => ({
@@ -312,9 +303,10 @@ class App extends Component {
   // Chore Execution Methods //
   /////////////////////////////
   // Executes a Task Set | Can be used independently
-  executioner(array, bot, getScoreUpdate) {
+  executioner(array, bot, getScoreUpdate, count) {
+    let executionCount = count
     if (array[0] && bot[array[0]]) {
-      console.log("I'm this.noNameCount:", this.noNameCount)
+      console.log("I'm this.noNameCount:", executionCount)
       this.setState({
         nextTask: array.length,
         currentTask: bot[array[0]]().description,
@@ -329,11 +321,12 @@ class App extends Component {
           nextTask: nextArray.length,
           progressInterval: prevState.progressInterval + 1,
         }))
-        this.executioner(nextArray, bot, getScoreUpdate)
+        executionCount += 1
+        this.executioner(nextArray, bot, getScoreUpdate, count)
       }, bot[array[0]]().eta)
     } else {
       console.log(`${bot.name} completed all tasks!`)
-      if (this.noNameCount >= 16) {
+      if (executionCount >= 16) {
         this.setState({
           taskIsComplete: true,
         })
@@ -357,13 +350,13 @@ class App extends Component {
             totalWorkDone: this.state.workDone,
           },
           () => {
-            if (this.noNameCount <= 15) {
+            if (executionCount <= 15) {
               window.responsiveVoice.speak(
                 'All Done! And ready for second breakfast, Elevensies and more! Yeah, totally stole that word from Pippin!',
                 'UK English Female',
               )
-              this.noNameCount = 16
-              console.log("I'm this.noNameCount:", this.noNameCount)
+              executionCount = 16
+              console.log("I'm this.noNameCount:", executionCount)
             }
           },
         )
@@ -372,13 +365,13 @@ class App extends Component {
   }
 
   // Selects chores for this.executioner()
-  selectChores(first, second, bot) {
+  selectChores(first, second, bot, count) {
     const getScores = this.getScores
     const randChoice = () => Math.random()
     randChoice() > 0.3
-      ? this.executioner(first, bot, getScores) &&
+      ? this.executioner(first, bot, getScores, count) &&
         this.setState({ choreList: 'Indoor Chores' })
-      : this.executioner(second, bot, getScores) &&
+      : this.executioner(second, bot, getScores, count) &&
         this.setState({ choreList: 'Outdoor Chores' })
   }
 
@@ -398,6 +391,7 @@ class App extends Component {
       Task.insideTasks,
       createdBots[createdBots.length - 1],
       getScores,
+      15
     )
 
     const creationData = {
