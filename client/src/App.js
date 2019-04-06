@@ -12,7 +12,6 @@ import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
 import { choreValidation, createValidation } from './helpers'
 import { CONSTANTS } from './constants'
-import SimpleModal from './Components/SimpleModal'
 
 let createdBots = []
 console.log('createdBots value on page load:', [createdBots])
@@ -63,7 +62,7 @@ class App extends Component {
         prevState => {
           return {
             botName: this.state.botName,
-            semiPermaName: this.state.botName || "Bot",
+            semiPermaName: this.state.botName || 'Bot',
             workDone: 5,
             // eslint-disable-next-line
           }
@@ -132,7 +131,7 @@ class App extends Component {
       Task.insideTasks,
       Task.outsideTasks,
       createdBots[createdBots.length - 1],
-      16
+      16,
     )
 
     this.saveWorkState()
@@ -140,9 +139,7 @@ class App extends Component {
     // Condition based on state when Short List Normally Completes
     setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        window.responsiveVoice.speak(
-          CONSTANTS.SPEECH.CHORES.LONG,
-        )
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.CHORES.LONG)
       } else {
         this.setState({
           isDisabledBurglar: false,
@@ -156,9 +153,7 @@ class App extends Component {
 
     const workingOnIt = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        window.responsiveVoice.speak(
-          CONSTANTS.SPEECH.CHORES.LOOK,
-        )
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.CHORES.LOOK)
       } else {
         clearTimeout(workingOnIt)
       }
@@ -166,9 +161,7 @@ class App extends Component {
 
     const dontBother = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        window.responsiveVoice.speak(
-          CONSTANTS.SPEECH.CHORES.BOTHER,
-        )
+        window.responsiveVoice.speak(CONSTANTS.SPEECH.CHORES.BOTHER)
       } else {
         clearTimeout(dontBother)
       }
@@ -268,9 +261,7 @@ class App extends Component {
       },
     }
     console.log('Home defense activated!')
-    speak.and(
-      CONSTANTS.SPEECH.DEFENSE.ALERT,
-    )
+    speak.and(CONSTANTS.SPEECH.DEFENSE.ALERT)
 
     const intruder = new Burglar()
     let theWinner = intruder.attackValue(createdBots[createdBots.length - 1])
@@ -392,7 +383,7 @@ class App extends Component {
       Task.insideTasks,
       createdBots[createdBots.length - 1],
       getScores,
-      15
+      15,
     )
 
     const creationData = {
@@ -584,7 +575,6 @@ class App extends Component {
               : `No intruders have come!`
           }
         />
-        {/* <SimpleModal /> */}
       </>
     )
   }

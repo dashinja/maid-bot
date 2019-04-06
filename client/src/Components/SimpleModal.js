@@ -44,7 +44,7 @@ class SimpleModal extends React.Component {
       },
     }
 
-    speak.and("Honey, I'm home!")
+    speak.and('Thanks for reading Maid-Bot Instructions')
   }
 
   handleClose = () => {
@@ -56,22 +56,24 @@ class SimpleModal extends React.Component {
 
     return (
       <div>
-        <Typography gutterBottom>
-          Click to get the full Modal experience!
-        </Typography>
-        <Button onClick={this.handleOpen}>Open Modal</Button>
+        <Typography gutterBottom>Maid-Bot Instructions</Typography>
+        <Button onClick={this.handleOpen} disabled={this.state.open===true} variant="contained">Click Here</Button>
         <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
+          aria-labelledby="Maid-Bot Instructions"
+          aria-describedby="Click this button to view simple instructions for Maid-Bot usage."
           open={this.state.open}
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
             <Typography variant="h6" id="modal-title">
-              Text in a modal
+              Handle With Care
             </Typography>
             <Typography variant="subtitle1" id="simple-modal-description">
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              <p>
+                Enter a bot name before pressing submit. Failure to do so places
+                user at risk.
+              </p>
+              <p>Developer not responsible for hurt feelings.</p>
             </Typography>
             <SimpleModalWrapped />
           </div>

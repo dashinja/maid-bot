@@ -6,7 +6,7 @@
   "scripts": {
     "start": "if-env NODE_ENV=production && pnpm run start:prod || pnpm run start:dev",
     "start:prod": "node ./build/server.js",
-    "start:dev": "concurrently \"nodemon --exec ./server/server.js --ignore 'client/*'\" \"pnpm run client\"",
+    "start:dev": "concurrently \"nodemon ./server/server.js --ignore 'client/*'\" \"pnpm run client\"",
     "client": "cd client && pnpm run start",
     "install": "pnpm run clean && pnpm run build-babel && cd client && pnpm install && pnpm run build",
     "build": "pnpm run clean && pnpm run build-babel && cd client && pnpm install && pnpm run build",

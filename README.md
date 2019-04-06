@@ -69,17 +69,37 @@ Example Below:\
 ### Install Dependencies & Start Application
 
 Sequelize will not work unless you create a mySQL database named 'smallbot'. It will not create it for you.
-
 Run it on a mySql Server like MAMP or others.
 
-Start a local SQL server instance, and then run the SQL command found in
-/server/models/seeds.sql to create the necessary database.
+Follow these instructions:
 
-Then from the root folder
+1 - Start a local SQL server instance, and then run the SQL command found in
+`/server/models/schema.sql` to create the necessary database.
+
+2 - Next, start the server alone from the root directory by running:
+
+```
+node server/server.js
+```
+
+3 - Now MANUALLY navigate to `/server/config/DB/` and run:
+
+```
+node seedWelcome.js
+```
+
+4 - Shut down the server
+
+5 - Navigate back up to the root folder and run:
 
 ```
 npm run maid-bot
 ```
+
+#### Note:
+
+For a less picky setup:
+Do Step 1, Step 5, Step 3 - and then refresh the browser window.
 
 ## Project Structure
 
@@ -112,7 +132,7 @@ client
 
 ### Back End
 
-The Back-end is built with NodeJS, Express Server and Sequelize ORM for the database.
+The Back-end is built with NodeJS, Express Server and Sequelize ORM for the database. In addition, a custom seeder and csv.
 
 ```
 server
