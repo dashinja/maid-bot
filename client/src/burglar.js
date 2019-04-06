@@ -25,7 +25,7 @@ export default class Burglar {
       console.log(`$The ${this.name} has ${this.health} health.`)
       return this.attackValue(victim)
     } else {
-      console.log(`${victim.name} is defeated! ${this.name} wins!`)
+      console.log(`${victim.name} is defeated and running away! ${this.name} wins!`)
       setTimeout(() => {
         window.responsiveVoice.speak(
           `Welp - the ${

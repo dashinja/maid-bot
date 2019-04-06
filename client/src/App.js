@@ -10,7 +10,7 @@ import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
-import {choreValidation} from "./helpers"
+import { choreValidation, createValidation } from './helpers'
 import SimpleModal from './Components/SimpleModal'
 
 let createdBots = []
@@ -18,7 +18,7 @@ console.log('createdBots value on page load:', [createdBots])
 
 class App extends Component {
   state = {
-    botName: '',
+    botName: ``,
     botType: 'Bipedal',
     workDone: 0,
     totalWorkDone: 0,
@@ -34,6 +34,7 @@ class App extends Component {
     progressInterval: 0,
     semiPermaName: 'Bot',
     choreClick: 0,
+    submitClick: 0,
   }
 
   //Counts submissions with no Input Name
@@ -59,106 +60,49 @@ class App extends Component {
   // 'Submit' Button
   createBot = e => {
     e.preventDefault()
-    if (this.noNameCount > 9) {
-      this.noNameCount = 0
-    }
-
-    if (this.state.botName === '') {
-      if (this.noNameCount === 0) {
-        this.speak.and(
-          'Nope! You must enter a proper Robot Name for your little pet',
-        )
-        this.noNameCount += 1
-        console.log("I'm this.noNameCount:", this.noNameCount)
-        return console.error('Must enter a Robot Name!')
-      } else if (this.noNameCount === 1) {
-        this.noNameCount += 1
-        this.speak.and(
-          'My Goodness, really!?!?! Please pay attention people! Kids these days!',
-        )
-        console.log("I'm this.noNameCount:", this.noNameCount)
-        return console.error('Must enter a Robot Name!')
-      } else if (this.noNameCount === 2) {
-        this.noNameCount += 1
-        this.speak.and(
-          "BLAST! I... I'm just... - I'm just so finished talking with you!",
-        )
-        console.log("I'm this.noNameCount:", this.noNameCount)
-        return console.error('Must enter a Robot Name!')
-      } else if (this.noNameCount === 3) {
-        this.noNameCount += 1
-        this.speak.and(`shhh! Whatever! See if I care.`)
-      } else if (this.noNameCount === 4) {
-        this.noNameCount += 1
-        this.speak.and(`Oh My - CIRCUITS! and My OCD`)
-      } else if (this.noNameCount === 5) {
-        this.speak.and(
-          `Humph. Your motherboard. Eat my circuits, dumb meatbag.`,
-        )
-      }
-    } else {
-      console.log("I'm this.noNameCount:", this.noNameCount)
-      if (this.noNameCount >= 1 && this.noNameCount <= 5) {
-        this.speak.and(`There, that's better. So ...Um...`)
-        this.speak.and(`${this.state.botName} you call it?`)
-        this.speak.and(`How very nice.`)
-        this.speak.and(
-          `Now its doing chores for you automagically. - Just how amazing is that?!`,
-        )
-        this.noNameCount += 10
-        console.log("I'm this.noNameCount:", this.noNameCount)
-        setTimeout(() => {
-          this.speak.and('One - chore robot - to rule over them all...')
-        }, 20000)
-        setTimeout(() => {
-          this.speak.and('And with that chore bot. Bind them.')
-        }, 25000)
-        setTimeout(() => {
-          window.responsiveVoice.speak(
-            `Oh my circuits -...I'm still saying stuff out loud. I'm gonna have to talk to my developer about this!`,
-            'UK English Female',
-            {
-              pitch: 1,
-              volume: 0.45,
-              rate: 1.1,
-            },
-          )
-        }, 28000)
-      } else if (this.noNameCount < 1) {
-        this.speak.and(
-          `Well well then. ${
-            this.state.botName
-          }, ahah? - I see... - How unique of you`,
-        )
-        this.speak.and(`Now its doing chores for you`)
-        this.noNameCount += 10
-        console.log("I'm this.noNameCount:", this.noNameCount)
-        setTimeout(() => {
-          this.speak.and(`Just look at it go!`)
-        }, 10500)
-        setTimeout(() => {
-          this.speak.and(
-            `Move those feet...- or... rotors...whatever you have! Just hurry it up!`,
-          )
-        }, 20000)
-        setTimeout(() => {
-          this.speak.and(`Almost there...`)
-        }, 28000)
-      }
-
-      setTimeout(() => {
-        this.setState(
-          {
-            workDone: 5,
+    setTimeout(() => {
+      this.setState(
+        prevState => {
+          return {
+            // submitClick: prevState.submitClick + 1,
+            botName: this.state.botName,
             semiPermaName: this.state.botName,
-            botName: '',
-            botType: 'Bipedal',
+            workDone: 5,
             // eslint-disable-next-line
-          },
-          this.botStartUp(),
-        )
-      }, 1000)
-    }
+          }
+        },
+        () => {
+          //do callback stuff
+          let counter = this.state.submitClick
+          switch (this.state.semiPermaName) {
+            
+            case "":
+            console.log("I'm still first")
+            // console.log("submitClick:", this.state.submitClick)
+            // console.log("botName:", this.state.botName)
+            createValidation(counter, "")
+            this.setState(prevState => ({submitClick: prevState.submitClick + 1}))
+            break
+
+            default:
+              console.log('Default Switch Statement: GO!')
+              console.log('submitClick:', this.state.submitClick)
+              console.log('botName:', this.state.botName)
+              createValidation(counter, this.state.semiPermaName)
+              this.botStartUp()
+              break
+           
+          }
+        },
+      )
+    }, 1000)
+
+    setTimeout(() => {
+      this.setState({
+        botName: '',
+        botType: 'Bipedal',
+      })
+    }, 2000)
   }
 
   // 'Do Chore Regimen' Button
@@ -178,20 +122,19 @@ class App extends Component {
     switch (this.state.choreClick) {
       case 0:
         choreValidation(16)
-        break;
-        
+        break
+
       case 1:
         choreValidation(17)
-        break;
-    
+        break
+
       case 2:
         choreValidation(18)
-        break;
+        break
 
       default:
-        break;
+        break
     }
-
 
     // Select and Do chores on the most recently created Bot
     this.selectChores(
@@ -206,7 +149,7 @@ class App extends Component {
     setTimeout(() => {
       if (this.state.taskIsComplete === false) {
         window.responsiveVoice.speak(
-          `Well, seems outside tasks take awhile. So don't touch anything! Next time pick drill practice instead!`,
+          `Well, seems outside tasks take a lot of time. So touch NOTHING! Next time pick drill practice! Twerp.`,
         )
       } else {
         this.setState({
@@ -216,7 +159,6 @@ class App extends Component {
         })
         clearTimeout(workingOnIt)
         clearTimeout(dontBother)
-
       }
     }, 36575)
 
@@ -481,6 +423,7 @@ class App extends Component {
         isDisabledChore: false,
         isDisabledDrill: false,
         isDisabledBurglar: true,
+        submitClick: 0,
       })
     }, 36575)
   }
