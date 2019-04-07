@@ -82,7 +82,7 @@ Follow these instructions:
 1 - Start a local SQL server instance, and then run the SQL command found in
 `/server/models/schema.sql` to create the necessary database.
 
-2 - Next, from the root folder and run:
+2 - Next, from the root folder run:
 
 ```
 npm run maid-bot
