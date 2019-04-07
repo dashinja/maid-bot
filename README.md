@@ -82,30 +82,11 @@ Follow these instructions:
 1 - Start a local SQL server instance, and then run the SQL command found in
 `/server/models/schema.sql` to create the necessary database.
 
-2 - Next, start the server alone from the root directory by running:
-
-```
-node server/server.js
-```
-
-3 - Now MANUALLY navigate to `/server/config/DB/` and run:
-
-```
-node seedWelcome.js
-```
-
-4 - Shut down the server
-
-5 - Navigate back up to the root folder and run:
+2 - Next, from the root folder and run:
 
 ```
 npm run maid-bot
 ```
-
-#### Note:
-
-For a less picky setup:
-Do Step 1, Step 5, Step 3 - and then refresh the browser window.
 
 ## Project Structure
 
