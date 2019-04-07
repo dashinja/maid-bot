@@ -1,0 +1,578 @@
+import React, { Component } from 'react'
+import './App.css';
+import ActionButton from './Components/ActionButton'
+import axios from 'axios'
+import { Destroyer } from './bots'
+import { Task, Pattern } from './patterns'
+import Banner from './Components/Banner'
+import ScoreBanner from './Components/ScoreBanner'
+import Grid from '@material-ui/core/Grid'
+import Input from '@material-ui/core/Input'
+import Select from '@material-ui/core/Select'
+import Button from '@material-ui/core/Button'
+import TaskBanner from './Components/TaskBanner'
+import Burglar from './burglar'
+import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
+import { CONSTANTS } from './constants'
+
+let createdBots = []
+
+class App extends Component {
+  state = {
+    botName: ``,
+    botType: 'Bipedal',
+    workDone: 0,
+    currentTask: 'Awaiting Bot Creation',
+    nextTask: 0, // Countdown Counter
+    choreList: '', // Tracks drill list name
+    taskIsComplete: true, // Reports task set status
+    isDisabledChore: true,
+    isDisabledBurglar: true,
+    isDisabledDrill: true,
+    score: 'high score', // Tracks High Score
+    progressInterval: 0, // Count up Counter
+    semiPermaName: 'Bot', // Persistent naming variable
+    choreClick: 0, // Chore Click Counter
+    submitClick: 0, // Submit Button Click Counter
+  }
+
+  componentDidMount() {
+    this.getScores()
+  }
+
+  ////////////////////
+  // Button Methods //
+  ////////////////////
+  // 'Submit' Button
+  createBot = e => {
+    e.preventDefault()
+    this.getScores()
+    setTimeout(() => {
+      this.setState(
+        prevState => {
+          return {
+            botName: this.state.botName,
+            semiPermaName: this.state.botName || 'Bot',
+            workDone: 5,
+            // eslint-disable-next-line
+          }
+        },
+        () => {
+          let counter = this.state.submitClick
+
+          switch (this.state.semiPermaName) {
+            case '':
+            case 'Bot':
+              createValidation(counter, '')
+              this.setState(prevState => ({
+                submitClick: prevState.submitClick + 1,
+              }))
+              break
+
+            default:
+              createValidation(counter, this.state.semiPermaName)
+              this.botStartUp()
+              break
+          }
+        },
+      )
+    }, 1000)
+
+    setTimeout(() => {
+      this.setState({
+        botName: '',
+        botType: 'Bipedal',
+      })
+    }, 2000)
+  }
+
+  // 'Do Chore Regimen' Button
+  doChores = e => {
+    e.preventDefault()
+
+    // Reflects 5 tasks added for current bot
+    this.setState(prevState => ({
+      choreClick: prevState.choreClick + 1,
+      isDisabledBurglar: true,
+      isDisabledDrill: true,
+      isDisabledChore: true,
+      taskIsComplete: false,
+      workDone: prevState.workDone + 5,
+    }))
+
+    switch (this.state.choreClick) {
+      case 0:
+        choreSequence(16)
+        break
+
+      case 1:
+        choreSequence(17)
+        break
+
+      case 2:
+        choreSequence(18)
+        break
+
+      default:
+        break
+    }
+
+    // Select and Do chores on the most recently created Bot
+    this.selectChores(
+      Task.insideTasks,
+      Task.outsideTasks,
+      createdBots[createdBots.length - 1],
+      16,
+    )
+
+    this.saveWorkState()
+
+    // Condition based on state when Short List Normally Completes
+    setTimeout(() => {
+      if (this.state.taskIsComplete === false) {
+        speak.and(CONSTANTS.SPEECH.CHORES.LONG)
+      } else {
+        this.setState({
+          isDisabledBurglar: false,
+          isDisabledDrill: false,
+          isDisabledChore: false,
+        })
+        clearTimeout(workingOnIt)
+        clearTimeout(dontBother)
+      }
+    }, 38575)
+
+    const workingOnIt = setTimeout(() => {
+      if (this.state.taskIsComplete === false) {
+        speak.and(CONSTANTS.SPEECH.CHORES.LOOK)
+      } else {
+        clearTimeout(workingOnIt)
+      }
+    }, 50 * 1000)
+
+    const dontBother = setTimeout(() => {
+      if (this.state.taskIsComplete === false) {
+        speak.and(CONSTANTS.SPEECH.CHORES.BOTHER)
+      } else {
+        clearTimeout(dontBother)
+      }
+    }, 60 * 1000)
+
+    // Happens when Long Chore List Completes
+    setTimeout(() => {
+      this.setState({
+        isDisabledBurglar: false,
+        isDisabledDrill: false,
+        isDisabledChore: false,
+      })
+    }, 77 * 1000)
+  }
+
+  // 'Home Defense Drill Practice' Button
+  drillPractice = e => {
+    e.preventDefault()
+
+    speak.and(`${this.state.semiPermaName} activated and ready!`)
+
+    const randChoice = Math.floor(Math.random() * Pattern.length)
+    const choice = Pattern[randChoice]
+
+    switch (randChoice) {
+      case 0:
+        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.ALPHA)
+        this.setState({ choreList: 'Alpha Pattern' })
+        break
+
+      case 1:
+        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.BETA)
+        this.setState({ choreList: 'Beta Pattern' })
+        break
+
+      case 2:
+        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.DELTA)
+        this.setState({ choreList: 'Delta Pattern' })
+        break
+
+      case 3:
+        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.OMEGA)
+        this.setState({ choreList: 'Omega Pattern' })
+        break
+
+      default:
+        break
+    }
+
+    const getScores = this.getScores
+    this.executioner(choice, createdBots[createdBots.length - 1], getScores, 16)
+
+    // Reflects 5 tasks added for current bot
+    this.setState(prevState => ({
+      workDone: prevState.workDone + 5,
+      isDisabledBurglar: true,
+      isDisabledChore: true,
+      isDisabledDrill: true,
+    }))
+
+    setTimeout(() => {
+      this.setState({
+        isDisabledBurglar: false,
+        isDisabledChore: false,
+        isDisabledDrill: false,
+      })
+    }, 14000)
+
+    this.saveWorkState()
+  }
+
+  // 'Burglar Attack' Button
+  burglarDefense = e => {
+    e.preventDefault()
+
+    this.setState(prevState => ({
+      isDisabledChore: true,
+      isDisabledDrill: true,
+      isDisabledBurglar: true,
+      progressInterval: prevState.progressInterval + 5,
+    }))
+
+    defenseVoice.speak(CONSTANTS.SPEECH.DEFENSE.ALERT)
+
+    const intruder = new Burglar()
+    let theWinner = intruder.attackValue(createdBots[createdBots.length - 1])
+
+    setTimeout(() => {
+      this.setState(
+        prevState => {
+          return {
+            isDisabledChore: false,
+            isDisabledDrill: false,
+            isDisabledBurglar: false,
+            winner: theWinner,
+          }
+        },
+        () => {
+          this.saveBurglarState()
+        },
+      )
+    }, 5750)
+
+    setTimeout(() => {
+      this.setState({ winner: undefined })
+    }, 16000)
+  }
+
+  bonusSass = () => {
+    const bonus = CONSTANTS.SPEECH.BONUS.SASS
+    const choice = Math.ceil(Math.random() * bonus.length - 1)
+    console.log('choice:', choice)
+    const bonusChoice = bonus[choice]
+    speak.and(bonusChoice)
+  }
+
+  /////////////////////////////
+  // Chore Execution Methods //
+  /////////////////////////////
+  // Executes a Task Set | Can be used independently
+  executioner(array, bot, getScoreUpdate, count) {
+    let executionCount = count
+    if (array[0] && bot[array[0]]) {
+      this.setState({
+        nextTask: array.length,
+        currentTask: bot[array[0]]().description,
+        taskIsComplete: false,
+      })
+      setTimeout(() => {
+        let nextArray = array.slice(1)
+        this.setState(prevState => ({
+          nextTask: nextArray.length,
+          progressInterval: prevState.progressInterval + 1,
+        }))
+        executionCount += 1
+        this.executioner(nextArray, bot, getScoreUpdate, count)
+      }, bot[array[0]]().eta)
+    } else {
+      if (executionCount >= 16) {
+        this.setState({
+          taskIsComplete: true,
+        })
+        speak.and(`${bot.name} completed the task set! Standing by!`)
+      }
+
+      if (typeof getScoreUpdate === 'function') {
+        getScoreUpdate()
+      }
+
+      setTimeout(() => {
+        this.setState(
+          {
+            currentTask: `${bot.name} completed all tasks!`,
+          },
+          () => {
+            if (executionCount <= 15) {
+              speak.and(
+                'All Done! And ready for second breakfast, Elevensies and more! Yeah, totally stole that word from Pippin!',
+                'UK English Female',
+              )
+              executionCount = 16
+            }
+          },
+        )
+      }, 3000)
+    }
+  }
+
+  // Selects chores for this.executioner()
+  selectChores(first, second, bot, count) {
+    const getScores = this.getScores
+    const randChoice = () => Math.random()
+    randChoice() > 0.3
+      ? this.executioner(first, bot, getScores, count) &&
+        this.setState({ choreList: 'Indoor Chores' })
+      : this.executioner(second, bot, getScores, count) &&
+        this.setState({ choreList: 'Outdoor Chores' })
+  }
+
+  ////////////////////
+  // Helper Methods //
+  ////////////////////
+  // Handles Bot Creation and Bot Save to DB
+  botStartUp = () => {
+    createdBots.push(new Destroyer(this.state.botName, this.state.botType))
+
+    const getScores = this.getScores
+    this.executioner(
+      Task.insideTasks,
+      createdBots[createdBots.length - 1],
+      getScores,
+      15,
+    )
+
+    const creationData = {
+      name: this.state.botName,
+      botType: this.state.botType,
+      workDone: 5,
+      attack: createdBots[createdBots.length - 1].attackValue().attack,
+      defense: createdBots[createdBots.length - 1].defenseValue().defense,
+      speed: createdBots[createdBots.length - 1].speedValue().speed,
+    }
+
+    axios
+      .post('/api/bot', creationData)
+      .then(data => {})
+      .catch(err => console.log(err))
+
+    // Enable buttons in time for task completion
+    setTimeout(() => {
+      this.setState({
+        isDisabledChore: false,
+        isDisabledDrill: false,
+        isDisabledBurglar: true,
+        submitClick: 0,
+      })
+    }, 36575)
+  }
+
+  // Retrieves highest score only
+  getScores = () => {
+    axios
+      .get('/api/bot/score')
+      .then(allScores => {
+        this.setState({ score: allScores.data })
+      })
+      .catch(err => console.log(err))
+  }
+
+  // Tracks Name & Selection Inputs - Synchronizes with State
+  handleInputChange = event => {
+    const target = event.target
+    const value = target.type === 'select' ? target.selected : target.value
+    const name = target.name
+
+    this.setState({
+      [name]: value,
+    })
+  }
+
+  // Saves current State of Work Done to Database
+  saveWorkState = () => {
+    let data = {
+      workDone: this.state.workDone,
+      botName: createdBots[createdBots.length - 1].name,
+    }
+    return axios.post('/api/bot/score', data).catch(err => console.log(err))
+  }
+
+  saveBurglarState = () => {
+    let data = {
+      workDone: this.state.workDone,
+      botName: createdBots[createdBots.length - 1].name,
+    }
+    return axios
+      .post('/api/bot/score', data)
+      .then(() => {
+        axios
+          .get('/api/bot/score')
+          .then(allScores => {
+            this.setState({
+              workDone: allScores.data.workDone,
+              score: allScores.data,
+            })
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
+  }
+
+  render() {
+    return (
+      <>
+        <Grid container justify="center">
+          <h1>Maid-Bot Home Defense Systems</h1>
+        </Grid>
+        <Grid container justify="center">
+          <h3>Give your bot a name and choose it's type</h3>
+        </Grid>
+        <Grid container justify="center">
+          <h4>How much work can YOUR bot do?</h4>
+        </Grid>
+
+        <Grid container justify="center">
+          <form onSubmit={this.createBot} >
+            <fieldset>
+              <legend>Create a Bot</legend>
+              <label>
+                <span>Name: </span>
+                <Input
+                  name="botName"
+                  type="text"
+                  value={this.state.botName}
+                  onChange={this.handleInputChange}
+                  placeholder="Enter Bot Name Here"
+                  classes={{ input: 'white-text'}}
+                />
+                <span> Type: </span>
+              </label>
+
+              <Select
+                name="botType"
+                type="select"
+                id="botType"
+                selected={this.state.botType}
+                onChange={this.handleInputChange}
+                value={this.state.botType}
+                native={true}
+                variant="filled"
+                classes={{ filled: 'white-text' }}
+              >
+                <option value="Unipedal">Unipedal</option>
+                <option value="Bipedal">Bipedal</option>
+                <option value="Quadrupedal">Quadrupedal</option>
+                <option value="Arachnid">Arachnid</option>
+                <option value="Radial">Radial</option>
+                <option value="Aeronautical">Aeronautical</option>
+              </Select>
+
+              <Button type="submit" variant="contained" size="large">
+                Submit
+              </Button>
+            </fieldset>
+          </form>
+        </Grid>
+
+        <Grid container justify="center">
+          <ActionButton
+            text="Do Chore Regimen"
+            name="N/A"
+            onClick={this.doChores}
+            disabled={this.state.isDisabledChore}
+            color="secondary"
+            size="large"
+            classes={{ disabled: 'light-grey' }}
+            variant="contained"
+          />
+
+          <ActionButton
+            text="Home Defense Drill Practice"
+            name="N/A"
+            onClick={this.drillPractice}
+            disabled={this.state.isDisabledDrill}
+            color="primary"
+            size="large"
+          />
+
+          <ActionButton
+            text="Burglar Attack"
+            name="N/A"
+            onClick={this.burglarDefense}
+            disabled={this.state.isDisabledBurglar}
+            color="secondary"
+            size="large"
+          />
+        </Grid>
+
+        {/* Status Components */}
+        <Grid container justify="center" direction='row' spacing={8}>
+          <Grid>
+            {/* <h3>Status</h3> */}
+            <Banner title="Status" value={this.state.currentTask} />
+          </Grid>
+        </Grid>
+        {/* <Grid container justify="center">
+        </Grid> */}
+
+        <Grid container justify="center">
+          <TaskBanner
+            title={`Tasks Remaining for ${this.state.semiPermaName}`}
+            value={this.state.nextTask}
+          />
+        </Grid>
+
+        <Grid container justify="center">
+          <Banner title="Work Done" value={this.state.progressInterval} />
+        </Grid>
+
+        <Grid container justify="center">
+          <Banner
+            title="Burglar Status"
+            value={
+              this.state.winner !== undefined
+                ? this.state.winner === 'Burglar'
+                  ? `Burglar is looting your owner's home over your lifeless circuits!`
+                  : `Burglar is defeated and has run away!`
+                : `No intruders have come!`
+            }
+          />
+        </Grid>
+
+        <Grid container justify="center">
+          <ScoreBanner
+            title="High Score"
+            value={
+              this.state.score === 'N/A'
+                ? 'any'
+                : this.state.score.workDone === 0
+                ? this.state.progressInterval
+                : this.state.score.workDone
+            }
+            name={
+              this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name
+            }
+          />
+        </Grid>
+
+        <Grid container justify="center">
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            onClick={this.bonusSass}
+          >
+            Bonus Sass
+          </Button>
+        </Grid>
+      </>
+    )
+  }
+}
+
+export default App
