@@ -4,7 +4,7 @@
 
 [Maid-Bot Demo](https://maid-bots.herokuapp.com/)
 
-## Who is the Maid-Bot?
+## Who is the Maid Bot?
 
 Well turn up your volume - She's got things to say!
 
@@ -14,7 +14,7 @@ Sometimes she identifies as a particular maid-bot, other times she recognizes he
 
 She manufactures the maid-bots at the factory and speaks on behalf of all the maid-bots in the world.
 
-She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid bot services at your own risk... I'm sure we're all working her last neural node...
+She is efficient - but has a bite. So just use common sense, and your logic might pass. Otherwise, your experience of her may vary. Use maid-bot services at your own risk... I'm sure we're all working her last neural node...
 
 And for the love of motherboards: Do NOT forget to give maid-bots a name. Repeated failures have been known to throw her into a bot-rage.
 
@@ -36,10 +36,10 @@ If you'd like an alternate experience - start submitting without entering a name
 
 After you properly name and type your specific maid bot, it will auto-magically start doing some tasks around the house for you.
 
-When these tasks finish, you can give Maid-Bot another task set to complete.
+When these tasks finish, you can give Maid Bot another task set to complete.
 She does have a preference on task type however. I'll let you figure that out...
 
-After selecting a task set for Maid-Bot, she'll be busy working - you can't stop her. Don't bother trying to offer further instruction. Just wait it out.
+After selecting a task set for Maid Bot, she'll be busy working - you can't stop her. Don't bother trying to offer further instruction. Just wait it out.
 
 She'll let you know when she is finished.
 Her buttons let you know too.
@@ -47,7 +47,7 @@ Her buttons let you know too.
 
 ## Bonus
 
-Every now and then, though out of the norm: A burglar may attempt to enter your home. Maid-Bot has a lot of pent up bot-rage she'd love to clear out of her cache on some would be perp.
+Every now and then, though out of the norm: A burglar may attempt to enter your home. Maid Bot has a lot of pent up bot-rage she'd love to clear out of her cache on some would be perp.
 
 She does NOT entertain failure as an option.
 
@@ -68,7 +68,7 @@ Replace the "host" line in `/config/config.json` with the following:
     "port": "/Applications/MAMP/tmp/mysql/mysql.sock",
 ```
 
-Example Below:\
+Example Below:
 
 ![MacOS Sequelize DB Settings](https://i.imgur.com/w3VOnMn.png)
 
