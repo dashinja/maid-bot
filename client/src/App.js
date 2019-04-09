@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './App.css';
+import './App.css'
 import ActionButton from './Components/ActionButton'
 import axios from 'axios'
 import { Destroyer } from './bots'
@@ -14,6 +14,7 @@ import TaskBanner from './Components/TaskBanner'
 import Burglar from './burglar'
 import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
 import { CONSTANTS } from './constants'
+import InfoPanel from './Components/InfoPanel'
 
 let createdBots = []
 
@@ -437,7 +438,7 @@ class App extends Component {
         </Grid>
 
         <Grid container justify="center">
-          <form onSubmit={this.createBot} >
+          <form onSubmit={this.createBot}>
             <fieldset>
               <legend>Create a Bot</legend>
               <label>
@@ -448,7 +449,7 @@ class App extends Component {
                   value={this.state.botName}
                   onChange={this.handleInputChange}
                   placeholder="Enter Bot Name Here"
-                  classes={{ input: 'white-text'}}
+                  classes={{ input: 'white-text' }}
                 />
                 <span> Type: </span>
               </label>
@@ -511,65 +512,15 @@ class App extends Component {
         </Grid>
 
         {/* Status Components */}
-        <Grid container justify="center" direction='row' spacing={8}>
-          <Grid>
-            {/* <h3>Status</h3> */}
-            <Banner title="Status" value={this.state.currentTask} />
-          </Grid>
-        </Grid>
-        {/* <Grid container justify="center">
-        </Grid> */}
-
-        <Grid container justify="center">
-          <TaskBanner
-            title={`Tasks Remaining for ${this.state.semiPermaName}`}
-            value={this.state.nextTask}
-          />
-        </Grid>
-
-        <Grid container justify="center">
-          <Banner title="Work Done" value={this.state.progressInterval} />
-        </Grid>
-
-        <Grid container justify="center">
-          <Banner
-            title="Burglar Status"
-            value={
-              this.state.winner !== undefined
-                ? this.state.winner === 'Burglar'
-                  ? `Burglar is looting your owner's home over your lifeless circuits!`
-                  : `Burglar is defeated and has run away!`
-                : `No intruders have come!`
-            }
-          />
-        </Grid>
-
-        <Grid container justify="center">
-          <ScoreBanner
-            title="High Score"
-            value={
-              this.state.score === 'N/A'
-                ? 'any'
-                : this.state.score.workDone === 0
-                ? this.state.progressInterval
-                : this.state.score.workDone
-            }
-            name={
-              this.state.score === 'N/A' ? `No-Bot-y` : this.state.score.name
-            }
-          />
-        </Grid>
-
-        <Grid container justify="center">
-          <Button
-            type="submit"
-            variant="contained"
-            size="large"
-            onClick={this.bonusSass}
-          >
-            Bonus Sass
-          </Button>
-        </Grid>
+        <InfoPanel 
+          currentTask = {this.state.currentTask}
+          semiPermaName = {this.state.semiPermaName}
+          nextTask = {this.state.nextTask}
+          progressInterval={this.state.progressInterval}
+          winner={this.state.winner}
+          score={this.state.score}
+          bonusSass={this.bonusSass}
+        />
       </>
     )
   }
