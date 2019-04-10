@@ -422,16 +422,6 @@ class App extends Component {
   render() {
     return (
       <>
-        <Grid container justify="center">
-          <h1>Maid-Bot Home Defense Systems</h1>
-        </Grid>
-        <Grid container justify="center">
-          <h3>Give your bot a name and choose it's type</h3>
-        </Grid>
-        <Grid container justify="center">
-          <h4>How much work can YOUR bot do?</h4>
-        </Grid>
-
         <CreateForm
           onSubmit={this.createBot}
           botName={this.state.botName}
