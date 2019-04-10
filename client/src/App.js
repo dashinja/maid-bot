@@ -1,20 +1,19 @@
 import React, { Component } from 'react'
 import './App.css'
-import ActionButton from './Components/ActionButton'
+// import ActionButton from './Components/ActionButton'
 import axios from 'axios'
 import { Destroyer } from './bots'
 import { Task, Pattern } from './patterns'
-import Banner from './Components/Banner'
-import ScoreBanner from './Components/ScoreBanner'
 import Grid from '@material-ui/core/Grid'
-import Input from '@material-ui/core/Input'
-import Select from '@material-ui/core/Select'
-import Button from '@material-ui/core/Button'
-import TaskBanner from './Components/TaskBanner'
+// import Input from '@material-ui/core/Input'
+// import Select from '@material-ui/core/Select'
+// import Button from '@material-ui/core/Button'
 import Burglar from './burglar'
 import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
 import { CONSTANTS } from './constants'
 import InfoPanel from './Components/InfoPanel'
+import ButtonPanel from './Components/ButtonPanel'
+import CreateForm from './Components/CreateForm'
 
 let createdBots = []
 
@@ -437,85 +436,30 @@ class App extends Component {
           <h4>How much work can YOUR bot do?</h4>
         </Grid>
 
-        <Grid container justify="center">
-          <form onSubmit={this.createBot}>
-            <fieldset>
-              <legend>Create a Bot</legend>
-              <label>
-                <span>Name: </span>
-                <Input
-                  name="botName"
-                  type="text"
-                  value={this.state.botName}
-                  onChange={this.handleInputChange}
-                  placeholder="Enter Bot Name Here"
-                  classes={{ input: 'white-text' }}
-                />
-                <span> Type: </span>
-              </label>
+        <CreateForm
+          onSubmit={this.createBot}
+          botName={this.state.botName}
+          botType={this.state.botType}
+          handleInputChange={this.handleInputChange}
+        />
 
-              <Select
-                name="botType"
-                type="select"
-                id="botType"
-                selected={this.state.botType}
-                onChange={this.handleInputChange}
-                value={this.state.botType}
-                native={true}
-                variant="filled"
-                classes={{ filled: 'white-text' }}
-              >
-                <option value="Unipedal">Unipedal</option>
-                <option value="Bipedal">Bipedal</option>
-                <option value="Quadrupedal">Quadrupedal</option>
-                <option value="Arachnid">Arachnid</option>
-                <option value="Radial">Radial</option>
-                <option value="Aeronautical">Aeronautical</option>
-              </Select>
+        <ButtonPanel
+          formSubmit={this.createBot}
+          botName={this.state.botName}
+          botType={this.state.botType}
+          handleInputChange={this.handleInputChange}
+          doChores={this.doChores}
+          isDisabledChore={this.state.isDisabledChore}
+          drillPractice={this.drillPractice}
+          isDisabledDrill={this.state.isDisabledDrill}
+          burglarDefense={this.burglarDefense}
+          isDisabledBurglar={this.isDisabledBurglar}
+        />
 
-              <Button type="submit" variant="contained" size="large">
-                Submit
-              </Button>
-            </fieldset>
-          </form>
-        </Grid>
-
-        <Grid container justify="center">
-          <ActionButton
-            text="Do Chore Regimen"
-            name="N/A"
-            onClick={this.doChores}
-            disabled={this.state.isDisabledChore}
-            color="secondary"
-            size="large"
-            classes={{ disabled: 'light-grey' }}
-            variant="contained"
-          />
-
-          <ActionButton
-            text="Home Defense Drill Practice"
-            name="N/A"
-            onClick={this.drillPractice}
-            disabled={this.state.isDisabledDrill}
-            color="primary"
-            size="large"
-          />
-
-          <ActionButton
-            text="Burglar Attack"
-            name="N/A"
-            onClick={this.burglarDefense}
-            disabled={this.state.isDisabledBurglar}
-            color="secondary"
-            size="large"
-          />
-        </Grid>
-
-        {/* Status Components */}
-        <InfoPanel 
-          currentTask = {this.state.currentTask}
-          semiPermaName = {this.state.semiPermaName}
-          nextTask = {this.state.nextTask}
+        <InfoPanel
+          currentTask={this.state.currentTask}
+          semiPermaName={this.state.semiPermaName}
+          nextTask={this.state.nextTask}
           progressInterval={this.state.progressInterval}
           winner={this.state.winner}
           score={this.state.score}
