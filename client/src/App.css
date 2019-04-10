@@ -2,11 +2,3 @@ input.white-text,
 select.white-text {
   color: white;
 }
-
-button.light-grey {
-  background-color: rgba(255, 255, 255, 0.753);
-}
-
-button[disabled].light-grey {
-  background-color: rgba(255, 255, 255, 0.753);
-}

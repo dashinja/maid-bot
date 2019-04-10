@@ -3,7 +3,6 @@ import './App.css'
 import axios from 'axios'
 import { Destroyer } from './bots'
 import { Task, Pattern } from './patterns'
-import Grid from '@material-ui/core/Grid'
 import Burglar from './burglar'
 import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
 import { CONSTANTS } from './constants'
@@ -439,7 +438,7 @@ class App extends Component {
           drillPractice={this.drillPractice}
           isDisabledDrill={this.state.isDisabledDrill}
           burglarDefense={this.burglarDefense}
-          isDisabledBurglar={this.isDisabledBurglar}
+          isDisabledBurglar={this.state.isDisabledBurglar}
         />
 
         <InfoPanel
