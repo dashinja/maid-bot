@@ -49,6 +49,10 @@ class App extends Component {
             botName: this.state.botName,
             semiPermaName: this.state.botName || 'Bot',
             workDone: 5,
+            progressInterval: 0,
+            isDisabledBurglar: true,
+            isDisabledChore: true,
+            isDisabledDrill: true,
             // eslint-disable-next-line
           }
         },
@@ -351,10 +355,7 @@ class App extends Component {
       speed: createdBots[createdBots.length - 1].speedValue().speed,
     }
 
-    axios
-      .post('/api/bot', creationData)
-      .then(data => {})
-      .catch(err => console.log(err))
+    axios.post('/api/bot', creationData).catch(err => console.log(err))
 
     // Enable buttons in time for task completion
     setTimeout(() => {
@@ -409,7 +410,7 @@ class App extends Component {
           .get('/api/bot/score')
           .then(allScores => {
             this.setState({
-              workDone: allScores.data.workDone,
+              workDone: this.state.progressInterval,
               score: allScores.data,
             })
           })
@@ -445,9 +446,9 @@ class App extends Component {
           currentTask={this.state.currentTask}
           semiPermaName={this.state.semiPermaName}
           nextTask={this.state.nextTask}
-          progressInterval={this.state.progressInterval}
+          progressInterval={this.state.progressInterval} //shows "work done"
           winner={this.state.winner}
-          score={this.state.score}
+          score={this.state.score} // taken from database
           bonusSass={this.bonusSass}
         />
       </>

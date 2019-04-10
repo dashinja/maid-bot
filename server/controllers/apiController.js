@@ -10,7 +10,7 @@ apiController.route('/welcome').get((req, res) => {
     .catch(err => console.log(err))
 })
 
-apiController.route('/bot/').post((req, res) => {
+apiController.route('/bot').post((req, res) => {
   db.Bot.create({
     name: req.body.name,
     botType: req.body.botType,
