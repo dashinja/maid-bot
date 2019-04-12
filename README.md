@@ -103,15 +103,25 @@ client
 ┣ src
 ┃ ┃
 ┃ ┣ Components
-┃ ┃ ┣ ActionButton.js       # 'Push' buttons in user interface
-┃ ┃ ┣ Banner.js             # 'General' status components
-┃ ┃ ┣ ScoreBanner.js        # Score specific <Banner/> component
-┃ ┃ ┣ SimpleModal.js        # Modal for simple instructions
-┃ ┃ ┗ TaskBanner.js         # Task specific <Banner /> component
+┃ ┃ ┣ ButtonPanel
+┃ ┃ ┃ ┣ ActionButton.js     # 'Push' buttons in user interface
+┃ ┃ ┃ ┗ index.js            # Composed <ButtonPanel/> component
+┃ ┃ ┃
+┃ ┃ ┣ CreateForm
+┃ ┃ ┃ ┗ index.js            # Composed <CreateForm/> component
+┃ ┃ ┃
+┃ ┃ ┗ InfoPanel
+┃ ┃   ┣ ActionButton.js
+┃ ┃   ┣ Banner.js           # 'General' status components
+┃ ┃   ┣ ScoreBanner.js      # Score specific <Banner/> component
+┃ ┃   ┣ index.js            # Composed <InfoPanel/> component
+┃ ┃   ┗ TaskBanner.js       # Task specific <Banner/> component
 ┃ ┃
 ┃ ┣ App.js                  # Main Component & State Holder
 ┃ ┣ bots.js                 # Bot Definition > i.e. Destroyer Class
 ┃ ┣ burglar.js              # Burglar Definition > i.e. Burglar Class
+┃ ┣ constants.js
+┃ ┣ helpers.js
 ┃ ┣ index.css
 ┃ ┣ index.js                # Renders App.js to #root in index.html
 ┃ ┗ patterns.js             # Array dependencies for App.js
