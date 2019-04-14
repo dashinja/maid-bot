@@ -23,6 +23,22 @@ apiController.route('/bot').post((req, res) => {
   res.send(req.body)
 })
 
+apiController.route('/bot/name').post((req, res) => {
+  db.Bot.findOne({
+    where: {
+      name: req.body.name,
+    },
+  }).then(result => {
+    // If botName already used, return valid = false
+    if (result !== null) {
+      res.json(false)
+    } else {
+      res.json(true)
+
+    }
+  })
+})
+
 apiController.route('/bot/score').get((req, res) => {
   db.Bot.findOne({
     attributes: ['name', 'botType', 'workDone'],

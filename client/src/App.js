@@ -39,42 +39,47 @@ class App extends Component {
   // Button Methods //
   ////////////////////
   // 'Submit' Button
-  createBot = e => {
+  createBot = async e => {
     e.preventDefault()
+    const botNameValidation = await this.botNameIsValid()
     this.getScores()
     setTimeout(() => {
-      this.setState(
-        prevState => {
-          return {
-            botName: this.state.botName,
-            semiPermaName: this.state.botName || 'Bot',
-            workDone: 5,
-            progressInterval: 0,
-            isDisabledBurglar: true,
-            isDisabledChore: true,
-            isDisabledDrill: true,
-            // eslint-disable-next-line
-          }
-        },
-        () => {
-          let counter = this.state.submitClick
+      if (botNameValidation) {
+        this.setState(
+          prevState => {
+            return {
+              botName: this.state.botName,
+              semiPermaName: this.state.botName || 'Bot',
+              workDone: 5,
+              progressInterval: 0,
+              isDisabledBurglar: true,
+              isDisabledChore: true,
+              isDisabledDrill: true,
+              // eslint-disable-next-line
+            }
+          },
+          () => {
+            let counter = this.state.submitClick
 
-          switch (this.state.semiPermaName) {
-            case '':
-            case 'Bot':
-              createValidation(counter, '')
-              this.setState(prevState => ({
-                submitClick: prevState.submitClick + 1,
-              }))
-              break
+            switch (this.state.semiPermaName) {
+              case '':
+              case 'Bot':
+                createValidation(counter, '')
+                this.setState(prevState => ({
+                  submitClick: prevState.submitClick + 1,
+                }))
+                break
 
-            default:
-              createValidation(counter, this.state.semiPermaName)
-              this.botStartUp()
-              break
-          }
-        },
-      )
+              default:
+                createValidation(counter, this.state.semiPermaName)
+                this.botStartUp()
+                break
+            }
+          },
+        )
+      } else {
+        return
+      }
     }, 1000)
 
     setTimeout(() => {
@@ -334,6 +339,34 @@ class App extends Component {
   ////////////////////
   // Helper Methods //
   ////////////////////
+
+  botNameIsValid = async () => {
+    let validationReturn
+    if (this.state.botName === '') {
+      return true
+    } else {
+      const botName = this.state.botName
+      const data = {
+        name: botName,
+      }
+      console.log('data:', data)
+      await axios
+        .post('api/bot/name', data)
+        .then(result => {
+          if (!result.data) {
+            speak.and('Bot Name Already Taken! You MUST Choose Another')
+            validationReturn = false
+            return false
+          } else {
+            validationReturn = result
+            return true
+          }
+        })
+        .catch(err => console.log(err))
+      return validationReturn
+    }
+  }
+
   // Handles Bot Creation and Bot Save to DB
   botStartUp = () => {
     createdBots.push(new Destroyer(this.state.botName, this.state.botType))
