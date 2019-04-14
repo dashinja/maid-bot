@@ -268,7 +268,6 @@ class App extends Component {
   bonusSass = () => {
     const bonus = CONSTANTS.SPEECH.BONUS.SASS
     const choice = Math.ceil(Math.random() * bonus.length - 1)
-    console.log('choice:', choice)
     const bonusChoice = bonus[choice]
     speak.and(bonusChoice)
   }
@@ -349,7 +348,6 @@ class App extends Component {
       const data = {
         name: botName,
       }
-      console.log('data:', data)
       await axios
         .post('api/bot/name', data)
         .then(result => {

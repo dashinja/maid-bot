@@ -18,7 +18,7 @@ apiController.route('/bot').post((req, res) => {
     attack: req.body.attack,
     defense: req.body.defense,
     speed: req.body.speed,
-  })
+  }).catch(err => console.log(err))
 
   res.send(req.body)
 })
@@ -28,15 +28,16 @@ apiController.route('/bot/name').post((req, res) => {
     where: {
       name: req.body.name,
     },
-  }).then(result => {
-    // If botName already used, return valid = false
-    if (result !== null) {
-      res.json(false)
-    } else {
-      res.json(true)
-
-    }
   })
+    .then(result => {
+      // If botName already used, return valid = false
+      if (result !== null) {
+        res.json(false)
+      } else {
+        res.json(true)
+      }
+    })
+    .catch(err => console.log(err))
 })
 
 apiController.route('/bot/score').get((req, res) => {
@@ -62,9 +63,11 @@ apiController.route('/bot/score').post((req, res) => {
     where: {
       name: req.body.botName,
     },
-  }).then(result => {
-    res.send(result)
   })
+    .then(result => {
+      res.send(result)
+    })
+    .catch(err => console.log(err))
 })
 
 module.exports = apiController
