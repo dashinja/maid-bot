@@ -2,27 +2,26 @@ const express = require('express')
 const apiController = express.Router()
 const db = require('../models')
 
-apiController.route('/welcome').get((req, res) => {
-  db.Welcome.findOne({})
-    .then(result => {
-      res.send(result)
-    })
-    .catch(err => console.log(err))
-})
-
+// Creates DB Entry with User Bot Input
 apiController.route('/bot').post((req, res) => {
-  db.Bot.create({
-    name: req.body.name,
-    botType: req.body.botType,
-    workDone: req.body.workDone,
-    attack: req.body.attack,
-    defense: req.body.defense,
-    speed: req.body.speed,
-  }).catch(err => console.log(err))
+  if (!req.body.name || !req.body.botType) {
+    res.send(console.error('Bot name already taken, please choose another!'))
+    return
+  } else {
+    db.Bot.create({
+      name: req.body.name,
+      botType: req.body.botType,
+      workDone: req.body.workDone,
+      attack: req.body.attack,
+      defense: req.body.defense,
+      speed: req.body.speed,
+    }).catch(err => console.log(err))
 
-  res.send(req.body)
+    res.send(req.body)
+  }
 })
 
+// Validation call to prevent BotName Duplication
 apiController.route('/bot/name').post((req, res) => {
   db.Bot.findOne({
     where: {
@@ -40,6 +39,7 @@ apiController.route('/bot/name').post((req, res) => {
     .catch(err => console.log(err))
 })
 
+// Retrieves highest score
 apiController.route('/bot/score').get((req, res) => {
   db.Bot.findOne({
     attributes: ['name', 'botType', 'workDone'],
@@ -56,6 +56,7 @@ apiController.route('/bot/score').get((req, res) => {
     .catch(err => console.log(err))
 })
 
+// Calculates and Inserts new Score in DB for current Bot
 apiController.route('/bot/score').post((req, res) => {
   const newValue = { workDone: req.body.workDone + 5 }
 

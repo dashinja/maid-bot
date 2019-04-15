@@ -6,6 +6,22 @@ import ScoreBanner from './ScoreBanner'
 import TaskBanner from './TaskBanner'
 
 export default function InfoPanel(props) {
+  const highScore =
+    props.score === 'N/A'
+      ? 'any'
+      : props.score.workDone === 0
+      ? props.progressInterval
+      : props.score.workDone
+
+  const highScoreName = props.score === 'N/A' ? `No-Bot-y` : props.score.name
+
+  const burglarStatus =
+    props.winner !== undefined
+      ? props.winner === 'Burglar'
+        ? `Burglar is looting your owner's home over your lifeless circuits!`
+        : `Burglar is defeated and has run away!`
+      : `No intruders have come!`
+
   return (
     <div>
       <Grid container justify="center" direction="row" spacing={8}>
@@ -26,29 +42,14 @@ export default function InfoPanel(props) {
       </Grid>
 
       <Grid container justify="center">
-        <Banner
-          title="Burglar Status"
-          value={
-            props.winner !== undefined
-              ? props.winner === 'Burglar'
-                ? `Burglar is looting your owner's home over your lifeless circuits!`
-                : `Burglar is defeated and has run away!`
-              : `No intruders have come!`
-          }
-        />
+        <Banner title="Burglar Status" value={burglarStatus} />
       </Grid>
 
       <Grid container justify="center">
         <ScoreBanner
           title="High Score"
-          value={
-            props.score === 'N/A'
-              ? 'any'
-              : props.score.workDone === 0
-              ? props.progressInterval
-              : props.score.workDone
-          }
-          name={props.score === 'N/A' ? `No-Bot-y` : props.score.name}
+          value={highScore}
+          name={highScoreName}
         />
       </Grid>
 

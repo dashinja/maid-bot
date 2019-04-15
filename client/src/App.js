@@ -1,11 +1,18 @@
+// Packages
 import React, { Component } from 'react'
-import './App.css'
 import axios from 'axios'
-import { Destroyer } from './bots'
-import { Task, Pattern } from './patterns'
-import Burglar from './burglar'
-import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
+import './App.css'
+
+// Helpers and Constants
 import { CONSTANTS } from './constants'
+import { Task, Pattern } from './patterns'
+import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
+
+// Classes
+import Destroyer from './bots'
+import Burglar from './burglar'
+
+// Components
 import InfoPanel from './Components/InfoPanel'
 import ButtonPanel from './Components/ButtonPanel'
 import CreateForm from './Components/CreateForm'
@@ -41,8 +48,12 @@ class App extends Component {
   // 'Submit' Button
   createBot = async e => {
     e.preventDefault()
-    const botNameValidation = await this.botNameIsValid()
+    
     this.getScores()
+
+    // Checks database for duplcates, if no duplicates executes bot creation
+    const botNameValidation = await this.botNameIsValid()
+
     setTimeout(() => {
       if (botNameValidation) {
         this.setState(

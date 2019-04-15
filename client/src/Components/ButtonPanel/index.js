@@ -1,5 +1,5 @@
 import React from 'react'
-import ActionButton from './ActionButton'
+import ActionButton from '../ActionButton'
 import Grid from '@material-ui/core/Grid'
 
 export default function ButtonPanel(props) {
