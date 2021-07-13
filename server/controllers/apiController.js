@@ -1,15 +1,44 @@
 const express = require('express')
 const apiController = express.Router()
 const db = require('../models')
+// const bcrypt = require('../node_modules/brcypt');
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10
 
 // Creates DB Entry with User Bot Input
-apiController.route('/bot').post((req, res) => {
+apiController.route('/bot').post(async (req, res) => {
   if (!req.body.name || !req.body.botType) {
     res.send(console.error('Bot name already taken, please choose another!'))
     return
   } else {
-    db.Bot.create({
+
+    const plainObject = {
       name: req.body.name,
+      botType: req.body.botType,
+      workDone: req.body.workDone,
+      attack: req.body.attack,
+      defense: req.body.defense,
+      speed: req.body.speed,
+    }
+
+    // const encryptObject = {}
+
+    // const made = plainObject.reduce((prev, curr, index, obj) => {
+    //   curr[obj[index]] = obj[index]
+    // }, {})
+
+    const encryptName = await bcrypt.hash(req.body.name, saltRounds)
+    const compare = await bcrypt.compare(req.body.botType, encryptName)
+
+    if (!compare) {
+      console.log("NO MATCH: Encrypted name and plaintext name")
+    } else {
+      console.log("MATCH: Encrypted name and plaintext name")
+    }
+
+    db.Bot.create({
+      name: encryptName,
       botType: req.body.botType,
       workDone: req.body.workDone,
       attack: req.body.attack,
