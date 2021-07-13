@@ -52,9 +52,9 @@ apiController.route('/bot').post(async (req, res) => {
 
 // Validation call to prevent BotName Duplication
 apiController.route('/bot/name').post(async (req, res) => {
-
+  console.log("Value of req.body.name in /bot/name is: ", req.body.name)
   const encryptName = await bcrypt.hash(req.body.name, saltRounds)
-  const compare = await bcrypt.compare(req.body.botType, encryptName)
+  const compare = await bcrypt.compare(req.body.name, encryptName)
 
   if (!compare) {
     console.log("NO MATCH: New name added to database!")
