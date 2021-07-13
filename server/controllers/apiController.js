@@ -51,7 +51,7 @@ apiController.route('/bot').post(async (req, res) => {
 })
 
 // Validation call to prevent BotName Duplication
-apiController.route('/bot/name').post((req, res) => {
+apiController.route('/bot/name').post(async (req, res) => {
 
   const encryptName = await bcrypt.hash(req.body.name, saltRounds)
   const compare = await bcrypt.compare(req.body.botType, encryptName)
