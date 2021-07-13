@@ -63,3 +63,4 @@ typings/
 .vscode/
 */.vscode
 shrinkwrap.yaml
+build/

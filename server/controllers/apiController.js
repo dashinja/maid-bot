@@ -29,7 +29,7 @@ apiController.route('/bot').post(async (req, res) => {
     // }, {})
 
     const encryptName = await bcrypt.hash(req.body.name, saltRounds)
-    const compare = await bcrypt.compare(req.body.botType, encryptName)
+    const compare = await bcrypt.compare(req.body.name, encryptName)
 
     if (!compare) {
       console.log("NO MATCH: Encrypted name and plaintext name")
@@ -52,9 +52,19 @@ apiController.route('/bot').post(async (req, res) => {
 
 // Validation call to prevent BotName Duplication
 apiController.route('/bot/name').post((req, res) => {
+
+  const encryptName = await bcrypt.hash(req.body.name, saltRounds)
+  const compare = await bcrypt.compare(req.body.botType, encryptName)
+
+  if (!compare) {
+    console.log("NO MATCH: New name added to database!")
+  } else {
+    console.log("MATCH: Name already used! Choose another!")
+  }
+
   db.Bot.findOne({
     where: {
-      name: req.body.name,
+      name: encryptName,
     },
   })
     .then(result => {
