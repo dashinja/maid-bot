@@ -6,7 +6,7 @@
 
 ## Who is the Maid Bot?
 
-Well turn up your volume - She's got things to say!
+~~Well turn up your volume - She's got things to say!~~ Speaking now costs money!!
 
 The Maid Bot is the AI that powers all maid-bots. She is one, and not many. Though she may not know that. Thing is, she's the only condensed neural network to pass the Turing test - but that doesn't mean she isn't a little mental.
 
