@@ -1,7 +1,7 @@
 const express = require('express')
 const apiController = express.Router()
 const db = require('../models')
-// const bcrypt = require('../node_modules/brcypt');
+
 const bcrypt = require('bcrypt');
 
 const saltRounds = 10
