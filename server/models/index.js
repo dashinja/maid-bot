@@ -9,15 +9,12 @@ const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 require('dotenv').config()
 
-console.log('envConfig first: ', process.env.varDevEnv)
 const envConfig = JSON.parse(process.env.varDevEnv)
 
 let sequelize;
 if (env === 'production') {
-  console.log('env production: ', env)
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  console.log('env dev: ', env)
   sequelize = new Sequelize(envConfig.database, envConfig.username, envConfig.password, envConfig);
 }
 
