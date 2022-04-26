@@ -26,7 +26,6 @@ export default function CreateForm(props) {
               <Input
                 name="botName"
                 type="text"
-                value={props.botName}
                 onChange={props.handleInputChange}
                 placeholder="Enter Bot Name Here"
                 classes={{ input: 'white-text' }}

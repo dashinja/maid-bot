@@ -6,7 +6,7 @@ import './App.css'
 // Helpers and Constants
 import { CONSTANTS } from './constants'
 import { Task, Pattern } from './patterns'
-import { choreSequence, createValidation, speak, defenseVoice } from './helpers'
+import { choreSequence, createValidation, femaleDefault, femaleDefensive } from './helpers'
 
 // Classes
 import Destroyer from './bots'
@@ -145,7 +145,7 @@ class App extends Component {
     // Condition based on state when Short List Normally Completes
     setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        speak.and(CONSTANTS.SPEECH.CHORES.LONG)
+        femaleDefault.and(CONSTANTS.SPEECH.CHORES.LONG)
       } else {
         this.setState({
           isDisabledBurglar: false,
@@ -159,7 +159,7 @@ class App extends Component {
 
     const workingOnIt = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        speak.and(CONSTANTS.SPEECH.CHORES.LOOK)
+        femaleDefault.and(CONSTANTS.SPEECH.CHORES.LOOK)
       } else {
         clearTimeout(workingOnIt)
       }
@@ -167,7 +167,7 @@ class App extends Component {
 
     const dontBother = setTimeout(() => {
       if (this.state.taskIsComplete === false) {
-        speak.and(CONSTANTS.SPEECH.CHORES.BOTHER)
+        femaleDefault.and(CONSTANTS.SPEECH.CHORES.BOTHER)
       } else {
         clearTimeout(dontBother)
       }
@@ -187,29 +187,29 @@ class App extends Component {
   drillPractice = e => {
     e.preventDefault()
 
-    speak.and(`${this.state.semiPermaName} activated and ready!`)
+    femaleDefault.and(`${this.state.semiPermaName} activated and ready!`)
 
     const randChoice = Math.floor(Math.random() * Pattern.length)
     const choice = Pattern[randChoice]
 
     switch (randChoice) {
       case 0:
-        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.ALPHA)
+        femaleDefault.and(CONSTANTS.SPEECH.DRILL_PRACTICE.ALPHA)
         this.setState({ choreList: 'Alpha Pattern' })
         break
 
       case 1:
-        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.BETA)
+        femaleDefault.and(CONSTANTS.SPEECH.DRILL_PRACTICE.BETA)
         this.setState({ choreList: 'Beta Pattern' })
         break
 
       case 2:
-        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.DELTA)
+        femaleDefault.and(CONSTANTS.SPEECH.DRILL_PRACTICE.DELTA)
         this.setState({ choreList: 'Delta Pattern' })
         break
 
       case 3:
-        speak.and(CONSTANTS.SPEECH.DRILL_PRACTICE.OMEGA)
+        femaleDefault.and(CONSTANTS.SPEECH.DRILL_PRACTICE.OMEGA)
         this.setState({ choreList: 'Omega Pattern' })
         break
 
@@ -250,7 +250,7 @@ class App extends Component {
       progressInterval: prevState.progressInterval + 5,
     }))
 
-    defenseVoice.speak(CONSTANTS.SPEECH.DEFENSE.ALERT)
+    femaleDefensive.speak(CONSTANTS.SPEECH.DEFENSE.ALERT)
 
     const intruder = new Burglar()
     let theWinner = intruder.attackValue(createdBots[createdBots.length - 1])
@@ -280,7 +280,7 @@ class App extends Component {
     const bonus = CONSTANTS.SPEECH.BONUS.SASS
     const choice = Math.ceil(Math.random() * bonus.length - 1)
     const bonusChoice = bonus[choice]
-    speak.and(bonusChoice)
+    femaleDefault.and(bonusChoice)
   }
 
   /////////////////////////////
@@ -309,7 +309,7 @@ class App extends Component {
         this.setState({
           taskIsComplete: true,
         })
-        speak.and(`${bot.name} completed the task set! Standing by!`)
+        femaleDefault.and(`${bot.name} completed the task set! Standing by!`)
       }
 
       if (typeof getScoreUpdate === 'function') {
@@ -323,7 +323,7 @@ class App extends Component {
           },
           () => {
             if (executionCount <= 15) {
-              speak.and(
+              femaleDefault.and(
                 'All Done! And ready for second breakfast, Elevensies and more! Yeah, totally stole that word from Pippin!',
                 'UK English Female',
               )
@@ -363,7 +363,7 @@ class App extends Component {
         .post('api/bot/name', data)
         .then(result => {
           if (!result.data) {
-            speak.and('Bot Name Already Taken! You MUST Choose Another')
+            femaleDefault.and('Bot Name Already Taken! You MUST Choose Another')
             validationReturn = false
             return false
           } else {

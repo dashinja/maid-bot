@@ -1,11 +1,13 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@types/cors': ^2.8.12
   babel-cli: ^6.26.0
   babel-preset-env: ^1.7.0
   babel-preset-stage-2: ^6.24.1
   bcrypt: ^5.0.1
   concurrently: ^4.1.0
+  cors: ^2.8.5
   dotenv: ^16.0.0
   express: ^4.16.4
   express-http-proxy: ^1.6.3
@@ -16,10 +18,12 @@ specifiers:
   sequelize: ^5.21.6
 
 dependencies:
+  '@types/cors': 2.8.12
   babel-cli: 6.26.0
   babel-preset-env: 1.7.0
   babel-preset-stage-2: 6.24.1
   bcrypt: 5.0.1
+  cors: 2.8.5
   dotenv: 16.0.0
   express: 4.17.1
   if-env: 1.0.4
@@ -49,6 +53,10 @@ packages:
       tar: 6.1.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@types/cors/2.8.12:
+    resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
     dev: false
 
   /@types/node/16.3.1:
@@ -1098,6 +1106,14 @@ packages:
 
   /core-util-is/1.0.2:
     resolution: {integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=}
+
+  /cors/2.8.5:
+    resolution: {integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      object-assign: 4.1.1
+      vary: 1.1.2
+    dev: false
 
   /create-error-class/3.0.2:
     resolution: {integrity: sha1-Br56vvlHo/FKMP1hBnHUAbyot7Y=}
