@@ -7,6 +7,7 @@ export const femaleDefault = {
     window.responsiveVoice.speak(text, 'UK English Female', {
       pitch: 1,
       volume: 1,
+      key: "L1sSlRqo",
       ...options
     })
   },
@@ -18,6 +19,7 @@ export const femaleDefensive = {
     window.responsiveVoice.speak(text, 'UK English Female', {
       pitch: 0.77,
       volume: 1,
+      key: "L1sSlRqo",
       ...options
     })
   },
